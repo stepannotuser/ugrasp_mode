@@ -1,4 +1,4 @@
-AEDVICES Consulting SAS � Public Use License (Simplified Edition) v1.0 (AEDVICES-SE-v1.0)
+AEDVICES Consulting SAS (c) Public Use License (Simplified Edition) v1.0 (AEDVICES-SE-v1.0)
 
 Copyright (c) 2025 AEDVICES Consulting SAS. All rights reserved.
 
@@ -8,24 +8,27 @@ for any purpose, including internal professional use.
 
 Restrictions:
 
-1. The Software may not be modified, forked, or adapted in any form.
-2. The Software may not be sold, sublicensed, or used as part of any commercial offering.
-3. Redistribution is permitted only in its original, unmodified form, with this license and copyright notice intact.
-4. Any use of the Software must preserve the attribution to AEDVICES Consulting SAS.
-5. This license does not grant any rights to the Software�s name, logo, or trademarks.
-6. This license terminates automatically if the User violates any of its terms.
+1. The Software may be modified by the User for personal, internal, or experimental purposes only.
+   Such modified versions may not be redistributed in any form.
+2. If the User believes their modifications could benefit others, they are encouraged (but not required)
+   to submit a merge request to the official repository, subject to AEDVICES Consulting SAS's approval.
+3. The Software may not be sold, sublicensed, or used as part of any commercial offering.
+4. Redistribution is permitted only in its original, unmodified form, with this license and copyright notice intact.
+5. Any use of the Software must preserve the attribution to AEDVICES Consulting SAS.
+6. This license does not grant any rights to the Software's name, logo, or trademarks.
+7. This license terminates automatically if the User violates any of its terms.
 
 Patent Defense:
 
-7. If the User initiates any patent litigation (including a cross-claim or counterclaim) alleging that the Software
+8. If the User initiates any patent litigation (including a cross-claim or counterclaim) alleging that the Software
    or its use infringes any patent, this license is immediately and permanently terminated.
 
 Disclaimer:
 
-8. This Software is provided "as is", without warranty of any kind, express or implied.
+9. This Software is provided "as is", without warranty of any kind, express or implied.
    AEDVICES Consulting SAS shall not be liable for any damages arising from the use of the Software.
 
 Commercial Licensing:
 
-9. AEDVICES Consulting SAS reserves the right to license other versions of this Software under different (including commercial) terms.
+10. AEDVICES Consulting SAS reserves the right to license other versions of this Software under different (including commercial) terms.
    For commercial licensing inquiries, contact: contact@aedvices.com
