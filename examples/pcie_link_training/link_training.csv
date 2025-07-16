@@ -1,0 +1,18 @@
+state           ,next_state      
+Detect          ,Polling  
+Polling         ,Detect
+Polling         ,Configuration 
+Configuration   ,L0
+Configuration   , Recovery 
+Configuration   , Detect
+L0              , L1
+L0              ,L0s
+L0              ,L2
+L0              ,Recovery
+Recovery        , Configuration
+Recovery        , L0
+Recovery        , Detect
+L1              ,Recovery
+L2              ,Detect
+L0s             ,L0
+L0s             ,Recovery

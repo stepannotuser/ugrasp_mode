@@ -1,0 +1,25 @@
+digraph StateMachine {
+    rankdir=LR;
+    node [shape=diamond];
+
+    FIRST_NODE [shape=rectangle];
+    FIRST_NODE -> A [label="1"];
+    FIRST_NODE -> B [label="2"];
+    A -> C;
+    A -> D;
+    B -> A;
+    B -> E;
+    C [shape=ellipse];
+    D [shape=ellipse];
+    E [shape=ellipse];
+    
+    C -> A;
+    D -> B;
+    E -> E_action;
+    E_action [shape=ellipse label="{$display}"];
+    E_action -> B;
+    
+    /**/
+
+
+}

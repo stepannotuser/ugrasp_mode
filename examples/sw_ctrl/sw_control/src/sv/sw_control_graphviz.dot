@@ -1,0 +1,26 @@
+// SVGraph sw_control
+// File    sw_control_graphviz.dot
+
+
+digraph sw_control {
+  pad="0.5"
+  Idle [fillcolor=lightgrey style=filled]
+  Idle -> Configure;
+  Configure -> InitTxBuffers;
+  Configure -> WaitForInterrupt;
+  InitTxBuffers -> TxControl;
+  TxControl -> WaitForInterrupt;
+  WaitForInterrupt -> ReadRxBuffer;
+  WaitForInterrupt -> InitTxBuffers;
+  WaitForInterrupt -> Idle;
+  WaitForInterrupt -> TxControl;
+  ReadRxBuffer -> Idle;
+  ReadRxBuffer -> Configure;
+  ReadRxBuffer -> InitTxBuffers;
+  ReadRxBuffer -> WaitForInterrupt;
+  Idle -> InitTxBuffers;
+  Idle -> TxControl;
+  InitTxBuffers -> InitTxBuffers;
+  TxControl -> TxControl;
+  TxControl -> InitTxBuffers;
+}

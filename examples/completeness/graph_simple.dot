@@ -1,0 +1,21 @@
+//randseq_example.dot
+
+digraph FSM {
+    
+    node [shape=ellipse];    
+    rank=max;
+    IDLE;
+
+    rank=med;
+    // --selections--
+    A -> {A; B C};
+    B -> {B C D};
+    //IDLE -> {A B};
+    IDLE 
+    ->
+     A
+    IDLE -> B;
+    C    -> {A IDLE };
+    D    -> {B IDLE };
+
+}
