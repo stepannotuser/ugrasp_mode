@@ -116,8 +116,8 @@ class svgraph_app:
 
 
   def pre_gen(self):
-    self.graph[__START__] = []
     nodes = [node for node in self.graph]
+    self.graph[__START__] = [] # need to be after nodes in order to don't have __START__ pointing on itself
     invalid_first_states = []
     for state in self.first_states :
       if not state in nodes :
