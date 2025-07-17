@@ -23,11 +23,13 @@ class uvm_sequence_generator(base_generator):
     outdir    = "."        if args["out_dir"]   == None else args["out_dir"]
     classname = "svgraph"  if args["classname"] == None else args["classname"]
     first_state = args["first_state"]
+    no_covergroup = args["no_covergroup"]
 
     self.db        = db 
     self.classname = classname
     self.outdir    = outdir
     self.first_state = first_state
+    self.no_covergroup = no_covergroup
 
     if ( "per_instance" in args ):
       self.per_instance = args["per_instance"].lower()
@@ -47,10 +49,12 @@ class uvm_sequence_generator(base_generator):
     self.write_types(f)
     f.close()
 
+
     # Reuse able coveragroups
-    f = self.open("_covergroups.svh")
-    self.write_covergroups(f)
-    f.close()
+    if not self.no_covergroup :
+      f = self.open("_covergroups.svh")
+      self.write_covergroups(f)
+      f.close()
 
     # Base sequence definition
     f = self.open("_base_sequence.svh")
@@ -107,7 +111,8 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"import uvm_pkg::*;\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"{self.classname}_types.svh\"\n")
-    self.write(file,1,f"`include \"{self.classname}_covergroups.svh\"\n")
+    if not self.no_covergroup :
+      self.write(file,1,f"`include \"{self.classname}_covergroups.svh\"\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"{self.classname}_base_sequence.svh\"\n")
     self.write(file,1,f"`include \"{self.classname}_sequence.svh\"\n")
@@ -231,7 +236,8 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"protected {self.classname}_state_t current_state;\n")
     self.write(file,1,f"protected {self.classname}_state_t previous_state;\n")
-    self.write(file,1,f"{self.classname}_cg cg;\n")
+    if not self.no_covergroup :
+      self.write(file,1,f"{self.classname}_cg cg;\n")
     self.write(file,1,f"extern virtual           function int          get_custom_coverage();\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
@@ -295,10 +301,11 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"local_curr_iter_idx = 0;\n")
     self.write(file,1,f"weight_end = 0;\n")
     self.write(file,1,f"init_weight(initial_edge_weight);\n")
-    if ( self.per_instance == "param" ):
-      self.write(file,1,f"cg = new(.is_per_instance(PER_INSTANCE_COVERAGE));\n")
-    else:
-      self.write(file,1,f"cg = new();\n")
+    if not self.no_covergroup :
+      if ( self.per_instance == "param" ):
+        self.write(file,1,f"cg = new(.is_per_instance(PER_INSTANCE_COVERAGE));\n")
+      else:
+        self.write(file,1,f"cg = new();\n")
     self.write(file,0,f"endfunction : new\n\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"// configure the covergroup goals depending on constraint setup\n")
@@ -310,14 +317,15 @@ class uvm_sequence_generator(base_generator):
     self.write(file,2,f"_at_least_value = (weight[src][dst] == 0) ? 1 : this.default_edge_at_least;\n")
     self.write(file,2,f"_cover_weight   = (weight[src][dst] == 0) ? 0 : 1;\n")
     self.write(file,0,f"\n")
-    self.write(file,2,f"// setup individual edge coverpoint target\n")
-    self.write(file,2,f"case ({{src,dst}})\n")
-    for idx,state in enumerate(self.db):
-      _start = state.strip()
-      for jdx,nextstate in enumerate(self.db[state]):
-        _end   = nextstate.strip()
-        self.write(file,3,f"{{{_start},{_end}}} : begin cg.{_start}_to_{_end}.option.weight = _cover_weight; cg.{_start}_to_{_end}.option.at_least = _at_least_value; end\n")    
-    self.write(file,3,f"endcase\n")
+    if not self.no_covergroup :
+      self.write(file,2,f"// setup individual edge coverpoint target\n")
+      self.write(file,2,f"case ({{src,dst}})\n")
+      for idx,state in enumerate(self.db):
+        _start = state.strip()
+        for jdx,nextstate in enumerate(self.db[state]):
+          _end   = nextstate.strip()
+          self.write(file,3,f"{{{_start},{_end}}} : begin cg.{_start}_to_{_end}.option.weight = _cover_weight; cg.{_start}_to_{_end}.option.at_least = _at_least_value; end\n")    
+      self.write(file,3,f"endcase\n")
     self.write(file,2,f"end\n")
     self.write(file,0,f"endfunction :  post_randomize\n\n")
     self.write(file,0,f"\n")
@@ -369,15 +377,16 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"current_state = _dst;\n")
     self.write(file,1,f"weight[_src][_dst] = weight[_src][_dst] > weight_default_decrement ? weight[_src][_dst] - weight_default_decrement : 1;\n")
     self.write(file,1,f"local_curr_iter_idx += 1;\n")
-    self.write(file,1,f"// Record coverage\n")
-    self.write(file,1,f"cg.sample(current_state);\n")
-    self.write(file,1,f"// End of seqquence exit criteria\n")
-    self.write(file,1,f"if ( ( local_curr_iter_idx >= max_iter ) || \n")
-    self.write(file,1,f"   ( coverage_closure_en && (cg.get_coverage() == 100 && get_custom_coverage() == 100) ) ) \n")
-    self.write(file,1,f"begin \n")
-    self.write(file,2,f"init_weight(0);\n")
-    self.write(file,2,f"weight_end = 100;\n")
-    self.write(file,1,f"end\n")
+    if not self.no_covergroup :
+      self.write(file,1,f"// Record coverage\n")
+      self.write(file,1,f"cg.sample(current_state);\n")
+      self.write(file,1,f"// End of seqquence exit criteria\n")
+      self.write(file,1,f"if ( ( local_curr_iter_idx >= max_iter ) || \n")
+      self.write(file,1,f"   ( coverage_closure_en && (cg.get_coverage() == 100 && get_custom_coverage() == 100) ) ) \n")
+      self.write(file,1,f"begin \n")
+      self.write(file,2,f"init_weight(0);\n")
+      self.write(file,2,f"weight_end = 100;\n")
+      self.write(file,1,f"end\n")
     self.write(file,0,f"endfunction : update_transition\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"// ----------------------------------------------\n")
@@ -599,9 +608,10 @@ class uvm_sequence_generator(base_generator):
     self.write(file,2,f"`uvm_info(\"completion_post_body\",$sformatf(\"- nr of iterations : %d\",this.get_current_iteration()),UVM_MEDIUM);\n")
     self.write(file,2,f"if ( get_current_iteration() >= max_iter )\n")
     self.write(file,3,f"`uvm_info(\"completion_post_body\",$sformatf(\"- Max iterations %d reached\",this.max_iter),UVM_MEDIUM);\n")
-    self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- state      coverage: %d %%\",cg.states.get_coverage());\n")
-    self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- transition coverage: %d %%\",cg.transitions.get_coverage());\n")
-    self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- Total      coverage: %d %%\",cg.get_coverage());\n")
+    if not self.no_covergroup :
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- state      coverage: %d %%\",cg.states.get_coverage());\n")
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- transition coverage: %d %%\",cg.transitions.get_coverage());\n")
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- Total      coverage: %d %%\",cg.get_coverage());\n")
     self.write(file,0,f"endfunction\n")
     self.write(file,0,f"\n")
 

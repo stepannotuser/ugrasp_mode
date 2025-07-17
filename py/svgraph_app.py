@@ -29,11 +29,12 @@ from py.generator.uvm_sequence_generator  import uvm_sequence_generator
 from py.generator.dot_generator           import dot_generator
 from py.generator.dot_full_generator      import dot_full_generator
 
+__START__ = "__START__" # Name of the start node
 class svgraph_app:
   """
     Main SV Graph App
   """
-  common_arguments = ["out_dir","classname","first_state"]
+  common_arguments = ["out_dir","classname","first_state","no_covergroup","allow_orphans"]
 
   parser_factory = {
     "in_csv" : csv_parser
@@ -57,6 +58,7 @@ class svgraph_app:
     self.args  = args
     self.graph = {}
     self.parser = None
+    self.first_states = [] if args["first_state"]==None else args["first_state"].replace(" ","").split(",")
 
   def parse(self):
     # Check if any of the argument is in the parser factory
@@ -77,7 +79,38 @@ class svgraph_app:
     # Read the file
     self.graph = self.parser.read(self.args[argname],self.args)
 
+  def detect_orphans(self):
+    orphans = []
+    for current in self.graph:
+      found = False
+      for next in self.graph:
+        if current in self.graph.get(next):
+          found = True
+      if not found:
+        orphans.append(current)
 
+    return orphans
+  
+  def pre_gen(self):
+    nodes = [node for node in self.graph]
+    valid_first_state = True
+    for starter in self.first_states :
+      if not starter in nodes :
+        valid_first_state = False
+
+
+    if self.first_states and valid_first_state :
+      self.graph[__START__] = self.first_states
+    else : 
+      self.graph[__START__] = nodes
+    
+    if self.args['allow_orphans']:
+      orphans = self.detect_orphans()
+      for orphan in orphans:
+        if not orphan in self.graph[__START__] and orphan!=__START__:
+          self.graph[__START__].append(orphan)
+
+    self.args["first_state"] = __START__
 
   def generate(self):
     
@@ -98,4 +131,5 @@ class svgraph_app:
 
   def main(self):
     self.parse()
+    self.pre_gen()
     self.generate()

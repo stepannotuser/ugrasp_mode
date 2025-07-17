@@ -20,6 +20,7 @@ class csv_parser(base_parser):
   def read(self,filename,args=None):
 
     db = {}
+    first_state =args["first_state"]
 
     with open(filename, 'r') as csvfile:
       result = list(csv.reader(csvfile))
