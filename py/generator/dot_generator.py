@@ -56,7 +56,7 @@ class dot_generator(base_generator):
     self.write(file,1,f"pad=\"0.5\"\n")
 
     if ( self.first_state != None ):
-       self.write(file,1,f"{self.first_state} [fillcolor=lightgrey style=filled]\n")
+      self.write(file,1,f"{self.first_state} [fillcolor=lightgrey style=filled]\n")
 
     for idx,state in enumerate(self.db):
       _start = state.strip()

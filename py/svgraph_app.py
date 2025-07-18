@@ -29,11 +29,12 @@ from py.generator.uvm_sequence_generator  import uvm_sequence_generator
 from py.generator.dot_generator           import dot_generator
 from py.generator.dot_full_generator      import dot_full_generator
 
+__START__ = "__START__" # Name of the start node
 class svgraph_app:
   """
     Main SV Graph App
   """
-  common_arguments = ["out_dir","classname","first_state"]
+  common_arguments = ["out_dir","classname","first_state","no_covergroup","allow_orphans"]
 
   parser_factory = {
     "in_csv" : csv_parser
@@ -57,6 +58,17 @@ class svgraph_app:
     self.args  = args
     self.graph = {}
     self.parser = None
+    self.first_states = [] if args["first_state"]==None else args["first_state"].replace(" ","").split(",")
+    self.diagnostics = {
+      "errors": {
+        "has" : False,
+        "message":""
+      },
+      "warnings" :{
+        "hase" : False,
+        "message": ""
+      }
+    }
 
   def parse(self):
     # Check if any of the argument is in the parser factory
@@ -77,7 +89,63 @@ class svgraph_app:
     # Read the file
     self.graph = self.parser.read(self.args[argname],self.args)
 
+  def detect_orphans(self):
+    orphans = []
+    for current in self.graph:
+      found = False
+      for next in self.graph:
+        if current in self.graph.get(next):
+          found = True
+      if not found:
+        orphans.append(current)
 
+    return orphans
+  
+  def detect_unreachable(self,start=__START__):
+    unreachable = [node for node in self.graph]
+    to_process = [start]
+    unreachable.remove(start)
+    while to_process:
+      current = to_process.pop()
+      for neighbor in self.graph[current]:
+        if neighbor in unreachable:
+          to_process.append(neighbor)
+          unreachable.remove(neighbor)
+
+    return unreachable
+
+
+  def pre_gen(self):
+    nodes = [node for node in self.graph]
+    self.graph[__START__] = [] # need to be after nodes in order to don't have __START__ pointing on itself
+    invalid_first_states = []
+    for state in self.first_states :
+      if not state in nodes :
+        invalid_first_states.append(state)
+        self.raise_error(f"Error: undefined first state {state}")
+
+
+    if self.first_states and not invalid_first_states:
+      self.graph[__START__] = self.first_states
+    elif invalid_first_states:
+      for state in self.first_states:
+        if not state in invalid_first_states:
+          self.graph[__START__].append(state)
+    else : 
+      self.graph[__START__] = nodes
+    
+    if self.args['allow_orphans']:
+      orphans = self.detect_orphans()
+      for orphan in orphans:
+        if not orphan in self.graph[__START__] and orphan!=__START__:
+          self.graph[__START__].append(orphan)
+
+    unreachable = self.detect_unreachable()
+    if unreachable:
+      for state in unreachable:
+        self.warn(f"Warning: unreachable state {state}")
+
+    self.args["first_state"] = __START__
 
   def generate(self):
     
@@ -93,9 +161,22 @@ class svgraph_app:
 
         # generate files
         generator.generate(self.graph,self.args)
+  
+  def raise_error(self,message):
+    self.diagnostics["errors"]["has"] = True
+    self.diagnostics["errors"]["message"] += message + "\n" 
 
-
+  def warn(self,message):
+    self.diagnostics["warnings"]["has"] = True
+    self.diagnostics["warnings"]["message"] += message + "\n" 
 
   def main(self):
     self.parse()
-    self.generate()
+    self.pre_gen()
+    if not self.diagnostics["errors"]["has"]:
+      self.generate()
+    else:
+      print(self.diagnostics["errors"]["message"])
+    if self.diagnostics["warnings"]["has"]:
+      print(self.diagnostics["warnings"]["message"])
+
