@@ -1,0 +1,4 @@
+# Ignore all emacs extra files
+.*~
+\#.*
+__pycache__
