@@ -85,3 +85,19 @@ is converted to
 
 
 
+TODOs:
+======
+
+- Custom base sequence, instead of only "uvm_sequence"
+- Custom name for **starting** node and for **completion** task
+- Check conflict names with internal functions and tasks
+- Multi-Layered sequence scenarios within the same package, taking several inputs.
+- DPI calls to enable advanced graph search algorithms.
+- Input Formats:
+    - .dot / graphviz
+    - PSS ?
+- Output Formats:
+    - Markdown documentation .md files
+    - SVG and PNG directly calling graphviz
+
+
