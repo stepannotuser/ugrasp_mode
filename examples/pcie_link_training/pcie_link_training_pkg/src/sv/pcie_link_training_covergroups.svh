@@ -39,7 +39,7 @@
         ,(L0s => L0)
         ,(L0s => Recovery)
         ,(L2 => Detect)
-        ,(__START__ => Detect)
+        ,(starting => Detect)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -145,11 +145,11 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins L2_to_Detect = ( L2 => Detect ); 
     }
-    __START___to_Detect : coverpoint current_state {
+    starting_to_Detect : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins __START___to_Detect = ( __START__ => Detect ); 
+      bins starting_to_Detect = ( starting => Detect ); 
     }
 
   endgroup

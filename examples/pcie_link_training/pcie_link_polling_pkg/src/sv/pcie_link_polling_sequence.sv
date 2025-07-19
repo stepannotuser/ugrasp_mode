@@ -89,12 +89,12 @@ endtask
 function void pcie_link_polling_sequence::Exit_to_Configuration_post_body();
 endfunction
 
-// STATE:__START__ Hooks to be implemented in children classes
-function void pcie_link_polling_sequence::__START___pre_body();
+// STATE:starting Hooks to be implemented in children classes
+function void pcie_link_polling_sequence::starting_pre_body();
 endfunction
-task          pcie_link_polling_sequence::__START___body();
+task          pcie_link_polling_sequence::starting_body();
 endtask
-function void pcie_link_polling_sequence::__START___post_body();
+function void pcie_link_polling_sequence::starting_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -156,12 +156,12 @@ endtask
 function void pcie_link_polling_sequence::Polling_Configuration_to_Exit_to_Configuration_post_body();
 endfunction
 
-// TRANSITION:__START__ to Entry_from_Detect: Hooks to be implemented in children classes
-function void pcie_link_polling_sequence::__START___to_Entry_from_Detect_pre_body();
+// TRANSITION:starting to Entry_from_Detect: Hooks to be implemented in children classes
+function void pcie_link_polling_sequence::starting_to_Entry_from_Detect_pre_body();
 endfunction
-task          pcie_link_polling_sequence::__START___to_Entry_from_Detect_body();
+task          pcie_link_polling_sequence::starting_to_Entry_from_Detect_body();
 endtask
-function void pcie_link_polling_sequence::__START___to_Entry_from_Detect_post_body();
+function void pcie_link_polling_sequence::starting_to_Entry_from_Detect_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -191,14 +191,14 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task pcie_link_polling_sequence::body();
-  randsequence(__START__)
+  randsequence(starting)
     Entry_from_Detect : Entry_from_Detect_act Entry_from_Detect_sel;
     Polling_Active : Polling_Active_act Polling_Active_sel;
     Polling_Compliance : Polling_Compliance_act Polling_Compliance_sel;
     Polling_Configuration : Polling_Configuration_act Polling_Configuration_sel;
     Exit_to_Detect : Exit_to_Detect_act Exit_to_Detect_sel;
     Exit_to_Configuration : Exit_to_Configuration_act Exit_to_Configuration_sel;
-    __START__ : __START___act __START___sel;
+    starting : starting_act starting_sel;
 
     Entry_from_Detect_act : {
       prepare_context();
@@ -236,11 +236,11 @@ task pcie_link_polling_sequence::body();
       fork Exit_to_Configuration_body(); state_body(Exit_to_Configuration); join
       fork Exit_to_Configuration_post_body(); state_post_body(Exit_to_Configuration); join
     };
-    __START___act : {
+    starting_act : {
       prepare_context();
-      fork __START___pre_body(); state_pre_body(__START__); join
-      fork __START___body(); state_body(__START__); join
-      fork __START___post_body(); state_post_body(__START__); join
+      fork starting_pre_body(); state_pre_body(starting); join
+      fork starting_body(); state_body(starting); join
+      fork starting_post_body(); state_post_body(starting); join
     };
 
     Entry_from_Detect_sel : _END_:=weight_end | Entry_from_Detect_to_Polling_Active:=weight[Entry_from_Detect][Polling_Active];
@@ -249,7 +249,7 @@ task pcie_link_polling_sequence::body();
     Polling_Configuration_sel : _END_:=weight_end | Polling_Configuration_to_Exit_to_Detect:=weight[Polling_Configuration][Exit_to_Detect] | Polling_Configuration_to_Exit_to_Configuration:=weight[Polling_Configuration][Exit_to_Configuration];
     Exit_to_Detect_sel : _END_:=weight_end;
     Exit_to_Configuration_sel : _END_:=weight_end;
-    __START___sel : _END_:=weight_end | __START___to_Entry_from_Detect:=weight[__START__][Entry_from_Detect];
+    starting_sel : _END_:=weight_end | starting_to_Entry_from_Detect:=weight[starting][Entry_from_Detect];
 
     Entry_from_Detect_to_Polling_Active : { 
       prepare_context();
@@ -300,12 +300,12 @@ task pcie_link_polling_sequence::body();
       fork Polling_Configuration_to_Exit_to_Configuration_post_body(); transition_post_body(Polling_Configuration,Exit_to_Configuration); join
       update_transition(Polling_Configuration,Exit_to_Configuration);
     } /* ... to ... */ Exit_to_Configuration;
-    __START___to_Entry_from_Detect : { 
+    starting_to_Entry_from_Detect : { 
       prepare_context();
-      fork __START___to_Entry_from_Detect_pre_body(); transition_pre_body(__START__,Entry_from_Detect); join
-      fork __START___to_Entry_from_Detect_body(); transition_body(__START__,Entry_from_Detect); join
-      fork __START___to_Entry_from_Detect_post_body(); transition_post_body(__START__,Entry_from_Detect); join
-      update_transition(__START__,Entry_from_Detect);
+      fork starting_to_Entry_from_Detect_pre_body(); transition_pre_body(starting,Entry_from_Detect); join
+      fork starting_to_Entry_from_Detect_body(); transition_body(starting,Entry_from_Detect); join
+      fork starting_to_Entry_from_Detect_post_body(); transition_post_body(starting,Entry_from_Detect); join
+      update_transition(starting,Entry_from_Detect);
     } /* ... to ... */ Entry_from_Detect;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence

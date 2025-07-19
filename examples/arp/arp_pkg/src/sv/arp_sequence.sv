@@ -81,12 +81,12 @@ endtask
 function void arp_sequence::Ready_post_body();
 endfunction
 
-// STATE:__START__ Hooks to be implemented in children classes
-function void arp_sequence::__START___pre_body();
+// STATE:starting Hooks to be implemented in children classes
+function void arp_sequence::starting_pre_body();
 endfunction
-task          arp_sequence::__START___body();
+task          arp_sequence::starting_body();
 endtask
-function void arp_sequence::__START___post_body();
+function void arp_sequence::starting_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -140,12 +140,12 @@ endtask
 function void arp_sequence::Ready_to_Idle_post_body();
 endfunction
 
-// TRANSITION:__START__ to Idle: Hooks to be implemented in children classes
-function void arp_sequence::__START___to_Idle_pre_body();
+// TRANSITION:starting to Idle: Hooks to be implemented in children classes
+function void arp_sequence::starting_to_Idle_pre_body();
 endfunction
-task          arp_sequence::__START___to_Idle_body();
+task          arp_sequence::starting_to_Idle_body();
 endtask
-function void arp_sequence::__START___to_Idle_post_body();
+function void arp_sequence::starting_to_Idle_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -175,13 +175,13 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task arp_sequence::body();
-  randsequence(__START__)
+  randsequence(starting)
     Idle : Idle_act Idle_sel;
     RequestAddress : RequestAddress_act RequestAddress_sel;
     AddressConflict : AddressConflict_act AddressConflict_sel;
     AssignAddress : AssignAddress_act AssignAddress_sel;
     Ready : Ready_act Ready_sel;
-    __START__ : __START___act __START___sel;
+    starting : starting_act starting_sel;
 
     Idle_act : {
       prepare_context();
@@ -213,11 +213,11 @@ task arp_sequence::body();
       fork Ready_body(); state_body(Ready); join
       fork Ready_post_body(); state_post_body(Ready); join
     };
-    __START___act : {
+    starting_act : {
       prepare_context();
-      fork __START___pre_body(); state_pre_body(__START__); join
-      fork __START___body(); state_body(__START__); join
-      fork __START___post_body(); state_post_body(__START__); join
+      fork starting_pre_body(); state_pre_body(starting); join
+      fork starting_body(); state_body(starting); join
+      fork starting_post_body(); state_post_body(starting); join
     };
 
     Idle_sel : _END_:=weight_end | Idle_to_RequestAddress:=weight[Idle][RequestAddress];
@@ -225,7 +225,7 @@ task arp_sequence::body();
     AddressConflict_sel : _END_:=weight_end | AddressConflict_to_RequestAddress:=weight[AddressConflict][RequestAddress];
     AssignAddress_sel : _END_:=weight_end | AssignAddress_to_Ready:=weight[AssignAddress][Ready];
     Ready_sel : _END_:=weight_end | Ready_to_Idle:=weight[Ready][Idle];
-    __START___sel : _END_:=weight_end | __START___to_Idle:=weight[__START__][Idle];
+    starting_sel : _END_:=weight_end | starting_to_Idle:=weight[starting][Idle];
 
     Idle_to_RequestAddress : { 
       prepare_context();
@@ -269,12 +269,12 @@ task arp_sequence::body();
       fork Ready_to_Idle_post_body(); transition_post_body(Ready,Idle); join
       update_transition(Ready,Idle);
     } /* ... to ... */ Idle;
-    __START___to_Idle : { 
+    starting_to_Idle : { 
       prepare_context();
-      fork __START___to_Idle_pre_body(); transition_pre_body(__START__,Idle); join
-      fork __START___to_Idle_body(); transition_body(__START__,Idle); join
-      fork __START___to_Idle_post_body(); transition_post_body(__START__,Idle); join
-      update_transition(__START__,Idle);
+      fork starting_to_Idle_pre_body(); transition_pre_body(starting,Idle); join
+      fork starting_to_Idle_body(); transition_body(starting,Idle); join
+      fork starting_to_Idle_post_body(); transition_post_body(starting,Idle); join
+      update_transition(starting,Idle);
     } /* ... to ... */ Idle;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence

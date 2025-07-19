@@ -42,7 +42,7 @@ function void sw_control_base_sequence::post_randomize();
       {ReadRxBuffer,Configure} : begin cg.ReadRxBuffer_to_Configure.option.weight = _cover_weight; cg.ReadRxBuffer_to_Configure.option.at_least = _at_least_value; end
       {ReadRxBuffer,InitTxBuffers} : begin cg.ReadRxBuffer_to_InitTxBuffers.option.weight = _cover_weight; cg.ReadRxBuffer_to_InitTxBuffers.option.at_least = _at_least_value; end
       {ReadRxBuffer,WaitForInterrupt} : begin cg.ReadRxBuffer_to_WaitForInterrupt.option.weight = _cover_weight; cg.ReadRxBuffer_to_WaitForInterrupt.option.at_least = _at_least_value; end
-      {__START__,Idle} : begin cg.__START___to_Idle.option.weight = _cover_weight; cg.__START___to_Idle.option.at_least = _at_least_value; end
+      {starting,Idle} : begin cg.starting_to_Idle.option.weight = _cover_weight; cg.starting_to_Idle.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -76,7 +76,7 @@ function void sw_control_base_sequence::init_weight(int unsigned _w);
     weight[ReadRxBuffer][Configure] = _w;
     weight[ReadRxBuffer][InitTxBuffers] = _w;
     weight[ReadRxBuffer][WaitForInterrupt] = _w;
-    weight[__START__][Idle] = _w;
+    weight[starting][Idle] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints

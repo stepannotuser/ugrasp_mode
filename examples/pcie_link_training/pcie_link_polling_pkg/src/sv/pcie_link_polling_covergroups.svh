@@ -29,7 +29,7 @@
         ,(Polling_Compliance => Polling_Active)
         ,(Polling_Configuration => Exit_to_Detect)
         ,(Polling_Configuration => Exit_to_Configuration)
-        ,(__START__ => Entry_from_Detect)
+        ,(starting => Entry_from_Detect)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -75,11 +75,11 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins Polling_Configuration_to_Exit_to_Configuration = ( Polling_Configuration => Exit_to_Configuration ); 
     }
-    __START___to_Entry_from_Detect : coverpoint current_state {
+    starting_to_Entry_from_Detect : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins __START___to_Entry_from_Detect = ( __START__ => Entry_from_Detect ); 
+      bins starting_to_Entry_from_Detect = ( starting => Entry_from_Detect ); 
     }
 
   endgroup

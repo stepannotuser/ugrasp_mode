@@ -27,7 +27,7 @@ function bit sw_control_checker::is_valid_transition(sw_control_state_t src,dst)
     {ReadRxBuffer,Configure} : ret_val = 1;
     {ReadRxBuffer,InitTxBuffers} : ret_val = 1;
     {ReadRxBuffer,WaitForInterrupt} : ret_val = 1;
-    {__START__,Idle} : ret_val = 1;
+    {starting,Idle} : ret_val = 1;
     default: ret_val = 0;
   endcase
 endfunction : is_valid_transition

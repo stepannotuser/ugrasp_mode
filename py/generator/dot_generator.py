@@ -11,8 +11,9 @@
 
 from py.generator.base_generator import base_generator 
 import os
-
-
+import copy
+__START__ = "starting"    # Name of the start node
+__END__   = "completion"  # Name of the end node
 class dot_generator(base_generator):
   def __init__(self):
     fname = "dot_generator.dot"
@@ -22,10 +23,18 @@ class dot_generator(base_generator):
     classname = "svgraph"  if args["classname"] == None else args["classname"]
     first_state = args["first_state"]
 
-    self.db        = db 
+    self.db        = copy.deepcopy(db)
     self.classname = classname
     self.outdir    = outdir
     self.first_state = first_state
+
+    # Detect if there are any ending states
+    ending_states = [state for state in self.db if not self.db[state]]
+    if ending_states:
+      self.db[__END__] = []
+      for state in ending_states:
+        if state != __START__:
+          self.db[state].append(__END__)
 
     if ( not os.path.isdir(self.outdir) ):
       os.makedirs(self.outdir)

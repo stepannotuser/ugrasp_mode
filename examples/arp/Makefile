@@ -3,7 +3,7 @@
 arp_pkg: arp_pkg/src/sv/arp_pkg.sv 
 
 arp_pkg/src/sv/arp_pkg.sv: Makefile arp.csv
-	python3 ../../svgraph.py -in_csv arp.csv -out_dir arp_pkg/src/sv -classname arp -gen_uvm -first_state Idle -per_instance no
+	python3 ../../svgraph.py -in_csv arp.csv -out_dir arp_pkg/src/sv -classname arp -gen_uvm -first_state Idle -per_instance no -gen_dot -gen_dot_full
 
 gen: arp_pkg
 

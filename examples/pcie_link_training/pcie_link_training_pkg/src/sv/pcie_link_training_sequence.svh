@@ -70,9 +70,9 @@ class pcie_link_training_sequence extends pcie_link_training_base_sequence;
   extern virtual task          L2_body();
   extern virtual function void L2_post_body();
 
-  extern virtual function void __START___pre_body();
-  extern virtual task          __START___body();
-  extern virtual function void __START___post_body();
+  extern virtual function void starting_pre_body();
+  extern virtual task          starting_body();
+  extern virtual function void starting_post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -145,9 +145,9 @@ class pcie_link_training_sequence extends pcie_link_training_base_sequence;
   extern virtual task          L2_to_Detect_body();
   extern virtual function void L2_to_Detect_post_body();
 
-  extern virtual function void __START___to_Detect_pre_body();
-  extern virtual task          __START___to_Detect_body();
-  extern virtual function void __START___to_Detect_post_body();
+  extern virtual function void starting_to_Detect_pre_body();
+  extern virtual task          starting_to_Detect_body();
+  extern virtual function void starting_to_Detect_post_body();
 
   extern virtual task body();
 endclass : pcie_link_training_sequence

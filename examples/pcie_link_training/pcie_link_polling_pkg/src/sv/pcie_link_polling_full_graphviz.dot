@@ -4,8 +4,8 @@
 
 digraph pcie_link_polling {
   pad="0.5"
-  __START__ [label="__START__" fillcolor=lightgrey style=filled];
-  __START__ -> __START___body;
+  starting [label="starting" fillcolor=lightgrey style=filled];
+  starting -> starting_body;
   Entry_from_Detect_body [label="Entry_from_Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
   Entry_from_Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
   Entry_from_Detect_body -> Entry_from_Detect_sel;
@@ -42,13 +42,22 @@ digraph pcie_link_polling {
   Exit_to_Detect_body [label="Exit_to_Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
   Exit_to_Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
   Exit_to_Detect_body -> Exit_to_Detect_sel;
+  Exit_to_Detect_to_completion_body [label="Exit_to_Detect_to_completion_body()" shape=box style=filled fillcolor=lightcyan];
+  Exit_to_Detect_sel -> Exit_to_Detect_to_completion_body
+  Exit_to_Detect_to_completion_body -> completion_body;
   Exit_to_Configuration_body [label="Exit_to_Configuration_body()" shape=box style=filled fillcolor=darkseagreen1];
   Exit_to_Configuration_sel [label="" shape=diamond height="0.3" width="0.3"];
   Exit_to_Configuration_body -> Exit_to_Configuration_sel;
-  __START___body [label="__START___body()" shape=box style=filled fillcolor=darkseagreen1];
-  __START___sel [label="" shape=diamond height="0.3" width="0.3"];
-  __START___body -> __START___sel;
-  __START___to_Entry_from_Detect_body [label="__START___to_Entry_from_Detect_body()" shape=box style=filled fillcolor=lightcyan];
-  __START___sel -> __START___to_Entry_from_Detect_body
-  __START___to_Entry_from_Detect_body -> Entry_from_Detect_body;
+  Exit_to_Configuration_to_completion_body [label="Exit_to_Configuration_to_completion_body()" shape=box style=filled fillcolor=lightcyan];
+  Exit_to_Configuration_sel -> Exit_to_Configuration_to_completion_body
+  Exit_to_Configuration_to_completion_body -> completion_body;
+  starting_body [label="starting_body()" shape=box style=filled fillcolor=darkseagreen1];
+  starting_sel [label="" shape=diamond height="0.3" width="0.3"];
+  starting_body -> starting_sel;
+  starting_to_Entry_from_Detect_body [label="starting_to_Entry_from_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  starting_sel -> starting_to_Entry_from_Detect_body
+  starting_to_Entry_from_Detect_body -> Entry_from_Detect_body;
+  completion_body [label="completion_body()" shape=box style=filled fillcolor=darkseagreen1];
+  completion_sel [label="" shape=diamond height="0.3" width="0.3"];
+  completion_body -> completion_sel;
 }

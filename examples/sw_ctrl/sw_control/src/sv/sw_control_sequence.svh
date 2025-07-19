@@ -62,9 +62,9 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual task          ReadRxBuffer_body();
   extern virtual function void ReadRxBuffer_post_body();
 
-  extern virtual function void __START___pre_body();
-  extern virtual task          __START___body();
-  extern virtual function void __START___post_body();
+  extern virtual function void starting_pre_body();
+  extern virtual task          starting_body();
+  extern virtual function void starting_post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -141,9 +141,9 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual task          ReadRxBuffer_to_WaitForInterrupt_body();
   extern virtual function void ReadRxBuffer_to_WaitForInterrupt_post_body();
 
-  extern virtual function void __START___to_Idle_pre_body();
-  extern virtual task          __START___to_Idle_body();
-  extern virtual function void __START___to_Idle_post_body();
+  extern virtual function void starting_to_Idle_pre_body();
+  extern virtual task          starting_to_Idle_body();
+  extern virtual function void starting_to_Idle_post_body();
 
   extern virtual task body();
 endclass : sw_control_sequence

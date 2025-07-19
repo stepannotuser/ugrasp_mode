@@ -4,7 +4,7 @@
 
 digraph sw_control {
   pad="0.5"
-  __START__ [fillcolor=lightgrey style=filled]
+  starting [fillcolor=lightgrey style=filled]
   Idle -> Configure;
   Idle -> InitTxBuffers;
   Idle -> TxControl;
@@ -23,5 +23,5 @@ digraph sw_control {
   ReadRxBuffer -> Configure;
   ReadRxBuffer -> InitTxBuffers;
   ReadRxBuffer -> WaitForInterrupt;
-  __START__ -> Idle;
+  starting -> Idle;
 }

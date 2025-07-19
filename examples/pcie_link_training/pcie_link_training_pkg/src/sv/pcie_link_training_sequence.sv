@@ -105,12 +105,12 @@ endtask
 function void pcie_link_training_sequence::L2_post_body();
 endfunction
 
-// STATE:__START__ Hooks to be implemented in children classes
-function void pcie_link_training_sequence::__START___pre_body();
+// STATE:starting Hooks to be implemented in children classes
+function void pcie_link_training_sequence::starting_pre_body();
 endfunction
-task          pcie_link_training_sequence::__START___body();
+task          pcie_link_training_sequence::starting_body();
 endtask
-function void pcie_link_training_sequence::__START___post_body();
+function void pcie_link_training_sequence::starting_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -252,12 +252,12 @@ endtask
 function void pcie_link_training_sequence::L2_to_Detect_post_body();
 endfunction
 
-// TRANSITION:__START__ to Detect: Hooks to be implemented in children classes
-function void pcie_link_training_sequence::__START___to_Detect_pre_body();
+// TRANSITION:starting to Detect: Hooks to be implemented in children classes
+function void pcie_link_training_sequence::starting_to_Detect_pre_body();
 endfunction
-task          pcie_link_training_sequence::__START___to_Detect_body();
+task          pcie_link_training_sequence::starting_to_Detect_body();
 endtask
-function void pcie_link_training_sequence::__START___to_Detect_post_body();
+function void pcie_link_training_sequence::starting_to_Detect_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -287,7 +287,7 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task pcie_link_training_sequence::body();
-  randsequence(__START__)
+  randsequence(starting)
     Detect : Detect_act Detect_sel;
     Polling : Polling_act Polling_sel;
     Configuration : Configuration_act Configuration_sel;
@@ -296,7 +296,7 @@ task pcie_link_training_sequence::body();
     L1 : L1_act L1_sel;
     L0s : L0s_act L0s_sel;
     L2 : L2_act L2_sel;
-    __START__ : __START___act __START___sel;
+    starting : starting_act starting_sel;
 
     Detect_act : {
       prepare_context();
@@ -346,11 +346,11 @@ task pcie_link_training_sequence::body();
       fork L2_body(); state_body(L2); join
       fork L2_post_body(); state_post_body(L2); join
     };
-    __START___act : {
+    starting_act : {
       prepare_context();
-      fork __START___pre_body(); state_pre_body(__START__); join
-      fork __START___body(); state_body(__START__); join
-      fork __START___post_body(); state_post_body(__START__); join
+      fork starting_pre_body(); state_pre_body(starting); join
+      fork starting_body(); state_body(starting); join
+      fork starting_post_body(); state_post_body(starting); join
     };
 
     Detect_sel : _END_:=weight_end | Detect_to_Polling:=weight[Detect][Polling];
@@ -361,7 +361,7 @@ task pcie_link_training_sequence::body();
     L1_sel : _END_:=weight_end | L1_to_Recovery:=weight[L1][Recovery];
     L0s_sel : _END_:=weight_end | L0s_to_L0:=weight[L0s][L0] | L0s_to_Recovery:=weight[L0s][Recovery];
     L2_sel : _END_:=weight_end | L2_to_Detect:=weight[L2][Detect];
-    __START___sel : _END_:=weight_end | __START___to_Detect:=weight[__START__][Detect];
+    starting_sel : _END_:=weight_end | starting_to_Detect:=weight[starting][Detect];
 
     Detect_to_Polling : { 
       prepare_context();
@@ -482,12 +482,12 @@ task pcie_link_training_sequence::body();
       fork L2_to_Detect_post_body(); transition_post_body(L2,Detect); join
       update_transition(L2,Detect);
     } /* ... to ... */ Detect;
-    __START___to_Detect : { 
+    starting_to_Detect : { 
       prepare_context();
-      fork __START___to_Detect_pre_body(); transition_pre_body(__START__,Detect); join
-      fork __START___to_Detect_body(); transition_body(__START__,Detect); join
-      fork __START___to_Detect_post_body(); transition_post_body(__START__,Detect); join
-      update_transition(__START__,Detect);
+      fork starting_to_Detect_pre_body(); transition_pre_body(starting,Detect); join
+      fork starting_to_Detect_body(); transition_body(starting,Detect); join
+      fork starting_to_Detect_post_body(); transition_post_body(starting,Detect); join
+      update_transition(starting,Detect);
     } /* ... to ... */ Detect;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence

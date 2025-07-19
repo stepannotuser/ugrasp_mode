@@ -58,9 +58,9 @@ class arp_sequence extends arp_base_sequence;
   extern virtual task          Ready_body();
   extern virtual function void Ready_post_body();
 
-  extern virtual function void __START___pre_body();
-  extern virtual task          __START___body();
-  extern virtual function void __START___post_body();
+  extern virtual function void starting_pre_body();
+  extern virtual task          starting_body();
+  extern virtual function void starting_post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -89,9 +89,9 @@ class arp_sequence extends arp_base_sequence;
   extern virtual task          Ready_to_Idle_body();
   extern virtual function void Ready_to_Idle_post_body();
 
-  extern virtual function void __START___to_Idle_pre_body();
-  extern virtual task          __START___to_Idle_body();
-  extern virtual function void __START___to_Idle_post_body();
+  extern virtual function void starting_to_Idle_pre_body();
+  extern virtual task          starting_to_Idle_body();
+  extern virtual function void starting_to_Idle_post_body();
 
   extern virtual task body();
 endclass : arp_sequence

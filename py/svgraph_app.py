@@ -29,7 +29,8 @@ from py.generator.uvm_sequence_generator  import uvm_sequence_generator
 from py.generator.dot_generator           import dot_generator
 from py.generator.dot_full_generator      import dot_full_generator
 
-__START__ = "__START__" # Name of the start node
+__START__ = "starting"    # Name of the start node
+__END__   = "completion"  # Name of the end node
 class svgraph_app:
   """
     Main SV Graph App
@@ -160,9 +161,12 @@ class svgraph_app:
     if not ending_states:
       self.info(f"No final states are found. The sequence will loop until the maximum number of iterations or coverage is reached.")
     else:
+      #self.graph[__END__] = []
       for state in ending_states:
         if state != __START__:
+          #self.graph[state].append(__END__)
           self.info(f"State {state} is an ending state. Reaching it will terminate the sequence.")
+      
 
     self.args["first_state"] = __START__
 

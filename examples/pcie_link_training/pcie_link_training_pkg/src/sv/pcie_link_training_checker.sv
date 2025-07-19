@@ -26,7 +26,7 @@ function bit pcie_link_training_checker::is_valid_transition(pcie_link_training_
     {L0s,L0} : ret_val = 1;
     {L0s,Recovery} : ret_val = 1;
     {L2,Detect} : ret_val = 1;
-    {__START__,Detect} : ret_val = 1;
+    {starting,Detect} : ret_val = 1;
     default: ret_val = 0;
   endcase
 endfunction : is_valid_transition

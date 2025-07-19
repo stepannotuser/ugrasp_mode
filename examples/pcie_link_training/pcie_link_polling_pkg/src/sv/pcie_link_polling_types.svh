@@ -10,6 +10,6 @@ typedef enum integer {
   ,Polling_Configuration
   ,Exit_to_Detect
   ,Exit_to_Configuration
-  ,__START__
+  ,starting
 } pcie_link_polling_state_t;
 

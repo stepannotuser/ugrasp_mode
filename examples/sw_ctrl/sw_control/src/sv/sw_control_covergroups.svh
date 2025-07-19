@@ -40,7 +40,7 @@
         ,(ReadRxBuffer => Configure)
         ,(ReadRxBuffer => InitTxBuffers)
         ,(ReadRxBuffer => WaitForInterrupt)
-        ,(__START__ => Idle)
+        ,(starting => Idle)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -152,11 +152,11 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins ReadRxBuffer_to_WaitForInterrupt = ( ReadRxBuffer => WaitForInterrupt ); 
     }
-    __START___to_Idle : coverpoint current_state {
+    starting_to_Idle : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins __START___to_Idle = ( __START__ => Idle ); 
+      bins starting_to_Idle = ( starting => Idle ); 
     }
 
   endgroup

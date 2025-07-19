@@ -41,7 +41,7 @@ function void pcie_link_training_base_sequence::post_randomize();
       {L0s,L0} : begin cg.L0s_to_L0.option.weight = _cover_weight; cg.L0s_to_L0.option.at_least = _at_least_value; end
       {L0s,Recovery} : begin cg.L0s_to_Recovery.option.weight = _cover_weight; cg.L0s_to_Recovery.option.at_least = _at_least_value; end
       {L2,Detect} : begin cg.L2_to_Detect.option.weight = _cover_weight; cg.L2_to_Detect.option.at_least = _at_least_value; end
-      {__START__,Detect} : begin cg.__START___to_Detect.option.weight = _cover_weight; cg.__START___to_Detect.option.at_least = _at_least_value; end
+      {starting,Detect} : begin cg.starting_to_Detect.option.weight = _cover_weight; cg.starting_to_Detect.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -74,7 +74,7 @@ function void pcie_link_training_base_sequence::init_weight(int unsigned _w);
     weight[L0s][L0] = _w;
     weight[L0s][Recovery] = _w;
     weight[L2][Detect] = _w;
-    weight[__START__][Detect] = _w;
+    weight[starting][Detect] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints

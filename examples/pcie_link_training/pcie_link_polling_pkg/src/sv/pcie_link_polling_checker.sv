@@ -16,7 +16,7 @@ function bit pcie_link_polling_checker::is_valid_transition(pcie_link_polling_st
     {Polling_Compliance,Polling_Active} : ret_val = 1;
     {Polling_Configuration,Exit_to_Detect} : ret_val = 1;
     {Polling_Configuration,Exit_to_Configuration} : ret_val = 1;
-    {__START__,Entry_from_Detect} : ret_val = 1;
+    {starting,Entry_from_Detect} : ret_val = 1;
     default: ret_val = 0;
   endcase
 endfunction : is_valid_transition

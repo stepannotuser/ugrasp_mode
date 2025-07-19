@@ -31,7 +31,7 @@ function void pcie_link_polling_base_sequence::post_randomize();
       {Polling_Compliance,Polling_Active} : begin cg.Polling_Compliance_to_Polling_Active.option.weight = _cover_weight; cg.Polling_Compliance_to_Polling_Active.option.at_least = _at_least_value; end
       {Polling_Configuration,Exit_to_Detect} : begin cg.Polling_Configuration_to_Exit_to_Detect.option.weight = _cover_weight; cg.Polling_Configuration_to_Exit_to_Detect.option.at_least = _at_least_value; end
       {Polling_Configuration,Exit_to_Configuration} : begin cg.Polling_Configuration_to_Exit_to_Configuration.option.weight = _cover_weight; cg.Polling_Configuration_to_Exit_to_Configuration.option.at_least = _at_least_value; end
-      {__START__,Entry_from_Detect} : begin cg.__START___to_Entry_from_Detect.option.weight = _cover_weight; cg.__START___to_Entry_from_Detect.option.at_least = _at_least_value; end
+      {starting,Entry_from_Detect} : begin cg.starting_to_Entry_from_Detect.option.weight = _cover_weight; cg.starting_to_Entry_from_Detect.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -54,7 +54,7 @@ function void pcie_link_polling_base_sequence::init_weight(int unsigned _w);
     weight[Polling_Compliance][Polling_Active] = _w;
     weight[Polling_Configuration][Exit_to_Detect] = _w;
     weight[Polling_Configuration][Exit_to_Configuration] = _w;
-    weight[__START__][Entry_from_Detect] = _w;
+    weight[starting][Entry_from_Detect] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints

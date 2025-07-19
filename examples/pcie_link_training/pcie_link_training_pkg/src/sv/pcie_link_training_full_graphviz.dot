@@ -4,8 +4,8 @@
 
 digraph pcie_link_training {
   pad="0.5"
-  __START__ [label="__START__" fillcolor=lightgrey style=filled];
-  __START__ -> __START___body;
+  starting [label="starting" fillcolor=lightgrey style=filled];
+  starting -> starting_body;
   Detect_body [label="Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
   Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
   Detect_body -> Detect_sel;
@@ -81,10 +81,10 @@ digraph pcie_link_training {
   L2_to_Detect_body [label="L2_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
   L2_sel -> L2_to_Detect_body
   L2_to_Detect_body -> Detect_body;
-  __START___body [label="__START___body()" shape=box style=filled fillcolor=darkseagreen1];
-  __START___sel [label="" shape=diamond height="0.3" width="0.3"];
-  __START___body -> __START___sel;
-  __START___to_Detect_body [label="__START___to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
-  __START___sel -> __START___to_Detect_body
-  __START___to_Detect_body -> Detect_body;
+  starting_body [label="starting_body()" shape=box style=filled fillcolor=darkseagreen1];
+  starting_sel [label="" shape=diamond height="0.3" width="0.3"];
+  starting_body -> starting_sel;
+  starting_to_Detect_body [label="starting_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  starting_sel -> starting_to_Detect_body
+  starting_to_Detect_body -> Detect_body;
 }

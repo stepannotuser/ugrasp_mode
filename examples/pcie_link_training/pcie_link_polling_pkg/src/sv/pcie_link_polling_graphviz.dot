@@ -4,7 +4,7 @@
 
 digraph pcie_link_polling {
   pad="0.5"
-  __START__ [fillcolor=lightgrey style=filled]
+  starting [fillcolor=lightgrey style=filled]
   Entry_from_Detect -> Polling_Active;
   Polling_Active -> Polling_Compliance;
   Polling_Active -> Polling_Configuration;
@@ -12,5 +12,7 @@ digraph pcie_link_polling {
   Polling_Compliance -> Polling_Active;
   Polling_Configuration -> Exit_to_Detect;
   Polling_Configuration -> Exit_to_Configuration;
-  __START__ -> Entry_from_Detect;
+  Exit_to_Detect -> completion;
+  Exit_to_Configuration -> completion;
+  starting -> Entry_from_Detect;
 }

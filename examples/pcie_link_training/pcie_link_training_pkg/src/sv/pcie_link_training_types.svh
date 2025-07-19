@@ -12,6 +12,6 @@ typedef enum integer {
   ,L1
   ,L0s
   ,L2
-  ,__START__
+  ,starting
 } pcie_link_training_state_t;
 
