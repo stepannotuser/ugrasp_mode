@@ -62,13 +62,17 @@ class pcie_link_training_sequence extends pcie_link_training_base_sequence;
   extern virtual task          L1_body();
   extern virtual function void L1_post_body();
 
+  extern virtual function void L0s_pre_body();
+  extern virtual task          L0s_body();
+  extern virtual function void L0s_post_body();
+
   extern virtual function void L2_pre_body();
   extern virtual task          L2_body();
   extern virtual function void L2_post_body();
 
-  extern virtual function void L0s_pre_body();
-  extern virtual task          L0s_body();
-  extern virtual function void L0s_post_body();
+  extern virtual function void __START___pre_body();
+  extern virtual task          __START___body();
+  extern virtual function void __START___post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -129,10 +133,6 @@ class pcie_link_training_sequence extends pcie_link_training_base_sequence;
   extern virtual task          L1_to_Recovery_body();
   extern virtual function void L1_to_Recovery_post_body();
 
-  extern virtual function void L2_to_Detect_pre_body();
-  extern virtual task          L2_to_Detect_body();
-  extern virtual function void L2_to_Detect_post_body();
-
   extern virtual function void L0s_to_L0_pre_body();
   extern virtual task          L0s_to_L0_body();
   extern virtual function void L0s_to_L0_post_body();
@@ -140,6 +140,14 @@ class pcie_link_training_sequence extends pcie_link_training_base_sequence;
   extern virtual function void L0s_to_Recovery_pre_body();
   extern virtual task          L0s_to_Recovery_body();
   extern virtual function void L0s_to_Recovery_post_body();
+
+  extern virtual function void L2_to_Detect_pre_body();
+  extern virtual task          L2_to_Detect_body();
+  extern virtual function void L2_to_Detect_post_body();
+
+  extern virtual function void __START___to_Detect_pre_body();
+  extern virtual task          __START___to_Detect_body();
+  extern virtual function void __START___to_Detect_post_body();
 
   extern virtual task body();
 endclass : pcie_link_training_sequence

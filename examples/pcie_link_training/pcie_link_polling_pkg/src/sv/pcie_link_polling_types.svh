@@ -6,12 +6,10 @@ typedef enum integer {
   UNKNOWN = 0    // Allows to handle coverage to unkown states in your monitors
   ,Entry_from_Detect = 1
   ,Polling_Active
-  ,Polling_Active
-  ,Polling_Compliance
   ,Polling_Compliance
   ,Polling_Configuration
   ,Exit_to_Detect
-  ,Polling_Configuration
   ,Exit_to_Configuration
+  ,__START__
 } pcie_link_polling_state_t;
 

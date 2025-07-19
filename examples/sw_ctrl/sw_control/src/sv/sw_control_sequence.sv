@@ -41,7 +41,7 @@ endfunction
 // ----------------------------------------------
 // State tasks and functions hooks
 // ----------------------------------------------
-// STATE:Idle              Hooks to be implemented in children classes
+// STATE:Idle Hooks to be implemented in children classes
 function void sw_control_sequence::Idle_pre_body();
 endfunction
 task          sw_control_sequence::Idle_body();
@@ -49,7 +49,7 @@ endtask
 function void sw_control_sequence::Idle_post_body();
 endfunction
 
-// STATE:Configure         Hooks to be implemented in children classes
+// STATE:Configure Hooks to be implemented in children classes
 function void sw_control_sequence::Configure_pre_body();
 endfunction
 task          sw_control_sequence::Configure_body();
@@ -57,7 +57,7 @@ endtask
 function void sw_control_sequence::Configure_post_body();
 endfunction
 
-// STATE:InitTxBuffers     Hooks to be implemented in children classes
+// STATE:InitTxBuffers Hooks to be implemented in children classes
 function void sw_control_sequence::InitTxBuffers_pre_body();
 endfunction
 task          sw_control_sequence::InitTxBuffers_body();
@@ -65,7 +65,7 @@ endtask
 function void sw_control_sequence::InitTxBuffers_post_body();
 endfunction
 
-// STATE:TxControl         Hooks to be implemented in children classes
+// STATE:TxControl Hooks to be implemented in children classes
 function void sw_control_sequence::TxControl_pre_body();
 endfunction
 task          sw_control_sequence::TxControl_body();
@@ -73,7 +73,7 @@ endtask
 function void sw_control_sequence::TxControl_post_body();
 endfunction
 
-// STATE:WaitForInterrupt  Hooks to be implemented in children classes
+// STATE:WaitForInterrupt Hooks to be implemented in children classes
 function void sw_control_sequence::WaitForInterrupt_pre_body();
 endfunction
 task          sw_control_sequence::WaitForInterrupt_body();
@@ -81,7 +81,7 @@ endtask
 function void sw_control_sequence::WaitForInterrupt_post_body();
 endfunction
 
-// STATE:ReadRxBuffer      Hooks to be implemented in children classes
+// STATE:ReadRxBuffer Hooks to be implemented in children classes
 function void sw_control_sequence::ReadRxBuffer_pre_body();
 endfunction
 task          sw_control_sequence::ReadRxBuffer_body();
@@ -89,28 +89,12 @@ endtask
 function void sw_control_sequence::ReadRxBuffer_post_body();
 endfunction
 
-// STATE:Idle  Hooks to be implemented in children classes
-function void sw_control_sequence::Idle_pre_body();
+// STATE:__START__ Hooks to be implemented in children classes
+function void sw_control_sequence::__START___pre_body();
 endfunction
-task          sw_control_sequence::Idle_body();
+task          sw_control_sequence::__START___body();
 endtask
-function void sw_control_sequence::Idle_post_body();
-endfunction
-
-// STATE:InitTxBuffers  Hooks to be implemented in children classes
-function void sw_control_sequence::InitTxBuffers_pre_body();
-endfunction
-task          sw_control_sequence::InitTxBuffers_body();
-endtask
-function void sw_control_sequence::InitTxBuffers_post_body();
-endfunction
-
-// STATE:TxControl  Hooks to be implemented in children classes
-function void sw_control_sequence::TxControl_pre_body();
-endfunction
-task          sw_control_sequence::TxControl_body();
-endtask
-function void sw_control_sequence::TxControl_post_body();
+function void sw_control_sequence::__START___post_body();
 endfunction
 
 // ----------------------------------------------
@@ -122,6 +106,22 @@ endfunction
 task          sw_control_sequence::Idle_to_Configure_body();
 endtask
 function void sw_control_sequence::Idle_to_Configure_post_body();
+endfunction
+
+// TRANSITION:Idle to InitTxBuffers: Hooks to be implemented in children classes
+function void sw_control_sequence::Idle_to_InitTxBuffers_pre_body();
+endfunction
+task          sw_control_sequence::Idle_to_InitTxBuffers_body();
+endtask
+function void sw_control_sequence::Idle_to_InitTxBuffers_post_body();
+endfunction
+
+// TRANSITION:Idle to TxControl: Hooks to be implemented in children classes
+function void sw_control_sequence::Idle_to_TxControl_pre_body();
+endfunction
+task          sw_control_sequence::Idle_to_TxControl_body();
+endtask
+function void sw_control_sequence::Idle_to_TxControl_post_body();
 endfunction
 
 // TRANSITION:Configure to InitTxBuffers: Hooks to be implemented in children classes
@@ -148,12 +148,36 @@ endtask
 function void sw_control_sequence::InitTxBuffers_to_TxControl_post_body();
 endfunction
 
+// TRANSITION:InitTxBuffers to InitTxBuffers: Hooks to be implemented in children classes
+function void sw_control_sequence::InitTxBuffers_to_InitTxBuffers_pre_body();
+endfunction
+task          sw_control_sequence::InitTxBuffers_to_InitTxBuffers_body();
+endtask
+function void sw_control_sequence::InitTxBuffers_to_InitTxBuffers_post_body();
+endfunction
+
 // TRANSITION:TxControl to WaitForInterrupt: Hooks to be implemented in children classes
 function void sw_control_sequence::TxControl_to_WaitForInterrupt_pre_body();
 endfunction
 task          sw_control_sequence::TxControl_to_WaitForInterrupt_body();
 endtask
 function void sw_control_sequence::TxControl_to_WaitForInterrupt_post_body();
+endfunction
+
+// TRANSITION:TxControl to TxControl: Hooks to be implemented in children classes
+function void sw_control_sequence::TxControl_to_TxControl_pre_body();
+endfunction
+task          sw_control_sequence::TxControl_to_TxControl_body();
+endtask
+function void sw_control_sequence::TxControl_to_TxControl_post_body();
+endfunction
+
+// TRANSITION:TxControl to InitTxBuffers: Hooks to be implemented in children classes
+function void sw_control_sequence::TxControl_to_InitTxBuffers_pre_body();
+endfunction
+task          sw_control_sequence::TxControl_to_InitTxBuffers_body();
+endtask
+function void sw_control_sequence::TxControl_to_InitTxBuffers_post_body();
 endfunction
 
 // TRANSITION:WaitForInterrupt to ReadRxBuffer: Hooks to be implemented in children classes
@@ -220,44 +244,12 @@ endtask
 function void sw_control_sequence::ReadRxBuffer_to_WaitForInterrupt_post_body();
 endfunction
 
-// TRANSITION:Idle to InitTxBuffers: Hooks to be implemented in children classes
-function void sw_control_sequence::Idle_to_InitTxBuffers_pre_body();
+// TRANSITION:__START__ to Idle: Hooks to be implemented in children classes
+function void sw_control_sequence::__START___to_Idle_pre_body();
 endfunction
-task          sw_control_sequence::Idle_to_InitTxBuffers_body();
+task          sw_control_sequence::__START___to_Idle_body();
 endtask
-function void sw_control_sequence::Idle_to_InitTxBuffers_post_body();
-endfunction
-
-// TRANSITION:Idle to TxControl: Hooks to be implemented in children classes
-function void sw_control_sequence::Idle_to_TxControl_pre_body();
-endfunction
-task          sw_control_sequence::Idle_to_TxControl_body();
-endtask
-function void sw_control_sequence::Idle_to_TxControl_post_body();
-endfunction
-
-// TRANSITION:InitTxBuffers to InitTxBuffers: Hooks to be implemented in children classes
-function void sw_control_sequence::InitTxBuffers_to_InitTxBuffers_pre_body();
-endfunction
-task          sw_control_sequence::InitTxBuffers_to_InitTxBuffers_body();
-endtask
-function void sw_control_sequence::InitTxBuffers_to_InitTxBuffers_post_body();
-endfunction
-
-// TRANSITION:TxControl to TxControl: Hooks to be implemented in children classes
-function void sw_control_sequence::TxControl_to_TxControl_pre_body();
-endfunction
-task          sw_control_sequence::TxControl_to_TxControl_body();
-endtask
-function void sw_control_sequence::TxControl_to_TxControl_post_body();
-endfunction
-
-// TRANSITION:TxControl to InitTxBuffers: Hooks to be implemented in children classes
-function void sw_control_sequence::TxControl_to_InitTxBuffers_pre_body();
-endfunction
-task          sw_control_sequence::TxControl_to_InitTxBuffers_body();
-endtask
-function void sw_control_sequence::TxControl_to_InitTxBuffers_post_body();
+function void sw_control_sequence::__START___to_Idle_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -287,16 +279,14 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task sw_control_sequence::body();
-  randsequence(Idle)
+  randsequence(__START__)
     Idle : Idle_act Idle_sel;
     Configure : Configure_act Configure_sel;
     InitTxBuffers : InitTxBuffers_act InitTxBuffers_sel;
     TxControl : TxControl_act TxControl_sel;
     WaitForInterrupt : WaitForInterrupt_act WaitForInterrupt_sel;
     ReadRxBuffer : ReadRxBuffer_act ReadRxBuffer_sel;
-    Idle : Idle_act Idle_sel;
-    InitTxBuffers : InitTxBuffers_act InitTxBuffers_sel;
-    TxControl : TxControl_act TxControl_sel;
+    __START__ : __START___act __START___sel;
 
     Idle_act : {
       prepare_context();
@@ -334,34 +324,20 @@ task sw_control_sequence::body();
       fork ReadRxBuffer_body(); state_body(ReadRxBuffer); join
       fork ReadRxBuffer_post_body(); state_post_body(ReadRxBuffer); join
     };
-    Idle_act : {
+    __START___act : {
       prepare_context();
-      fork Idle_pre_body(); state_pre_body(Idle); join
-      fork Idle_body(); state_body(Idle); join
-      fork Idle_post_body(); state_post_body(Idle); join
-    };
-    InitTxBuffers_act : {
-      prepare_context();
-      fork InitTxBuffers_pre_body(); state_pre_body(InitTxBuffers); join
-      fork InitTxBuffers_body(); state_body(InitTxBuffers); join
-      fork InitTxBuffers_post_body(); state_post_body(InitTxBuffers); join
-    };
-    TxControl_act : {
-      prepare_context();
-      fork TxControl_pre_body(); state_pre_body(TxControl); join
-      fork TxControl_body(); state_body(TxControl); join
-      fork TxControl_post_body(); state_post_body(TxControl); join
+      fork __START___pre_body(); state_pre_body(__START__); join
+      fork __START___body(); state_body(__START__); join
+      fork __START___post_body(); state_post_body(__START__); join
     };
 
-    Idle_sel : _END_:=weight_end | Idle_to_Configure:=weight[Idle][Configure];
+    Idle_sel : _END_:=weight_end | Idle_to_Configure:=weight[Idle][Configure] | Idle_to_InitTxBuffers:=weight[Idle][InitTxBuffers] | Idle_to_TxControl:=weight[Idle][TxControl];
     Configure_sel : _END_:=weight_end | Configure_to_InitTxBuffers:=weight[Configure][InitTxBuffers] | Configure_to_WaitForInterrupt:=weight[Configure][WaitForInterrupt];
-    InitTxBuffers_sel : _END_:=weight_end | InitTxBuffers_to_TxControl:=weight[InitTxBuffers][TxControl];
-    TxControl_sel : _END_:=weight_end | TxControl_to_WaitForInterrupt:=weight[TxControl][WaitForInterrupt];
+    InitTxBuffers_sel : _END_:=weight_end | InitTxBuffers_to_TxControl:=weight[InitTxBuffers][TxControl] | InitTxBuffers_to_InitTxBuffers:=weight[InitTxBuffers][InitTxBuffers];
+    TxControl_sel : _END_:=weight_end | TxControl_to_WaitForInterrupt:=weight[TxControl][WaitForInterrupt] | TxControl_to_TxControl:=weight[TxControl][TxControl] | TxControl_to_InitTxBuffers:=weight[TxControl][InitTxBuffers];
     WaitForInterrupt_sel : _END_:=weight_end | WaitForInterrupt_to_ReadRxBuffer:=weight[WaitForInterrupt][ReadRxBuffer] | WaitForInterrupt_to_InitTxBuffers:=weight[WaitForInterrupt][InitTxBuffers] | WaitForInterrupt_to_Idle:=weight[WaitForInterrupt][Idle] | WaitForInterrupt_to_TxControl:=weight[WaitForInterrupt][TxControl];
     ReadRxBuffer_sel : _END_:=weight_end | ReadRxBuffer_to_Idle:=weight[ReadRxBuffer][Idle] | ReadRxBuffer_to_Configure:=weight[ReadRxBuffer][Configure] | ReadRxBuffer_to_InitTxBuffers:=weight[ReadRxBuffer][InitTxBuffers] | ReadRxBuffer_to_WaitForInterrupt:=weight[ReadRxBuffer][WaitForInterrupt];
-    Idle_sel : _END_:=weight_end | Idle_to_InitTxBuffers:=weight[Idle][InitTxBuffers] | Idle_to_TxControl:=weight[Idle][TxControl];
-    InitTxBuffers_sel : _END_:=weight_end | InitTxBuffers_to_InitTxBuffers:=weight[InitTxBuffers][InitTxBuffers];
-    TxControl_sel : _END_:=weight_end | TxControl_to_TxControl:=weight[TxControl][TxControl] | TxControl_to_InitTxBuffers:=weight[TxControl][InitTxBuffers];
+    __START___sel : _END_:=weight_end | __START___to_Idle:=weight[__START__][Idle];
 
     Idle_to_Configure : { 
       prepare_context();
@@ -370,6 +346,20 @@ task sw_control_sequence::body();
       fork Idle_to_Configure_post_body(); transition_post_body(Idle,Configure); join
       update_transition(Idle,Configure);
     } /* ... to ... */ Configure;
+    Idle_to_InitTxBuffers : { 
+      prepare_context();
+      fork Idle_to_InitTxBuffers_pre_body(); transition_pre_body(Idle,InitTxBuffers); join
+      fork Idle_to_InitTxBuffers_body(); transition_body(Idle,InitTxBuffers); join
+      fork Idle_to_InitTxBuffers_post_body(); transition_post_body(Idle,InitTxBuffers); join
+      update_transition(Idle,InitTxBuffers);
+    } /* ... to ... */ InitTxBuffers;
+    Idle_to_TxControl : { 
+      prepare_context();
+      fork Idle_to_TxControl_pre_body(); transition_pre_body(Idle,TxControl); join
+      fork Idle_to_TxControl_body(); transition_body(Idle,TxControl); join
+      fork Idle_to_TxControl_post_body(); transition_post_body(Idle,TxControl); join
+      update_transition(Idle,TxControl);
+    } /* ... to ... */ TxControl;
     Configure_to_InitTxBuffers : { 
       prepare_context();
       fork Configure_to_InitTxBuffers_pre_body(); transition_pre_body(Configure,InitTxBuffers); join
@@ -391,6 +381,13 @@ task sw_control_sequence::body();
       fork InitTxBuffers_to_TxControl_post_body(); transition_post_body(InitTxBuffers,TxControl); join
       update_transition(InitTxBuffers,TxControl);
     } /* ... to ... */ TxControl;
+    InitTxBuffers_to_InitTxBuffers : { 
+      prepare_context();
+      fork InitTxBuffers_to_InitTxBuffers_pre_body(); transition_pre_body(InitTxBuffers,InitTxBuffers); join
+      fork InitTxBuffers_to_InitTxBuffers_body(); transition_body(InitTxBuffers,InitTxBuffers); join
+      fork InitTxBuffers_to_InitTxBuffers_post_body(); transition_post_body(InitTxBuffers,InitTxBuffers); join
+      update_transition(InitTxBuffers,InitTxBuffers);
+    } /* ... to ... */ InitTxBuffers;
     TxControl_to_WaitForInterrupt : { 
       prepare_context();
       fork TxControl_to_WaitForInterrupt_pre_body(); transition_pre_body(TxControl,WaitForInterrupt); join
@@ -398,6 +395,20 @@ task sw_control_sequence::body();
       fork TxControl_to_WaitForInterrupt_post_body(); transition_post_body(TxControl,WaitForInterrupt); join
       update_transition(TxControl,WaitForInterrupt);
     } /* ... to ... */ WaitForInterrupt;
+    TxControl_to_TxControl : { 
+      prepare_context();
+      fork TxControl_to_TxControl_pre_body(); transition_pre_body(TxControl,TxControl); join
+      fork TxControl_to_TxControl_body(); transition_body(TxControl,TxControl); join
+      fork TxControl_to_TxControl_post_body(); transition_post_body(TxControl,TxControl); join
+      update_transition(TxControl,TxControl);
+    } /* ... to ... */ TxControl;
+    TxControl_to_InitTxBuffers : { 
+      prepare_context();
+      fork TxControl_to_InitTxBuffers_pre_body(); transition_pre_body(TxControl,InitTxBuffers); join
+      fork TxControl_to_InitTxBuffers_body(); transition_body(TxControl,InitTxBuffers); join
+      fork TxControl_to_InitTxBuffers_post_body(); transition_post_body(TxControl,InitTxBuffers); join
+      update_transition(TxControl,InitTxBuffers);
+    } /* ... to ... */ InitTxBuffers;
     WaitForInterrupt_to_ReadRxBuffer : { 
       prepare_context();
       fork WaitForInterrupt_to_ReadRxBuffer_pre_body(); transition_pre_body(WaitForInterrupt,ReadRxBuffer); join
@@ -454,41 +465,13 @@ task sw_control_sequence::body();
       fork ReadRxBuffer_to_WaitForInterrupt_post_body(); transition_post_body(ReadRxBuffer,WaitForInterrupt); join
       update_transition(ReadRxBuffer,WaitForInterrupt);
     } /* ... to ... */ WaitForInterrupt;
-    Idle_to_InitTxBuffers : { 
+    __START___to_Idle : { 
       prepare_context();
-      fork Idle_to_InitTxBuffers_pre_body(); transition_pre_body(Idle,InitTxBuffers); join
-      fork Idle_to_InitTxBuffers_body(); transition_body(Idle,InitTxBuffers); join
-      fork Idle_to_InitTxBuffers_post_body(); transition_post_body(Idle,InitTxBuffers); join
-      update_transition(Idle,InitTxBuffers);
-    } /* ... to ... */ InitTxBuffers;
-    Idle_to_TxControl : { 
-      prepare_context();
-      fork Idle_to_TxControl_pre_body(); transition_pre_body(Idle,TxControl); join
-      fork Idle_to_TxControl_body(); transition_body(Idle,TxControl); join
-      fork Idle_to_TxControl_post_body(); transition_post_body(Idle,TxControl); join
-      update_transition(Idle,TxControl);
-    } /* ... to ... */ TxControl;
-    InitTxBuffers_to_InitTxBuffers : { 
-      prepare_context();
-      fork InitTxBuffers_to_InitTxBuffers_pre_body(); transition_pre_body(InitTxBuffers,InitTxBuffers); join
-      fork InitTxBuffers_to_InitTxBuffers_body(); transition_body(InitTxBuffers,InitTxBuffers); join
-      fork InitTxBuffers_to_InitTxBuffers_post_body(); transition_post_body(InitTxBuffers,InitTxBuffers); join
-      update_transition(InitTxBuffers,InitTxBuffers);
-    } /* ... to ... */ InitTxBuffers;
-    TxControl_to_TxControl : { 
-      prepare_context();
-      fork TxControl_to_TxControl_pre_body(); transition_pre_body(TxControl,TxControl); join
-      fork TxControl_to_TxControl_body(); transition_body(TxControl,TxControl); join
-      fork TxControl_to_TxControl_post_body(); transition_post_body(TxControl,TxControl); join
-      update_transition(TxControl,TxControl);
-    } /* ... to ... */ TxControl;
-    TxControl_to_InitTxBuffers : { 
-      prepare_context();
-      fork TxControl_to_InitTxBuffers_pre_body(); transition_pre_body(TxControl,InitTxBuffers); join
-      fork TxControl_to_InitTxBuffers_body(); transition_body(TxControl,InitTxBuffers); join
-      fork TxControl_to_InitTxBuffers_post_body(); transition_post_body(TxControl,InitTxBuffers); join
-      update_transition(TxControl,InitTxBuffers);
-    } /* ... to ... */ InitTxBuffers;
+      fork __START___to_Idle_pre_body(); transition_pre_body(__START__,Idle); join
+      fork __START___to_Idle_body(); transition_body(__START__,Idle); join
+      fork __START___to_Idle_post_body(); transition_post_body(__START__,Idle); join
+      update_transition(__START__,Idle);
+    } /* ... to ... */ Idle;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence
 endtask : body

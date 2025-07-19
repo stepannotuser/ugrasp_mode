@@ -4,17 +4,14 @@
 
 digraph pcie_link_polling {
   pad="0.5"
-  Entry_from_Detect [label="Entry_from_Detect" fillcolor=lightgrey style=filled];
-  Entry_from_Detect -> Entry_from_Detect_body;
+  __START__ [label="__START__" fillcolor=lightgrey style=filled];
+  __START__ -> __START___body;
   Entry_from_Detect_body [label="Entry_from_Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
   Entry_from_Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
   Entry_from_Detect_body -> Entry_from_Detect_sel;
   Entry_from_Detect_to_Polling_Active_body [label="Entry_from_Detect_to_Polling_Active_body()" shape=box style=filled fillcolor=lightcyan];
   Entry_from_Detect_sel -> Entry_from_Detect_to_Polling_Active_body
   Entry_from_Detect_to_Polling_Active_body -> Polling_Active_body;
-  Polling_Active_body [label="Polling_Active_body()" shape=box style=filled fillcolor=darkseagreen1];
-  Polling_Active_sel [label="" shape=diamond height="0.3" width="0.3"];
-  Polling_Active_body -> Polling_Active_sel;
   Polling_Active_body [label="Polling_Active_body()" shape=box style=filled fillcolor=darkseagreen1];
   Polling_Active_sel [label="" shape=diamond height="0.3" width="0.3"];
   Polling_Active_body -> Polling_Active_sel;
@@ -30,18 +27,9 @@ digraph pcie_link_polling {
   Polling_Compliance_body [label="Polling_Compliance_body()" shape=box style=filled fillcolor=darkseagreen1];
   Polling_Compliance_sel [label="" shape=diamond height="0.3" width="0.3"];
   Polling_Compliance_body -> Polling_Compliance_sel;
-  Polling_Compliance_body [label="Polling_Compliance_body()" shape=box style=filled fillcolor=darkseagreen1];
-  Polling_Compliance_sel [label="" shape=diamond height="0.3" width="0.3"];
-  Polling_Compliance_body -> Polling_Compliance_sel;
   Polling_Compliance_to_Polling_Active_body [label="Polling_Compliance_to_Polling_Active_body()" shape=box style=filled fillcolor=lightcyan];
   Polling_Compliance_sel -> Polling_Compliance_to_Polling_Active_body
   Polling_Compliance_to_Polling_Active_body -> Polling_Active_body;
-  Polling_Configuration_body [label="Polling_Configuration_body()" shape=box style=filled fillcolor=darkseagreen1];
-  Polling_Configuration_sel [label="" shape=diamond height="0.3" width="0.3"];
-  Polling_Configuration_body -> Polling_Configuration_sel;
-  Exit_to_Detect_body [label="Exit_to_Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
-  Exit_to_Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
-  Exit_to_Detect_body -> Exit_to_Detect_sel;
   Polling_Configuration_body [label="Polling_Configuration_body()" shape=box style=filled fillcolor=darkseagreen1];
   Polling_Configuration_sel [label="" shape=diamond height="0.3" width="0.3"];
   Polling_Configuration_body -> Polling_Configuration_sel;
@@ -51,7 +39,16 @@ digraph pcie_link_polling {
   Polling_Configuration_to_Exit_to_Configuration_body [label="Polling_Configuration_to_Exit_to_Configuration_body()" shape=box style=filled fillcolor=lightcyan];
   Polling_Configuration_sel -> Polling_Configuration_to_Exit_to_Configuration_body
   Polling_Configuration_to_Exit_to_Configuration_body -> Exit_to_Configuration_body;
+  Exit_to_Detect_body [label="Exit_to_Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
+  Exit_to_Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
+  Exit_to_Detect_body -> Exit_to_Detect_sel;
   Exit_to_Configuration_body [label="Exit_to_Configuration_body()" shape=box style=filled fillcolor=darkseagreen1];
   Exit_to_Configuration_sel [label="" shape=diamond height="0.3" width="0.3"];
   Exit_to_Configuration_body -> Exit_to_Configuration_sel;
+  __START___body [label="__START___body()" shape=box style=filled fillcolor=darkseagreen1];
+  __START___sel [label="" shape=diamond height="0.3" width="0.3"];
+  __START___body -> __START___sel;
+  __START___to_Entry_from_Detect_body [label="__START___to_Entry_from_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  __START___sel -> __START___to_Entry_from_Detect_body
+  __START___to_Entry_from_Detect_body -> Entry_from_Detect_body;
 }

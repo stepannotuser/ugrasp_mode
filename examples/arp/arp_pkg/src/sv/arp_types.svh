@@ -9,5 +9,6 @@ typedef enum integer {
   ,AddressConflict
   ,AssignAddress
   ,Ready
+  ,__START__
 } arp_state_t;
 

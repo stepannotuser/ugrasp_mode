@@ -10,8 +10,6 @@ typedef enum integer {
   ,TxControl
   ,WaitForInterrupt
   ,ReadRxBuffer
-  ,Idle
-  ,InitTxBuffers
-  ,TxControl
+  ,__START__
 } sw_control_state_t;
 

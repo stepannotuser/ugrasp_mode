@@ -27,7 +27,7 @@ import argparse
 from py.svgraph_app import svgraph_app
 
 def main():
-  print("AEDVICES Consulting(c) - svgraph - SystemVerilog/UVM Graph Base Sequence")
+  print("AEDVICES Consulting(c) - uGRASP - UVM Graph Automated Sequence Producer")
   parser = argparse.ArgumentParser(description="Python Test Suite Runner")
   parser.add_argument("-classname"    ,action="store"        ,dest="classname"   ,default=None ,help="Destination path. Filenames that are given with a relative paths will be relative to this path")
   parser.add_argument("-first_state"  ,action="store"        ,dest="first_state" ,default=None ,help="First State to start with, multple states can be specify with \"State1,State2,...\" ")

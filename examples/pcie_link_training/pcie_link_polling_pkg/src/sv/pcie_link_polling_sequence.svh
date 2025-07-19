@@ -46,14 +46,6 @@ class pcie_link_polling_sequence extends pcie_link_polling_base_sequence;
   extern virtual task          Polling_Active_body();
   extern virtual function void Polling_Active_post_body();
 
-  extern virtual function void Polling_Active_pre_body();
-  extern virtual task          Polling_Active_body();
-  extern virtual function void Polling_Active_post_body();
-
-  extern virtual function void Polling_Compliance_pre_body();
-  extern virtual task          Polling_Compliance_body();
-  extern virtual function void Polling_Compliance_post_body();
-
   extern virtual function void Polling_Compliance_pre_body();
   extern virtual task          Polling_Compliance_body();
   extern virtual function void Polling_Compliance_post_body();
@@ -66,13 +58,13 @@ class pcie_link_polling_sequence extends pcie_link_polling_base_sequence;
   extern virtual task          Exit_to_Detect_body();
   extern virtual function void Exit_to_Detect_post_body();
 
-  extern virtual function void Polling_Configuration_pre_body();
-  extern virtual task          Polling_Configuration_body();
-  extern virtual function void Polling_Configuration_post_body();
-
   extern virtual function void Exit_to_Configuration_pre_body();
   extern virtual task          Exit_to_Configuration_body();
   extern virtual function void Exit_to_Configuration_post_body();
+
+  extern virtual function void __START___pre_body();
+  extern virtual task          __START___body();
+  extern virtual function void __START___post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -104,6 +96,10 @@ class pcie_link_polling_sequence extends pcie_link_polling_base_sequence;
   extern virtual function void Polling_Configuration_to_Exit_to_Configuration_pre_body();
   extern virtual task          Polling_Configuration_to_Exit_to_Configuration_body();
   extern virtual function void Polling_Configuration_to_Exit_to_Configuration_post_body();
+
+  extern virtual function void __START___to_Entry_from_Detect_pre_body();
+  extern virtual task          __START___to_Entry_from_Detect_body();
+  extern virtual function void __START___to_Entry_from_Detect_post_body();
 
   extern virtual task body();
 endclass : pcie_link_polling_sequence

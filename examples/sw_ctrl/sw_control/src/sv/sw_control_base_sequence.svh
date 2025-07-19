@@ -24,6 +24,7 @@ class sw_control_base_sequence extends uvm_sequence;
   // Coverage
   // ----------------------------------------------
   protected sw_control_state_t current_state;
+  protected sw_control_state_t previous_state;
   sw_control_cg cg;
   extern virtual           function int          get_custom_coverage();
   
@@ -42,6 +43,8 @@ class sw_control_base_sequence extends uvm_sequence;
   extern virtual           function void exclude_edge(sw_control_state_t src,dst);
   extern virtual           function void include_edge(sw_control_state_t src,dst,int unsigned _weight=initial_edge_weight);
   extern virtual           function int unsigned get_current_iteration();
+  extern virtual           function sw_control_state_t get_current_state();
+  extern virtual           function sw_control_state_t get_previous_state();
   
   // ----------------------------------------------
   /// Constructor

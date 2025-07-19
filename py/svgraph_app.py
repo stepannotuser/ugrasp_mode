@@ -61,14 +61,17 @@ class svgraph_app:
     self.first_states = [] if args["first_state"]==None else args["first_state"].replace(" ","").split(",")
     self.diagnostics = {
       "errors": {
-        "has" : False,
-        "message":""
+        "message": []
       },
       "warnings" :{
-        "hase" : False,
-        "message": ""
+        "message":  []
+      },
+      "info" :{
+        "message":  []
       }
     }
+    if len(self.first_states) == 0:
+      self.warn("No first state is defined. The sequence assumes to start from any state of the graph as a first state.")
 
   def parse(self):
     # Check if any of the argument is in the parser factory
@@ -116,14 +119,19 @@ class svgraph_app:
 
 
   def pre_gen(self):
+    """      Pre Generation Function
+        This function is called before the generation of the files.
+        It will check the graph and add the __START__ node.
+    """
     nodes = [node for node in self.graph]
-    self.graph[__START__] = [] # need to be after nodes in order to don't have __START__ pointing on itself
+    self.graph[__START__] = [] # need to be after user nodes in order not to have __START__ pointing on itself
+
+    # Check if first states are defined and valid
     invalid_first_states = []
     for state in self.first_states :
       if not state in nodes :
         invalid_first_states.append(state)
-        self.raise_error(f"Error: undefined first state {state}")
-
+        self.raise_error(f"Undefined first state {state}")
 
     if self.first_states and not invalid_first_states:
       self.graph[__START__] = self.first_states
@@ -133,22 +141,35 @@ class svgraph_app:
           self.graph[__START__].append(state)
     else : 
       self.graph[__START__] = nodes
-    
+
+    # If allow_orphans is set, add orphans to __START__
     if self.args['allow_orphans']:
       orphans = self.detect_orphans()
       for orphan in orphans:
         if not orphan in self.graph[__START__] and orphan!=__START__:
           self.graph[__START__].append(orphan)
 
+    # Detect unreachable states and report them
     unreachable = self.detect_unreachable()
     if unreachable:
       for state in unreachable:
-        self.warn(f"Warning: unreachable state {state}")
+        self.warn(f"Unreachable state {state}")
+
+    # Detect if there are any ending states
+    ending_states = [state for state in self.graph if not self.graph[state]]
+    if not ending_states:
+      self.info(f"No final states are found. The sequence will loop until the maximum number of iterations or coverage is reached.")
+    else:
+      for state in ending_states:
+        if state != __START__:
+          self.info(f"State {state} is an ending state. Reaching it will terminate the sequence.")
 
     self.args["first_state"] = __START__
 
   def generate(self):
-    
+    """
+      Main Generation Function
+    """
     # Generate Result
     for argname in self.args:
       # skip known generation arguments
@@ -163,20 +184,38 @@ class svgraph_app:
         generator.generate(self.graph,self.args)
   
   def raise_error(self,message):
-    self.diagnostics["errors"]["has"] = True
-    self.diagnostics["errors"]["message"] += message + "\n" 
+    """
+      Add an error message to diagnostics
+    """
+    self.diagnostics["errors"]["message"].append(message)
 
   def warn(self,message):
-    self.diagnostics["warnings"]["has"] = True
-    self.diagnostics["warnings"]["message"] += message + "\n" 
+    """ Add a warning message to diagnostics """
+    self.diagnostics["warnings"]["message"].append(message)
+
+  def info(self,message):
+    """ Add an info message to diagnostics """
+    self.diagnostics["info"]["message"].append(message)
+
+
+  def report_diagnostics(self):
+    """
+      Report diagnostics
+    """
+    for m in self.diagnostics["info"]["message"]:
+      print("Info: %s"%m)
+    for m in self.diagnostics["warnings"]["message"]:
+      print("Warning: %s"%m)
+    for m in self.diagnostics["errors"]["message"]:
+      print("Error: %s"%m)
 
   def main(self):
+    """
+      Main entry point of the application
+    """
     self.parse()
     self.pre_gen()
-    if not self.diagnostics["errors"]["has"]:
-      self.generate()
-    else:
-      print(self.diagnostics["errors"]["message"])
-    if self.diagnostics["warnings"]["has"]:
-      print(self.diagnostics["warnings"]["message"])
+    self.generate()
+    self.report_diagnostics()
+    
 

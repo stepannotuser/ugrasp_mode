@@ -41,7 +41,7 @@ endfunction
 // ----------------------------------------------
 // State tasks and functions hooks
 // ----------------------------------------------
-// STATE:Detect           Hooks to be implemented in children classes
+// STATE:Detect Hooks to be implemented in children classes
 function void pcie_link_training_sequence::Detect_pre_body();
 endfunction
 task          pcie_link_training_sequence::Detect_body();
@@ -49,7 +49,7 @@ endtask
 function void pcie_link_training_sequence::Detect_post_body();
 endfunction
 
-// STATE:Polling          Hooks to be implemented in children classes
+// STATE:Polling Hooks to be implemented in children classes
 function void pcie_link_training_sequence::Polling_pre_body();
 endfunction
 task          pcie_link_training_sequence::Polling_body();
@@ -57,7 +57,7 @@ endtask
 function void pcie_link_training_sequence::Polling_post_body();
 endfunction
 
-// STATE:Configuration    Hooks to be implemented in children classes
+// STATE:Configuration Hooks to be implemented in children classes
 function void pcie_link_training_sequence::Configuration_pre_body();
 endfunction
 task          pcie_link_training_sequence::Configuration_body();
@@ -65,7 +65,7 @@ endtask
 function void pcie_link_training_sequence::Configuration_post_body();
 endfunction
 
-// STATE:L0               Hooks to be implemented in children classes
+// STATE:L0 Hooks to be implemented in children classes
 function void pcie_link_training_sequence::L0_pre_body();
 endfunction
 task          pcie_link_training_sequence::L0_body();
@@ -73,7 +73,7 @@ endtask
 function void pcie_link_training_sequence::L0_post_body();
 endfunction
 
-// STATE:Recovery         Hooks to be implemented in children classes
+// STATE:Recovery Hooks to be implemented in children classes
 function void pcie_link_training_sequence::Recovery_pre_body();
 endfunction
 task          pcie_link_training_sequence::Recovery_body();
@@ -81,7 +81,7 @@ endtask
 function void pcie_link_training_sequence::Recovery_post_body();
 endfunction
 
-// STATE:L1               Hooks to be implemented in children classes
+// STATE:L1 Hooks to be implemented in children classes
 function void pcie_link_training_sequence::L1_pre_body();
 endfunction
 task          pcie_link_training_sequence::L1_body();
@@ -89,7 +89,15 @@ endtask
 function void pcie_link_training_sequence::L1_post_body();
 endfunction
 
-// STATE:L2               Hooks to be implemented in children classes
+// STATE:L0s Hooks to be implemented in children classes
+function void pcie_link_training_sequence::L0s_pre_body();
+endfunction
+task          pcie_link_training_sequence::L0s_body();
+endtask
+function void pcie_link_training_sequence::L0s_post_body();
+endfunction
+
+// STATE:L2 Hooks to be implemented in children classes
 function void pcie_link_training_sequence::L2_pre_body();
 endfunction
 task          pcie_link_training_sequence::L2_body();
@@ -97,12 +105,12 @@ endtask
 function void pcie_link_training_sequence::L2_post_body();
 endfunction
 
-// STATE:L0s              Hooks to be implemented in children classes
-function void pcie_link_training_sequence::L0s_pre_body();
+// STATE:__START__ Hooks to be implemented in children classes
+function void pcie_link_training_sequence::__START___pre_body();
 endfunction
-task          pcie_link_training_sequence::L0s_body();
+task          pcie_link_training_sequence::__START___body();
 endtask
-function void pcie_link_training_sequence::L0s_post_body();
+function void pcie_link_training_sequence::__START___post_body();
 endfunction
 
 // ----------------------------------------------
@@ -220,14 +228,6 @@ endtask
 function void pcie_link_training_sequence::L1_to_Recovery_post_body();
 endfunction
 
-// TRANSITION:L2 to Detect: Hooks to be implemented in children classes
-function void pcie_link_training_sequence::L2_to_Detect_pre_body();
-endfunction
-task          pcie_link_training_sequence::L2_to_Detect_body();
-endtask
-function void pcie_link_training_sequence::L2_to_Detect_post_body();
-endfunction
-
 // TRANSITION:L0s to L0: Hooks to be implemented in children classes
 function void pcie_link_training_sequence::L0s_to_L0_pre_body();
 endfunction
@@ -242,6 +242,22 @@ endfunction
 task          pcie_link_training_sequence::L0s_to_Recovery_body();
 endtask
 function void pcie_link_training_sequence::L0s_to_Recovery_post_body();
+endfunction
+
+// TRANSITION:L2 to Detect: Hooks to be implemented in children classes
+function void pcie_link_training_sequence::L2_to_Detect_pre_body();
+endfunction
+task          pcie_link_training_sequence::L2_to_Detect_body();
+endtask
+function void pcie_link_training_sequence::L2_to_Detect_post_body();
+endfunction
+
+// TRANSITION:__START__ to Detect: Hooks to be implemented in children classes
+function void pcie_link_training_sequence::__START___to_Detect_pre_body();
+endfunction
+task          pcie_link_training_sequence::__START___to_Detect_body();
+endtask
+function void pcie_link_training_sequence::__START___to_Detect_post_body();
 endfunction
 
 // ----------------------------------------------
@@ -271,15 +287,16 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task pcie_link_training_sequence::body();
-  randsequence(Detect)
+  randsequence(__START__)
     Detect : Detect_act Detect_sel;
     Polling : Polling_act Polling_sel;
     Configuration : Configuration_act Configuration_sel;
     L0 : L0_act L0_sel;
     Recovery : Recovery_act Recovery_sel;
     L1 : L1_act L1_sel;
-    L2 : L2_act L2_sel;
     L0s : L0s_act L0s_sel;
+    L2 : L2_act L2_sel;
+    __START__ : __START___act __START___sel;
 
     Detect_act : {
       prepare_context();
@@ -317,17 +334,23 @@ task pcie_link_training_sequence::body();
       fork L1_body(); state_body(L1); join
       fork L1_post_body(); state_post_body(L1); join
     };
+    L0s_act : {
+      prepare_context();
+      fork L0s_pre_body(); state_pre_body(L0s); join
+      fork L0s_body(); state_body(L0s); join
+      fork L0s_post_body(); state_post_body(L0s); join
+    };
     L2_act : {
       prepare_context();
       fork L2_pre_body(); state_pre_body(L2); join
       fork L2_body(); state_body(L2); join
       fork L2_post_body(); state_post_body(L2); join
     };
-    L0s_act : {
+    __START___act : {
       prepare_context();
-      fork L0s_pre_body(); state_pre_body(L0s); join
-      fork L0s_body(); state_body(L0s); join
-      fork L0s_post_body(); state_post_body(L0s); join
+      fork __START___pre_body(); state_pre_body(__START__); join
+      fork __START___body(); state_body(__START__); join
+      fork __START___post_body(); state_post_body(__START__); join
     };
 
     Detect_sel : _END_:=weight_end | Detect_to_Polling:=weight[Detect][Polling];
@@ -336,8 +359,9 @@ task pcie_link_training_sequence::body();
     L0_sel : _END_:=weight_end | L0_to_L1:=weight[L0][L1] | L0_to_L0s:=weight[L0][L0s] | L0_to_L2:=weight[L0][L2] | L0_to_Recovery:=weight[L0][Recovery];
     Recovery_sel : _END_:=weight_end | Recovery_to_Configuration:=weight[Recovery][Configuration] | Recovery_to_L0:=weight[Recovery][L0] | Recovery_to_Detect:=weight[Recovery][Detect];
     L1_sel : _END_:=weight_end | L1_to_Recovery:=weight[L1][Recovery];
-    L2_sel : _END_:=weight_end | L2_to_Detect:=weight[L2][Detect];
     L0s_sel : _END_:=weight_end | L0s_to_L0:=weight[L0s][L0] | L0s_to_Recovery:=weight[L0s][Recovery];
+    L2_sel : _END_:=weight_end | L2_to_Detect:=weight[L2][Detect];
+    __START___sel : _END_:=weight_end | __START___to_Detect:=weight[__START__][Detect];
 
     Detect_to_Polling : { 
       prepare_context();
@@ -437,13 +461,6 @@ task pcie_link_training_sequence::body();
       fork L1_to_Recovery_post_body(); transition_post_body(L1,Recovery); join
       update_transition(L1,Recovery);
     } /* ... to ... */ Recovery;
-    L2_to_Detect : { 
-      prepare_context();
-      fork L2_to_Detect_pre_body(); transition_pre_body(L2,Detect); join
-      fork L2_to_Detect_body(); transition_body(L2,Detect); join
-      fork L2_to_Detect_post_body(); transition_post_body(L2,Detect); join
-      update_transition(L2,Detect);
-    } /* ... to ... */ Detect;
     L0s_to_L0 : { 
       prepare_context();
       fork L0s_to_L0_pre_body(); transition_pre_body(L0s,L0); join
@@ -458,6 +475,20 @@ task pcie_link_training_sequence::body();
       fork L0s_to_Recovery_post_body(); transition_post_body(L0s,Recovery); join
       update_transition(L0s,Recovery);
     } /* ... to ... */ Recovery;
+    L2_to_Detect : { 
+      prepare_context();
+      fork L2_to_Detect_pre_body(); transition_pre_body(L2,Detect); join
+      fork L2_to_Detect_body(); transition_body(L2,Detect); join
+      fork L2_to_Detect_post_body(); transition_post_body(L2,Detect); join
+      update_transition(L2,Detect);
+    } /* ... to ... */ Detect;
+    __START___to_Detect : { 
+      prepare_context();
+      fork __START___to_Detect_pre_body(); transition_pre_body(__START__,Detect); join
+      fork __START___to_Detect_body(); transition_body(__START__,Detect); join
+      fork __START___to_Detect_post_body(); transition_post_body(__START__,Detect); join
+      update_transition(__START__,Detect);
+    } /* ... to ... */ Detect;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence
 endtask : body

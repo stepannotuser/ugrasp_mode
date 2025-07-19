@@ -10,7 +10,7 @@
     // State coverage
     states : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 17; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 18; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 10;
       bins state      [] = { [current_state.first():current_state.last()] };
       ignore_bins unknown = { UNKNOWN };
@@ -19,7 +19,7 @@
     // Global Transition Coverage
     transitions : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 17; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 18; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins transition[] =
          (Detect => Polling)
@@ -36,9 +36,10 @@
         ,(Recovery => L0)
         ,(Recovery => Detect)
         ,(L1 => Recovery)
-        ,(L2 => Detect)
         ,(L0s => L0)
         ,(L0s => Recovery)
+        ,(L2 => Detect)
+        ,(__START__ => Detect)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -126,12 +127,6 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins L1_to_Recovery = ( L1 => Recovery ); 
     }
-    L2_to_Detect : coverpoint current_state {
-      option.goal     = 100;
-      option.weight   = 1;
-      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins L2_to_Detect = ( L2 => Detect ); 
-    }
     L0s_to_L0 : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
@@ -143,6 +138,18 @@
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins L0s_to_Recovery = ( L0s => Recovery ); 
+    }
+    L2_to_Detect : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins L2_to_Detect = ( L2 => Detect ); 
+    }
+    __START___to_Detect : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins __START___to_Detect = ( __START__ => Detect ); 
     }
 
   endgroup

@@ -2,12 +2,12 @@
 // File    pcie_link_training_checker.sv
 
 
-function pcie_link_training_checker::new(string name="pcie_link_training_checker" , uvm_object parent=null);
+function pcie_link_training_checker::new(string name="pcie_link_training_checker" , uvm_component parent=null);
   super.new(name,parent);
 endfunction : new
 
 function bit pcie_link_training_checker::is_valid_transition(pcie_link_training_state_t src,dst);
-  bit ret_val = 0
+  bit ret_val = 0;
   case ({src,dst})
     {Detect,Polling} : ret_val = 1;
     {Polling,Detect} : ret_val = 1;
@@ -23,9 +23,10 @@ function bit pcie_link_training_checker::is_valid_transition(pcie_link_training_
     {Recovery,L0} : ret_val = 1;
     {Recovery,Detect} : ret_val = 1;
     {L1,Recovery} : ret_val = 1;
-    {L2,Detect} : ret_val = 1;
     {L0s,L0} : ret_val = 1;
     {L0s,Recovery} : ret_val = 1;
+    {L2,Detect} : ret_val = 1;
+    {__START__,Detect} : ret_val = 1;
     default: ret_val = 0;
   endcase
 endfunction : is_valid_transition

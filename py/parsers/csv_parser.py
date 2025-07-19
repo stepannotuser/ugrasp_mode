@@ -20,7 +20,6 @@ class csv_parser(base_parser):
   def read(self,filename,args=None):
 
     db = {}
-    first_state =args["first_state"]
 
     with open(filename, 'r') as csvfile:
       result = list(csv.reader(csvfile))
@@ -46,8 +45,8 @@ class csv_parser(base_parser):
     for row in result[1:]:
       l = len(row)
       if ( state_idx < l and next_state_idx < l):
-        curr_state = row[state_idx]
-        next_state = row[next_state_idx]
+        curr_state = row[state_idx].strip()
+        next_state = row[next_state_idx].strip()
 
       if curr_state in db:
         db[curr_state].append(next_state)

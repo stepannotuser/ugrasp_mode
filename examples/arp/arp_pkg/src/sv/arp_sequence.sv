@@ -41,7 +41,7 @@ endfunction
 // ----------------------------------------------
 // State tasks and functions hooks
 // ----------------------------------------------
-// STATE:Idle             Hooks to be implemented in children classes
+// STATE:Idle Hooks to be implemented in children classes
 function void arp_sequence::Idle_pre_body();
 endfunction
 task          arp_sequence::Idle_body();
@@ -49,7 +49,7 @@ endtask
 function void arp_sequence::Idle_post_body();
 endfunction
 
-// STATE:RequestAddress   Hooks to be implemented in children classes
+// STATE:RequestAddress Hooks to be implemented in children classes
 function void arp_sequence::RequestAddress_pre_body();
 endfunction
 task          arp_sequence::RequestAddress_body();
@@ -57,7 +57,7 @@ endtask
 function void arp_sequence::RequestAddress_post_body();
 endfunction
 
-// STATE:AddressConflict  Hooks to be implemented in children classes
+// STATE:AddressConflict Hooks to be implemented in children classes
 function void arp_sequence::AddressConflict_pre_body();
 endfunction
 task          arp_sequence::AddressConflict_body();
@@ -65,7 +65,7 @@ endtask
 function void arp_sequence::AddressConflict_post_body();
 endfunction
 
-// STATE:AssignAddress    Hooks to be implemented in children classes
+// STATE:AssignAddress Hooks to be implemented in children classes
 function void arp_sequence::AssignAddress_pre_body();
 endfunction
 task          arp_sequence::AssignAddress_body();
@@ -73,12 +73,20 @@ endtask
 function void arp_sequence::AssignAddress_post_body();
 endfunction
 
-// STATE:Ready            Hooks to be implemented in children classes
+// STATE:Ready Hooks to be implemented in children classes
 function void arp_sequence::Ready_pre_body();
 endfunction
 task          arp_sequence::Ready_body();
 endtask
 function void arp_sequence::Ready_post_body();
+endfunction
+
+// STATE:__START__ Hooks to be implemented in children classes
+function void arp_sequence::__START___pre_body();
+endfunction
+task          arp_sequence::__START___body();
+endtask
+function void arp_sequence::__START___post_body();
 endfunction
 
 // ----------------------------------------------
@@ -132,6 +140,14 @@ endtask
 function void arp_sequence::Ready_to_Idle_post_body();
 endfunction
 
+// TRANSITION:__START__ to Idle: Hooks to be implemented in children classes
+function void arp_sequence::__START___to_Idle_pre_body();
+endfunction
+task          arp_sequence::__START___to_Idle_body();
+endtask
+function void arp_sequence::__START___to_Idle_post_body();
+endfunction
+
 // ----------------------------------------------
 // Completion hook
 // ----------------------------------------------
@@ -159,12 +175,13 @@ endfunction
 // Graph Based Sequence body
 // ----------------------------------------------
 task arp_sequence::body();
-  randsequence(Idle)
+  randsequence(__START__)
     Idle : Idle_act Idle_sel;
     RequestAddress : RequestAddress_act RequestAddress_sel;
     AddressConflict : AddressConflict_act AddressConflict_sel;
     AssignAddress : AssignAddress_act AssignAddress_sel;
     Ready : Ready_act Ready_sel;
+    __START__ : __START___act __START___sel;
 
     Idle_act : {
       prepare_context();
@@ -196,12 +213,19 @@ task arp_sequence::body();
       fork Ready_body(); state_body(Ready); join
       fork Ready_post_body(); state_post_body(Ready); join
     };
+    __START___act : {
+      prepare_context();
+      fork __START___pre_body(); state_pre_body(__START__); join
+      fork __START___body(); state_body(__START__); join
+      fork __START___post_body(); state_post_body(__START__); join
+    };
 
     Idle_sel : _END_:=weight_end | Idle_to_RequestAddress:=weight[Idle][RequestAddress];
     RequestAddress_sel : _END_:=weight_end | RequestAddress_to_AddressConflict:=weight[RequestAddress][AddressConflict] | RequestAddress_to_AssignAddress:=weight[RequestAddress][AssignAddress];
     AddressConflict_sel : _END_:=weight_end | AddressConflict_to_RequestAddress:=weight[AddressConflict][RequestAddress];
     AssignAddress_sel : _END_:=weight_end | AssignAddress_to_Ready:=weight[AssignAddress][Ready];
     Ready_sel : _END_:=weight_end | Ready_to_Idle:=weight[Ready][Idle];
+    __START___sel : _END_:=weight_end | __START___to_Idle:=weight[__START__][Idle];
 
     Idle_to_RequestAddress : { 
       prepare_context();
@@ -244,6 +268,13 @@ task arp_sequence::body();
       fork Ready_to_Idle_body(); transition_body(Ready,Idle); join
       fork Ready_to_Idle_post_body(); transition_post_body(Ready,Idle); join
       update_transition(Ready,Idle);
+    } /* ... to ... */ Idle;
+    __START___to_Idle : { 
+      prepare_context();
+      fork __START___to_Idle_pre_body(); transition_pre_body(__START__,Idle); join
+      fork __START___to_Idle_body(); transition_body(__START__,Idle); join
+      fork __START___to_Idle_post_body(); transition_post_body(__START__,Idle); join
+      update_transition(__START__,Idle);
     } /* ... to ... */ Idle;
     _END_ : { completion_pre_body(); completion_body(); completion_post_body();};
   endsequence

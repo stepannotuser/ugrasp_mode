@@ -62,17 +62,9 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual task          ReadRxBuffer_body();
   extern virtual function void ReadRxBuffer_post_body();
 
-  extern virtual function void Idle_pre_body();
-  extern virtual task          Idle_body();
-  extern virtual function void Idle_post_body();
-
-  extern virtual function void InitTxBuffers_pre_body();
-  extern virtual task          InitTxBuffers_body();
-  extern virtual function void InitTxBuffers_post_body();
-
-  extern virtual function void TxControl_pre_body();
-  extern virtual task          TxControl_body();
-  extern virtual function void TxControl_post_body();
+  extern virtual function void __START___pre_body();
+  extern virtual task          __START___body();
+  extern virtual function void __START___post_body();
 
   // ----------------------------------------------
   // Transition tasks and functions hooks
@@ -80,6 +72,14 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual function void Idle_to_Configure_pre_body();
   extern virtual task          Idle_to_Configure_body();
   extern virtual function void Idle_to_Configure_post_body();
+
+  extern virtual function void Idle_to_InitTxBuffers_pre_body();
+  extern virtual task          Idle_to_InitTxBuffers_body();
+  extern virtual function void Idle_to_InitTxBuffers_post_body();
+
+  extern virtual function void Idle_to_TxControl_pre_body();
+  extern virtual task          Idle_to_TxControl_body();
+  extern virtual function void Idle_to_TxControl_post_body();
 
   extern virtual function void Configure_to_InitTxBuffers_pre_body();
   extern virtual task          Configure_to_InitTxBuffers_body();
@@ -93,9 +93,21 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual task          InitTxBuffers_to_TxControl_body();
   extern virtual function void InitTxBuffers_to_TxControl_post_body();
 
+  extern virtual function void InitTxBuffers_to_InitTxBuffers_pre_body();
+  extern virtual task          InitTxBuffers_to_InitTxBuffers_body();
+  extern virtual function void InitTxBuffers_to_InitTxBuffers_post_body();
+
   extern virtual function void TxControl_to_WaitForInterrupt_pre_body();
   extern virtual task          TxControl_to_WaitForInterrupt_body();
   extern virtual function void TxControl_to_WaitForInterrupt_post_body();
+
+  extern virtual function void TxControl_to_TxControl_pre_body();
+  extern virtual task          TxControl_to_TxControl_body();
+  extern virtual function void TxControl_to_TxControl_post_body();
+
+  extern virtual function void TxControl_to_InitTxBuffers_pre_body();
+  extern virtual task          TxControl_to_InitTxBuffers_body();
+  extern virtual function void TxControl_to_InitTxBuffers_post_body();
 
   extern virtual function void WaitForInterrupt_to_ReadRxBuffer_pre_body();
   extern virtual task          WaitForInterrupt_to_ReadRxBuffer_body();
@@ -129,25 +141,9 @@ class sw_control_sequence extends sw_control_base_sequence;
   extern virtual task          ReadRxBuffer_to_WaitForInterrupt_body();
   extern virtual function void ReadRxBuffer_to_WaitForInterrupt_post_body();
 
-  extern virtual function void Idle_to_InitTxBuffers_pre_body();
-  extern virtual task          Idle_to_InitTxBuffers_body();
-  extern virtual function void Idle_to_InitTxBuffers_post_body();
-
-  extern virtual function void Idle_to_TxControl_pre_body();
-  extern virtual task          Idle_to_TxControl_body();
-  extern virtual function void Idle_to_TxControl_post_body();
-
-  extern virtual function void InitTxBuffers_to_InitTxBuffers_pre_body();
-  extern virtual task          InitTxBuffers_to_InitTxBuffers_body();
-  extern virtual function void InitTxBuffers_to_InitTxBuffers_post_body();
-
-  extern virtual function void TxControl_to_TxControl_pre_body();
-  extern virtual task          TxControl_to_TxControl_body();
-  extern virtual function void TxControl_to_TxControl_post_body();
-
-  extern virtual function void TxControl_to_InitTxBuffers_pre_body();
-  extern virtual task          TxControl_to_InitTxBuffers_body();
-  extern virtual function void TxControl_to_InitTxBuffers_post_body();
+  extern virtual function void __START___to_Idle_pre_body();
+  extern virtual task          __START___to_Idle_body();
+  extern virtual function void __START___to_Idle_post_body();
 
   extern virtual task body();
 endclass : sw_control_sequence

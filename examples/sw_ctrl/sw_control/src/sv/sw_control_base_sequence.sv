@@ -25,10 +25,15 @@ function void sw_control_base_sequence::post_randomize();
     // setup individual edge coverpoint target
     case ({src,dst})
       {Idle,Configure} : begin cg.Idle_to_Configure.option.weight = _cover_weight; cg.Idle_to_Configure.option.at_least = _at_least_value; end
+      {Idle,InitTxBuffers} : begin cg.Idle_to_InitTxBuffers.option.weight = _cover_weight; cg.Idle_to_InitTxBuffers.option.at_least = _at_least_value; end
+      {Idle,TxControl} : begin cg.Idle_to_TxControl.option.weight = _cover_weight; cg.Idle_to_TxControl.option.at_least = _at_least_value; end
       {Configure,InitTxBuffers} : begin cg.Configure_to_InitTxBuffers.option.weight = _cover_weight; cg.Configure_to_InitTxBuffers.option.at_least = _at_least_value; end
       {Configure,WaitForInterrupt} : begin cg.Configure_to_WaitForInterrupt.option.weight = _cover_weight; cg.Configure_to_WaitForInterrupt.option.at_least = _at_least_value; end
       {InitTxBuffers,TxControl} : begin cg.InitTxBuffers_to_TxControl.option.weight = _cover_weight; cg.InitTxBuffers_to_TxControl.option.at_least = _at_least_value; end
+      {InitTxBuffers,InitTxBuffers} : begin cg.InitTxBuffers_to_InitTxBuffers.option.weight = _cover_weight; cg.InitTxBuffers_to_InitTxBuffers.option.at_least = _at_least_value; end
       {TxControl,WaitForInterrupt} : begin cg.TxControl_to_WaitForInterrupt.option.weight = _cover_weight; cg.TxControl_to_WaitForInterrupt.option.at_least = _at_least_value; end
+      {TxControl,TxControl} : begin cg.TxControl_to_TxControl.option.weight = _cover_weight; cg.TxControl_to_TxControl.option.at_least = _at_least_value; end
+      {TxControl,InitTxBuffers} : begin cg.TxControl_to_InitTxBuffers.option.weight = _cover_weight; cg.TxControl_to_InitTxBuffers.option.at_least = _at_least_value; end
       {WaitForInterrupt,ReadRxBuffer} : begin cg.WaitForInterrupt_to_ReadRxBuffer.option.weight = _cover_weight; cg.WaitForInterrupt_to_ReadRxBuffer.option.at_least = _at_least_value; end
       {WaitForInterrupt,InitTxBuffers} : begin cg.WaitForInterrupt_to_InitTxBuffers.option.weight = _cover_weight; cg.WaitForInterrupt_to_InitTxBuffers.option.at_least = _at_least_value; end
       {WaitForInterrupt,Idle} : begin cg.WaitForInterrupt_to_Idle.option.weight = _cover_weight; cg.WaitForInterrupt_to_Idle.option.at_least = _at_least_value; end
@@ -37,11 +42,7 @@ function void sw_control_base_sequence::post_randomize();
       {ReadRxBuffer,Configure} : begin cg.ReadRxBuffer_to_Configure.option.weight = _cover_weight; cg.ReadRxBuffer_to_Configure.option.at_least = _at_least_value; end
       {ReadRxBuffer,InitTxBuffers} : begin cg.ReadRxBuffer_to_InitTxBuffers.option.weight = _cover_weight; cg.ReadRxBuffer_to_InitTxBuffers.option.at_least = _at_least_value; end
       {ReadRxBuffer,WaitForInterrupt} : begin cg.ReadRxBuffer_to_WaitForInterrupt.option.weight = _cover_weight; cg.ReadRxBuffer_to_WaitForInterrupt.option.at_least = _at_least_value; end
-      {Idle,InitTxBuffers} : begin cg.Idle_to_InitTxBuffers.option.weight = _cover_weight; cg.Idle_to_InitTxBuffers.option.at_least = _at_least_value; end
-      {Idle,TxControl} : begin cg.Idle_to_TxControl.option.weight = _cover_weight; cg.Idle_to_TxControl.option.at_least = _at_least_value; end
-      {InitTxBuffers,InitTxBuffers} : begin cg.InitTxBuffers_to_InitTxBuffers.option.weight = _cover_weight; cg.InitTxBuffers_to_InitTxBuffers.option.at_least = _at_least_value; end
-      {TxControl,TxControl} : begin cg.TxControl_to_TxControl.option.weight = _cover_weight; cg.TxControl_to_TxControl.option.at_least = _at_least_value; end
-      {TxControl,InitTxBuffers} : begin cg.TxControl_to_InitTxBuffers.option.weight = _cover_weight; cg.TxControl_to_InitTxBuffers.option.at_least = _at_least_value; end
+      {__START__,Idle} : begin cg.__START___to_Idle.option.weight = _cover_weight; cg.__START___to_Idle.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -58,10 +59,15 @@ function void sw_control_base_sequence::init_weight(int unsigned _w);
   if ( _w > 0 ) weight_end = 0 ;
   else          weight_end = 100;
     weight[Idle][Configure] = _w;
+    weight[Idle][InitTxBuffers] = _w;
+    weight[Idle][TxControl] = _w;
     weight[Configure][InitTxBuffers] = _w;
     weight[Configure][WaitForInterrupt] = _w;
     weight[InitTxBuffers][TxControl] = _w;
+    weight[InitTxBuffers][InitTxBuffers] = _w;
     weight[TxControl][WaitForInterrupt] = _w;
+    weight[TxControl][TxControl] = _w;
+    weight[TxControl][InitTxBuffers] = _w;
     weight[WaitForInterrupt][ReadRxBuffer] = _w;
     weight[WaitForInterrupt][InitTxBuffers] = _w;
     weight[WaitForInterrupt][Idle] = _w;
@@ -70,11 +76,7 @@ function void sw_control_base_sequence::init_weight(int unsigned _w);
     weight[ReadRxBuffer][Configure] = _w;
     weight[ReadRxBuffer][InitTxBuffers] = _w;
     weight[ReadRxBuffer][WaitForInterrupt] = _w;
-    weight[Idle][InitTxBuffers] = _w;
-    weight[Idle][TxControl] = _w;
-    weight[InitTxBuffers][InitTxBuffers] = _w;
-    weight[TxControl][TxControl] = _w;
-    weight[TxControl][InitTxBuffers] = _w;
+    weight[__START__][Idle] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints
@@ -89,6 +91,12 @@ function int unsigned sw_control_base_sequence::get_current_iteration();
 endfunction : get_current_iteration
 
 
+function sw_control_state_t sw_control_base_sequence::get_current_state();
+  return current_state;
+endfunction : get_current_state
+function sw_control_state_t sw_control_base_sequence::get_previous_state();
+  return previous_state;
+endfunction : get_previous_state
 // ----------------------------------------------
 // Coverage
 // ----------------------------------------------
@@ -101,6 +109,7 @@ endfunction : get_custom_coverage
 // we need to perform some maintenance each time a transition is made
 // cannot be in the base class because of the dependency on sw_control_state_t
 function void sw_control_base_sequence::update_transition(sw_control_state_t _src, _dst);
+  previous_state = current_state;
   current_state = _dst;
   weight[_src][_dst] = weight[_src][_dst] > weight_default_decrement ? weight[_src][_dst] - weight_default_decrement : 1;
   local_curr_iter_idx += 1;

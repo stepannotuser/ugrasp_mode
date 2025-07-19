@@ -38,9 +38,10 @@ function void pcie_link_training_base_sequence::post_randomize();
       {Recovery,L0} : begin cg.Recovery_to_L0.option.weight = _cover_weight; cg.Recovery_to_L0.option.at_least = _at_least_value; end
       {Recovery,Detect} : begin cg.Recovery_to_Detect.option.weight = _cover_weight; cg.Recovery_to_Detect.option.at_least = _at_least_value; end
       {L1,Recovery} : begin cg.L1_to_Recovery.option.weight = _cover_weight; cg.L1_to_Recovery.option.at_least = _at_least_value; end
-      {L2,Detect} : begin cg.L2_to_Detect.option.weight = _cover_weight; cg.L2_to_Detect.option.at_least = _at_least_value; end
       {L0s,L0} : begin cg.L0s_to_L0.option.weight = _cover_weight; cg.L0s_to_L0.option.at_least = _at_least_value; end
       {L0s,Recovery} : begin cg.L0s_to_Recovery.option.weight = _cover_weight; cg.L0s_to_Recovery.option.at_least = _at_least_value; end
+      {L2,Detect} : begin cg.L2_to_Detect.option.weight = _cover_weight; cg.L2_to_Detect.option.at_least = _at_least_value; end
+      {__START__,Detect} : begin cg.__START___to_Detect.option.weight = _cover_weight; cg.__START___to_Detect.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -70,9 +71,10 @@ function void pcie_link_training_base_sequence::init_weight(int unsigned _w);
     weight[Recovery][L0] = _w;
     weight[Recovery][Detect] = _w;
     weight[L1][Recovery] = _w;
-    weight[L2][Detect] = _w;
     weight[L0s][L0] = _w;
     weight[L0s][Recovery] = _w;
+    weight[L2][Detect] = _w;
+    weight[__START__][Detect] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints
@@ -87,6 +89,12 @@ function int unsigned pcie_link_training_base_sequence::get_current_iteration();
 endfunction : get_current_iteration
 
 
+function pcie_link_training_state_t pcie_link_training_base_sequence::get_current_state();
+  return current_state;
+endfunction : get_current_state
+function pcie_link_training_state_t pcie_link_training_base_sequence::get_previous_state();
+  return previous_state;
+endfunction : get_previous_state
 // ----------------------------------------------
 // Coverage
 // ----------------------------------------------
@@ -99,6 +107,7 @@ endfunction : get_custom_coverage
 // we need to perform some maintenance each time a transition is made
 // cannot be in the base class because of the dependency on pcie_link_training_state_t
 function void pcie_link_training_base_sequence::update_transition(pcie_link_training_state_t _src, _dst);
+  previous_state = current_state;
   current_state = _dst;
   weight[_src][_dst] = weight[_src][_dst] > weight_default_decrement ? weight[_src][_dst] - weight_default_decrement : 1;
   local_curr_iter_idx += 1;

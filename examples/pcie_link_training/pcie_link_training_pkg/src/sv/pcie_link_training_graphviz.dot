@@ -4,7 +4,7 @@
 
 digraph pcie_link_training {
   pad="0.5"
-  Detect [fillcolor=lightgrey style=filled]
+  __START__ [fillcolor=lightgrey style=filled]
   Detect -> Polling;
   Polling -> Detect;
   Polling -> Configuration;
@@ -19,7 +19,8 @@ digraph pcie_link_training {
   Recovery -> L0;
   Recovery -> Detect;
   L1 -> Recovery;
-  L2 -> Detect;
   L0s -> L0;
   L0s -> Recovery;
+  L2 -> Detect;
+  __START__ -> Detect;
 }

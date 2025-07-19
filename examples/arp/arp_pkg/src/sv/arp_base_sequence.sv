@@ -30,6 +30,7 @@ function void arp_base_sequence::post_randomize();
       {AddressConflict,RequestAddress} : begin cg.AddressConflict_to_RequestAddress.option.weight = _cover_weight; cg.AddressConflict_to_RequestAddress.option.at_least = _at_least_value; end
       {AssignAddress,Ready} : begin cg.AssignAddress_to_Ready.option.weight = _cover_weight; cg.AssignAddress_to_Ready.option.at_least = _at_least_value; end
       {Ready,Idle} : begin cg.Ready_to_Idle.option.weight = _cover_weight; cg.Ready_to_Idle.option.at_least = _at_least_value; end
+      {__START__,Idle} : begin cg.__START___to_Idle.option.weight = _cover_weight; cg.__START___to_Idle.option.at_least = _at_least_value; end
       endcase
     end
 endfunction :  post_randomize
@@ -51,6 +52,7 @@ function void arp_base_sequence::init_weight(int unsigned _w);
     weight[AddressConflict][RequestAddress] = _w;
     weight[AssignAddress][Ready] = _w;
     weight[Ready][Idle] = _w;
+    weight[__START__][Idle] = _w;
 endfunction : init_weight
 
 // Value getter to be used in directed constraints

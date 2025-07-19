@@ -10,7 +10,8 @@ typedef enum integer {
   ,L0
   ,Recovery
   ,L1
-  ,L2
   ,L0s
+  ,L2
+  ,__START__
 } pcie_link_training_state_t;
 

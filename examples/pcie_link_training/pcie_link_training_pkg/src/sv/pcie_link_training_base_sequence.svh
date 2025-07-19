@@ -24,6 +24,7 @@ class pcie_link_training_base_sequence extends uvm_sequence;
   // Coverage
   // ----------------------------------------------
   protected pcie_link_training_state_t current_state;
+  protected pcie_link_training_state_t previous_state;
   pcie_link_training_cg cg;
   extern virtual           function int          get_custom_coverage();
   
@@ -42,6 +43,8 @@ class pcie_link_training_base_sequence extends uvm_sequence;
   extern virtual           function void exclude_edge(pcie_link_training_state_t src,dst);
   extern virtual           function void include_edge(pcie_link_training_state_t src,dst,int unsigned _weight=initial_edge_weight);
   extern virtual           function int unsigned get_current_iteration();
+  extern virtual           function pcie_link_training_state_t get_current_state();
+  extern virtual           function pcie_link_training_state_t get_previous_state();
   
   // ----------------------------------------------
   /// Constructor

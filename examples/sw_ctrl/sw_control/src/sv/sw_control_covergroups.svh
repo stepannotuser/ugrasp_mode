@@ -10,7 +10,7 @@
     // State coverage
     states : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 18; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 19; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 10;
       bins state      [] = { [current_state.first():current_state.last()] };
       ignore_bins unknown = { UNKNOWN };
@@ -19,14 +19,19 @@
     // Global Transition Coverage
     transitions : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 18; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 19; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins transition[] =
          (Idle => Configure)
+        ,(Idle => InitTxBuffers)
+        ,(Idle => TxControl)
         ,(Configure => InitTxBuffers)
         ,(Configure => WaitForInterrupt)
         ,(InitTxBuffers => TxControl)
+        ,(InitTxBuffers => InitTxBuffers)
         ,(TxControl => WaitForInterrupt)
+        ,(TxControl => TxControl)
+        ,(TxControl => InitTxBuffers)
         ,(WaitForInterrupt => ReadRxBuffer)
         ,(WaitForInterrupt => InitTxBuffers)
         ,(WaitForInterrupt => Idle)
@@ -35,11 +40,7 @@
         ,(ReadRxBuffer => Configure)
         ,(ReadRxBuffer => InitTxBuffers)
         ,(ReadRxBuffer => WaitForInterrupt)
-        ,(Idle => InitTxBuffers)
-        ,(Idle => TxControl)
-        ,(InitTxBuffers => InitTxBuffers)
-        ,(TxControl => TxControl)
-        ,(TxControl => InitTxBuffers)
+        ,(__START__ => Idle)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -48,6 +49,18 @@
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins Idle_to_Configure = ( Idle => Configure ); 
+    }
+    Idle_to_InitTxBuffers : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins Idle_to_InitTxBuffers = ( Idle => InitTxBuffers ); 
+    }
+    Idle_to_TxControl : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins Idle_to_TxControl = ( Idle => TxControl ); 
     }
     Configure_to_InitTxBuffers : coverpoint current_state {
       option.goal     = 100;
@@ -67,11 +80,29 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins InitTxBuffers_to_TxControl = ( InitTxBuffers => TxControl ); 
     }
+    InitTxBuffers_to_InitTxBuffers : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins InitTxBuffers_to_InitTxBuffers = ( InitTxBuffers => InitTxBuffers ); 
+    }
     TxControl_to_WaitForInterrupt : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins TxControl_to_WaitForInterrupt = ( TxControl => WaitForInterrupt ); 
+    }
+    TxControl_to_TxControl : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins TxControl_to_TxControl = ( TxControl => TxControl ); 
+    }
+    TxControl_to_InitTxBuffers : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins TxControl_to_InitTxBuffers = ( TxControl => InitTxBuffers ); 
     }
     WaitForInterrupt_to_ReadRxBuffer : coverpoint current_state {
       option.goal     = 100;
@@ -121,35 +152,11 @@
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins ReadRxBuffer_to_WaitForInterrupt = ( ReadRxBuffer => WaitForInterrupt ); 
     }
-    Idle_to_InitTxBuffers : coverpoint current_state {
+    __START___to_Idle : coverpoint current_state {
       option.goal     = 100;
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins Idle_to_InitTxBuffers = ( Idle => InitTxBuffers ); 
-    }
-    Idle_to_TxControl : coverpoint current_state {
-      option.goal     = 100;
-      option.weight   = 1;
-      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins Idle_to_TxControl = ( Idle => TxControl ); 
-    }
-    InitTxBuffers_to_InitTxBuffers : coverpoint current_state {
-      option.goal     = 100;
-      option.weight   = 1;
-      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins InitTxBuffers_to_InitTxBuffers = ( InitTxBuffers => InitTxBuffers ); 
-    }
-    TxControl_to_TxControl : coverpoint current_state {
-      option.goal     = 100;
-      option.weight   = 1;
-      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins TxControl_to_TxControl = ( TxControl => TxControl ); 
-    }
-    TxControl_to_InitTxBuffers : coverpoint current_state {
-      option.goal     = 100;
-      option.weight   = 1;
-      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
-      bins TxControl_to_InitTxBuffers = ( TxControl => InitTxBuffers ); 
+      bins __START___to_Idle = ( __START__ => Idle ); 
     }
 
   endgroup

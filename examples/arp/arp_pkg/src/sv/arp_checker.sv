@@ -15,6 +15,7 @@ function bit arp_checker::is_valid_transition(arp_state_t src,dst);
     {AddressConflict,RequestAddress} : ret_val = 1;
     {AssignAddress,Ready} : ret_val = 1;
     {Ready,Idle} : ret_val = 1;
+    {__START__,Idle} : ret_val = 1;
     default: ret_val = 0;
   endcase
 endfunction : is_valid_transition

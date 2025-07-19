@@ -10,7 +10,7 @@
     // State coverage
     states : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 6; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 7; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 10;
       bins state      [] = { [current_state.first():current_state.last()] };
       ignore_bins unknown = { UNKNOWN };
@@ -19,7 +19,7 @@
     // Global Transition Coverage
     transitions : coverpoint current_state {
       option.goal     = 100;
-      option.weight   = 6; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
+      option.weight   = 7; //< The weight is set to the number of transitions so that states have as much weight as the all transations together
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins transition[] =
          (Idle => RequestAddress)
@@ -28,6 +28,7 @@
         ,(AddressConflict => RequestAddress)
         ,(AssignAddress => Ready)
         ,(Ready => Idle)
+        ,(__START__ => Idle)
 ;    }
 
         // Individual Edge Coverpoints, allow fine grain objective setup
@@ -66,6 +67,12 @@
       option.weight   = 1;
       option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
       bins Ready_to_Idle = ( Ready => Idle ); 
+    }
+    __START___to_Idle : coverpoint current_state {
+      option.goal     = 100;
+      option.weight   = 1;
+      option.at_least = 1; //< default objective is to cover every transition at least once. Can be overridden by users.
+      bins __START___to_Idle = ( __START__ => Idle ); 
     }
 
   endgroup

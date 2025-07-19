@@ -5,10 +5,10 @@
 class pcie_link_training_checker extends uvm_component;
   `uvm_component_utils(pcie_link_training_checker)
 
-  extern function new(string name="pcie_link_training_checker" , uvm_object parent=null);
+  extern function new(string name="pcie_link_training_checker" , uvm_component parent=null);
 
   extern static function bit is_valid_transition(pcie_link_training_state_t src,dst);
 
-  extern static function void check_transition(pcie_link_training_state_t src,dst);
+  extern        function void check_transition(pcie_link_training_state_t src,dst);
 
 endclass : pcie_link_training_checker 
