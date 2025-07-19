@@ -6,8 +6,8 @@ SystemVerilog Graph
 * Tool to edit test Graphs and generate SystemVerilog graph randsequence
 * Tool to run randsequence efficiently
 
-Concept to be developped:
-=========================
+User Guide
+==========
 
 Inputs:
 
@@ -28,6 +28,9 @@ Outputs:
     * stops when a maximum number of iterations is reached
     * stops when coverage is 100%
     * allow users to extend the class and implement each action and call UVM sequences.
+
+See: [doc/ugrasp.md](doc/ugrasp.md)
+
 
 Example:
 ========
@@ -79,3 +82,6 @@ is converted to
 
 <iframe src="examples/completeness/randseq_example.sv">
 </iframe>
+
+
+
