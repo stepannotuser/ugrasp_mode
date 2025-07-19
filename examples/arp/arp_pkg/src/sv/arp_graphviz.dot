@@ -1,0 +1,15 @@
+// SVGraph arp
+// File    arp_graphviz.dot
+
+
+digraph arp {
+  pad="0.5"
+  starting [fillcolor=lightgrey style=filled]
+  Idle -> RequestAddress;
+  RequestAddress -> AddressConflict;
+  RequestAddress -> AssignAddress;
+  AddressConflict -> RequestAddress;
+  AssignAddress -> Ready;
+  Ready -> Idle;
+  starting -> Idle;
+}
