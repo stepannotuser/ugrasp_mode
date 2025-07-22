@@ -49,7 +49,8 @@ class csv_parser(base_parser):
         next_state = row[next_state_idx].strip()
 
       if curr_state in db:
-        db[curr_state].append(next_state)
+        if ( not next_state in db[curr_state] ): # avoid duplicates
+          db[curr_state].append(next_state)
       else:
         db[curr_state] = [next_state]
 
