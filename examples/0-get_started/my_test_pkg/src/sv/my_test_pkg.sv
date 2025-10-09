@@ -15,7 +15,9 @@ package my_test_pkg;
   // Package imports
   import uvm_pkg::*;
   import simple_vip_pkg::*;
+  import my_fsm_pkg::*;
   `include "uvm_macros.svh"
+  `include "my_fsm_user_sequence.svh"
   
   class my_test extends uvm_test;
     `uvm_component_utils(my_test)
@@ -35,11 +37,17 @@ package my_test_pkg;
 
     // Run Phase
     virtual task run_phase(uvm_phase phase);
+      my_fsm_user_sequence my_seq = my_fsm_user_sequence::type_id::create("my_seq");
       phase.raise_objection(this);
     
       `uvm_info(get_type_name(), "Starting my_test run_phase", UVM_LOW)
-      // Add your test stimulus here
+      
+      assert(my_seq.randomize() with { max_iter == 20; coverage_closure_en == 1; })
+      else `uvm_fatal(get_type_name(), "Failed to randomize my_seq");
+      
+      my_seq.start(vip_agent.sequencer);
       #100ns; // Simulate some activity
+
       `uvm_info(get_type_name(), "Ending my_test run_phase", UVM_LOW)
     
       phase.drop_objection(this);

@@ -30,6 +30,8 @@ class uvm_sequence_generator(base_generator):
     self.outdir    = outdir
     self.first_state = first_state
     self.no_covergroup = no_covergroup
+    self.sequence_item   = args["sequence_item"]
+    self.import_package   = args["import_package"]
 
     if ( "per_instance" in args ):
       self.per_instance = args["per_instance"].lower()
@@ -109,6 +111,11 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"uvm_macros.svh\"\n")
     self.write(file,1,f"import uvm_pkg::*;\n")
+
+    if ( self.import_package != None and self.import_package.strip() != "" ):
+      self.write(file,1,f"import " + self.import_package.strip() + "::*;\n")
+
+
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"{self.classname}_types.svh\"\n")
     if not self.no_covergroup :
@@ -169,7 +176,13 @@ class uvm_sequence_generator(base_generator):
     self.write(file,3,f"option.goal     = 100;\n")
     self.write(file,3,f"option.weight   = {nr_transitions}; //< The weight is set to the number of transitions so that states have as much weight as the all transations together\n")
     self.write(file,3,f"option.at_least = 10;\n")
-    self.write(file,3,f"bins state      [] = {{ [current_state.first():current_state.last()] }};\n")
+    self.write(file,3,f"bins state      [] = {{ ")
+    for idx,state in enumerate(self.db):
+      if idx == 0:
+        self.write(file,0,f"{state.strip()}")    
+      else:
+        self.write(file,0,f",{state.strip()}")
+    self.write(file,0,f" }};\n")
     self.write(file,3,f"ignore_bins unknown = {{ UNKNOWN }};\n")
     self.write(file,2,f"}}\n\n")
     self.write(file,2,f"// Global Transition Coverage\n")
@@ -210,16 +223,22 @@ class uvm_sequence_generator(base_generator):
     """
       Base Class Declaration
     """
+    uvm_sequence_name = "uvm_sequence"
+    if ( self.sequence_item != None and self.sequence_item.strip() != "" ):
+      uvm_sequence_name = "uvm_sequence#(" + self.sequence_item.strip() + ")"
+
+
     if ( self.per_instance == "param" ):
-      self.write(file,0,f"class {self.classname}_base_sequence#(PER_INSTANCE_COVERAGE=1) extends uvm_sequence;\n")
+      self.write(file,0,f"class {self.classname}_base_sequence#(PER_INSTANCE_COVERAGE=1) extends {uvm_sequence_name};\n")
     else:
-      self.write(file,0,f"class {self.classname}_base_sequence extends uvm_sequence;\n")
+      self.write(file,0,f"class {self.classname}_base_sequence extends {uvm_sequence_name};\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// protected internal variables\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"local     int unsigned local_curr_iter_idx = 0;  ///< Current Iteration Index. Incremented on each new state\n")
     self.write(file,1,f"protected int unsigned weight_end = 0;           ///< Exit criteria. When 0, no exit from normal flow is possible\n")
+    self.write(file,1,f"protected bit          randomization_done = 0;   ///< Randomization done flag\n")     
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// public constrainable settings\n")
@@ -229,7 +248,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"rand bit          coverage_closure_en = 0;       ///< constrainable coverage closure configuration. When 1, graph will exit when the coverage reaches 100%\n")
     self.write(file,1,f"rand int unsigned weight_default_decrement = 1;  ///< constrainable decrement of the weight of the edge each time it is executed\n")
     self.write(file,1,f"rand int unsigned default_edge_at_least = 1;     ///< constrainable. Each edge should be covered at least this number of times\n")
-    self.write(file,1,f"rand int unsigned weight[{self.classname}_state_t][{self.classname}_state_t] = '{{default:initial_edge_weight}}; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'\n\n")
+    self.write(file,1,f"rand int unsigned weight[{self.classname}_state_t][{self.classname}_state_t]; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'\n\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// Coverage\n")
@@ -328,6 +347,9 @@ class uvm_sequence_generator(base_generator):
           self.write(file,3,f"{{{_start},{_end}}} : begin cg.{_start}_to_{_end}.option.weight = _cover_weight; cg.{_start}_to_{_end}.option.at_least = _at_least_value; end\n")    
       self.write(file,3,f"endcase\n")
     self.write(file,2,f"end\n")
+    self.write(file,0,f"//\n")
+    self.write(file,1,f"// Allow the body() to run. If not a fatal is triggered.\n")
+    self.write(file,1,f"randomization_done = 1;\n")
     self.write(file,0,f"endfunction :  post_randomize\n\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"// ----------------------------------------------\n")
@@ -670,6 +692,10 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f"// Graph Based Sequence body\n")
     self.write(file,0,f"// ----------------------------------------------\n")
     self.write(file,0,f"task {self.classname}_sequence::body();\n")
+
+    self.write(file,1,f"if (!randomization_done)\n")
+    self.write(file,1,f"`uvm_fatal(\"F_NORAND\",\"Sequence not randomized. Please randomize the sequence before calling start()\")\n")
+
     if self.first_state == None:
       self.write(file,1,f"randsequence()\n")
     else:

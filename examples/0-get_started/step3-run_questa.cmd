@@ -1,0 +1,1 @@
+vsim -do "run -all; quit" tb
