@@ -20,9 +20,12 @@ class csv_parser(base_parser):
   def read(self,filename,args=None):
 
     db = {}
-
-    with open(filename, 'r') as csvfile:
-      result = list(csv.reader(csvfile))
+    try:
+      with open(filename, 'r') as csvfile:
+        csvf = list(csv.reader(csvfile))
+    except (FileNotFoundError, IOError) as e:
+      print(f"Error: Unable to open or read the file '{filename}': {e}")
+      return {}
 
     # Get all header info.
     state_idx      = 0
@@ -31,7 +34,7 @@ class csv_parser(base_parser):
 
     # Recovery of the header
     idx = 0
-    for column in result[0]:
+    for column in csvf[0]:
       column = column.lower().strip()
       header.append(column)
 
@@ -42,7 +45,7 @@ class csv_parser(base_parser):
       idx += 1
 
     # Create the graph
-    for row in result[1:]:
+    for row in csvf[1:]:
       l = len(row)
       if ( state_idx < l and next_state_idx < l):
         curr_state = row[state_idx].strip()
@@ -59,6 +62,3 @@ class csv_parser(base_parser):
 
     return db
   
-
-  def toto(self):
-    print("toto")

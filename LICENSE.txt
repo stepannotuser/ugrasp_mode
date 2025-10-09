@@ -14,21 +14,20 @@ Restrictions:
    to submit a merge request to the official repository, subject to AEDVICES Consulting SAS's approval.
 3. The Software may not be sold, sublicensed, or used as part of any commercial offering.
 4. Redistribution is permitted only in its original, unmodified form, with this license and copyright notice intact.
-5. Any use of the Software must preserve the attribution to AEDVICES Consulting SAS.
-6. This license does not grant any rights to the Software's name, logo, or trademarks.
-7. This license terminates automatically if the User violates any of its terms.
+5. This license does not grant any rights to the Software's name, logo, or trademarks.
+6. This license terminates automatically if the User violates any of its terms.
 
 Patent Defense:
 
-8. If the User initiates any patent litigation (including a cross-claim or counterclaim) alleging that the Software
+7. If the User initiates any patent litigation (including a cross-claim or counterclaim) alleging that the Software
    or its use infringes any patent, this license is immediately and permanently terminated.
 
 Disclaimer:
 
-9. This Software is provided "as is", without warranty of any kind, express or implied.
+8. This Software is provided "as is", without warranty of any kind, express or implied.
    AEDVICES Consulting SAS shall not be liable for any damages arising from the use of the Software.
 
 Commercial Licensing:
 
-10. AEDVICES Consulting SAS reserves the right to license other versions of this Software under different (including commercial) terms.
+9. AEDVICES Consulting SAS reserves the right to license other versions of this Software under different (including commercial) terms.
    For commercial licensing inquiries, contact: contact@aedvices.com
