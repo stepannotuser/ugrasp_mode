@@ -30,6 +30,8 @@ class uvm_sequence_generator(base_generator):
     self.outdir    = outdir
     self.first_state = first_state
     self.no_covergroup = no_covergroup
+    self.sequence_item   = args["sequence_item"]
+    self.import_package   = args["import_package"]
 
     if ( "per_instance" in args ):
       self.per_instance = args["per_instance"].lower()
@@ -109,6 +111,11 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"uvm_macros.svh\"\n")
     self.write(file,1,f"import uvm_pkg::*;\n")
+
+    if ( self.import_package != None and self.import_package.strip() != "" ):
+      self.write(file,1,f"import " + self.import_package.strip() + "::*;\n")
+
+
     self.write(file,1,f"\n")
     self.write(file,1,f"`include \"{self.classname}_types.svh\"\n")
     if not self.no_covergroup :
@@ -169,7 +176,13 @@ class uvm_sequence_generator(base_generator):
     self.write(file,3,f"option.goal     = 100;\n")
     self.write(file,3,f"option.weight   = {nr_transitions}; //< The weight is set to the number of transitions so that states have as much weight as the all transations together\n")
     self.write(file,3,f"option.at_least = 10;\n")
-    self.write(file,3,f"bins state      [] = {{ [current_state.first():current_state.last()] }};\n")
+    self.write(file,3,f"bins state      [] = {{ ")
+    for idx,state in enumerate(self.db):
+      if idx == 0:
+        self.write(file,0,f"{state.strip()}")    
+      else:
+        self.write(file,0,f",{state.strip()}")
+    self.write(file,0,f" }};\n")
     self.write(file,3,f"ignore_bins unknown = {{ UNKNOWN }};\n")
     self.write(file,2,f"}}\n\n")
     self.write(file,2,f"// Global Transition Coverage\n")
@@ -210,16 +223,22 @@ class uvm_sequence_generator(base_generator):
     """
       Base Class Declaration
     """
+    uvm_sequence_name = "uvm_sequence"
+    if ( self.sequence_item != None and self.sequence_item.strip() != "" ):
+      uvm_sequence_name = "uvm_sequence#(" + self.sequence_item.strip() + ")"
+
+
     if ( self.per_instance == "param" ):
-      self.write(file,0,f"class {self.classname}_base_sequence#(PER_INSTANCE_COVERAGE=1) extends uvm_sequence;\n")
+      self.write(file,0,f"class {self.classname}_base_sequence#(PER_INSTANCE_COVERAGE=1) extends {uvm_sequence_name};\n")
     else:
-      self.write(file,0,f"class {self.classname}_base_sequence extends uvm_sequence;\n")
+      self.write(file,0,f"class {self.classname}_base_sequence extends {uvm_sequence_name};\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// protected internal variables\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"local     int unsigned local_curr_iter_idx = 0;  ///< Current Iteration Index. Incremented on each new state\n")
     self.write(file,1,f"protected int unsigned weight_end = 0;           ///< Exit criteria. When 0, no exit from normal flow is possible\n")
+    self.write(file,1,f"protected bit          randomization_done = 0;   ///< Randomization done flag\n")     
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// public constrainable settings\n")
@@ -229,7 +248,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"rand bit          coverage_closure_en = 0;       ///< constrainable coverage closure configuration. When 1, graph will exit when the coverage reaches 100%\n")
     self.write(file,1,f"rand int unsigned weight_default_decrement = 1;  ///< constrainable decrement of the weight of the edge each time it is executed\n")
     self.write(file,1,f"rand int unsigned default_edge_at_least = 1;     ///< constrainable. Each edge should be covered at least this number of times\n")
-    self.write(file,1,f"rand int unsigned weight[{self.classname}_state_t][{self.classname}_state_t] = '{{default:initial_edge_weight}}; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'\n\n")
+    self.write(file,1,f"rand int unsigned weight[{self.classname}_state_t][{self.classname}_state_t]; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'\n\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// Coverage\n")
@@ -249,6 +268,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"protected bit          goto_activated = 0; // got is activated\n")
     self.write(file,1,f"extern virtual protected function void prepare_context();\n")
     self.write(file,1,f"extern virtual           function void goto({self.classname}_state_t next);\n")
+    
     self.write(file,1,f"extern virtual           function void exit();\n")
     self.write(file,1,f"extern virtual           function void exclude_next({self.classname}_state_t next);\n")
     self.write(file,1,f"extern virtual           function void include_next({self.classname}_state_t next,int unsigned _weight=initial_edge_weight);\n")
@@ -327,6 +347,9 @@ class uvm_sequence_generator(base_generator):
           self.write(file,3,f"{{{_start},{_end}}} : begin cg.{_start}_to_{_end}.option.weight = _cover_weight; cg.{_start}_to_{_end}.option.at_least = _at_least_value; end\n")    
       self.write(file,3,f"endcase\n")
     self.write(file,2,f"end\n")
+    self.write(file,0,f"//\n")
+    self.write(file,1,f"// Allow the body() to run. If not a fatal is triggered.\n")
+    self.write(file,1,f"randomization_done = 1;\n")
     self.write(file,0,f"endfunction :  post_randomize\n\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"// ----------------------------------------------\n")
@@ -488,50 +511,87 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f"\n")
 
     # post randomize
-    self.write(file,1,f"/// ----------------------------------------------\n")
-    self.write(file,1,f"/// Common body tasks\n")
-    self.write(file,1,f"/// ----------------------------------------------\n")
-    self.write(file,1,f"\n")
+    self.write(file,1,f"// ----------------------------------------------\n")
+    self.write(file,1,f"// Common body tasks\n")
+    self.write(file,1,f"// ----------------------------------------------\n")
+    self.write(file,1,f"// completion is called when the graph exists\n")
     self.write(file,1,f"extern virtual function void completion_pre_body(); \n")
     self.write(file,1,f"extern virtual task          completion_body(); \n")
     self.write(file,1,f"extern virtual function void completion_post_body();\n")
-    self.write(file,1,f"\n")
+    self.write(file,0,f"\n")
+    self.write(file,1,f"// state_body(state) is called in parallal to any <state>_body() task.\n")
+    self.write(file,1,f"// this allows to handles states in a more generic way\n")
     self.write(file,1,f"extern virtual function void state_pre_body({self.classname}_state_t state);\n")    
     self.write(file,1,f"extern virtual task          state_body({self.classname}_state_t state);\n")    
     self.write(file,1,f"extern virtual function void state_post_body({self.classname}_state_t state);\n")    
-    self.write(file,1,f"\n")
+    self.write(file,0,f"\n")
+    self.write(file,1,f"// transition_body(src,dst) is called in parallal to any <transition>_body() task.\n")
+    self.write(file,1,f"// this allows to handles transition in a more generic way\n")
     self.write(file,1,f"extern virtual function void transition_pre_body({self.classname}_state_t src,dst);\n")    
     self.write(file,1,f"extern virtual task          transition_body({self.classname}_state_t src,dst);\n")    
     self.write(file,1,f"extern virtual function void transition_post_body({self.classname}_state_t src,dst);\n")    
-    self.write(file,1,f"\n")
+    self.write(file,0,f"\n")
     self.write(file,1,f"/// ----------------------------------------------\n")
     self.write(file,1,f"/// Utility Functions\n")
     self.write(file,1,f"/// ----------------------------------------------\n")
-    self.write(file,1,f"extern virtual function void goto({self.classname}_state_t next);\n")
-    self.write(file,1,f"extern virtual function void exit();\n")
-
+    self.write(file,1,f"// goto(): to be called in a state to control what is the next state\n")
+    self.write(file,1,f"extern virtual function void goto({self.classname}_state_t next);\n\n")
+    self.write(file,1,f"// exit(): to be called at anytime to force to go to completion\n")
+    self.write(file,1,f"extern virtual function void exit();\n\n")
+    self.write(file,1,f"// exclude_next(): to be called in a state to exclude one of the next from possible choices\n")
+    self.write(file,1,f"extern virtual function void exclude_next({self.classname}_state_t next);\n\n")
+    self.write(file,1,f"// include_next(): to be called in a state to include one of the next within possible choices\n")
+    self.write(file,1,f"extern virtual function void include_next({self.classname}_state_t next,\n")
+    self.write(file,1,f"                                          int unsigned _weight=initial_edge_weight);\n\n")
+    self.write(file,1,f"// exclude_edge(): to be called anywhere, to exclude any edge\n")
+    self.write(file,1,f"extern virtual function void exclude_edge({self.classname}_state_t src,dst);\n\n")
+    self.write(file,1,f"// include_edge(): to be called anywhere, to include any edge\n")
+    self.write(file,1,f"extern virtual function void include_edge({self.classname}_state_t src,dst,\n")
+    self.write(file,1,f"                                          int unsigned _weight=initial_edge_weight);\n")
+    self.write(file,0,f"\n")
 
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// State tasks and functions hooks\n")
     self.write(file,1,f"// ----------------------------------------------\n")
+    self.write(file,1,f"// Use these to perform actions when you are expected to be in or to go to a state\n")
+    self.write(file,1,f"// You may use goto(state) include_next(state) or include_next(state) from these\n")
+    self.write(file,1,f"// You may use exclude_edge(src,dst) or include_edge(src,dst) from these\n")
     for idx,state in enumerate(self.db):
       _start = state.strip()
       self.write(file,1,f"extern virtual function void {_start}_pre_body();\n")    
+    self.write(file,0,f"\n")
+    for idx,state in enumerate(self.db):
+      _start = state.strip()
       self.write(file,1,f"extern virtual task          {_start}_body();\n")    
+    self.write(file,0,f"\n")
+    for idx,state in enumerate(self.db):
+      _start = state.strip()
       self.write(file,1,f"extern virtual function void {_start}_post_body();\n")    
-      self.write(file,0,f"\n")
+    self.write(file,0,f"\n")
 
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// Transition tasks and functions hooks\n")
     self.write(file,1,f"// ----------------------------------------------\n")
+    self.write(file,1,f"// Use these to perform actions to move to the destination state\n")
+    self.write(file,1,f"// You may use exclude_edge(src,dst) or include_edge(src,dst) from these\n")
     for idx,state in enumerate(self.db):
       _start = state.strip()
       for jdx,nextstate in enumerate(self.db[state]):
         _end   = nextstate.strip()
         self.write(file,1,f"extern virtual function void {_start}_to_{_end}_pre_body();\n")    
+    self.write(file,0,f"\n")
+    for idx,state in enumerate(self.db):
+      _start = state.strip()
+      for jdx,nextstate in enumerate(self.db[state]):
+        _end   = nextstate.strip()
         self.write(file,1,f"extern virtual task          {_start}_to_{_end}_body();\n")    
+    self.write(file,0,f"\n")
+    for idx,state in enumerate(self.db):
+      _start = state.strip()
+      for jdx,nextstate in enumerate(self.db[state]):
+        _end   = nextstate.strip()
         self.write(file,1,f"extern virtual function void {_start}_to_{_end}_post_body();\n")    
-        self.write(file,0,f"\n")
+    self.write(file,0,f"\n")
 
     self.write(file,1,f"extern virtual task body();\n")
     self.write(file,0,f"endclass : {self.classname}_sequence\n")
@@ -552,10 +612,22 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f"// ----------------------------------------------\n")
     self.write(file,0,f"function void {self.classname}_sequence::goto({self.classname}_state_t next);\n")
     self.write(file,0,f"  super.goto(next);\n")
-    self.write(file,0,f"endfunction : goto\n")
+    self.write(file,0,f"endfunction : goto\n\n")
     self.write(file,0,f"function void {self.classname}_sequence::exit();\n")
     self.write(file,0,f"  super.exit();\n")
-    self.write(file,0,f"endfunction : exit\n")
+    self.write(file,0,f"endfunction : exit\n\n")
+    self.write(file,0,f"function void {self.classname}_sequence::exclude_next({self.classname}_state_t next);\n")
+    self.write(file,0,f"  super.exclude_next(next);\n")
+    self.write(file,0,f"endfunction : exclude_next\n\n")
+    self.write(file,0,f"function void {self.classname}_sequence::include_next({self.classname}_state_t next,int unsigned _weight=initial_edge_weight);\n")
+    self.write(file,0,f"  super.include_next(next);\n")
+    self.write(file,0,f"endfunction : include_next\n\n")
+    self.write(file,0,f"function void {self.classname}_sequence::exclude_edge({self.classname}_state_t src,dst);\n")
+    self.write(file,0,f"  super.exclude_edge(src,dst);\n")
+    self.write(file,0,f"endfunction : exclude_edge\n\n")
+    self.write(file,0,f"function void {self.classname}_sequence::include_edge({self.classname}_state_t src,dst,int unsigned _weight=initial_edge_weight);\n")
+    self.write(file,0,f"  super.include_edge(src,dst);\n")
+    self.write(file,0,f"endfunction : include_edge\n\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"// ----------------------------------------------\n")
     self.write(file,0,f"// Common tasks and functions hooks\n")
@@ -620,6 +692,10 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f"// Graph Based Sequence body\n")
     self.write(file,0,f"// ----------------------------------------------\n")
     self.write(file,0,f"task {self.classname}_sequence::body();\n")
+
+    self.write(file,1,f"if (!randomization_done)\n")
+    self.write(file,1,f"`uvm_fatal(\"F_NORAND\",\"Sequence not randomized. Please randomize the sequence before calling start()\")\n")
+
     if self.first_state == None:
       self.write(file,1,f"randsequence()\n")
     else:

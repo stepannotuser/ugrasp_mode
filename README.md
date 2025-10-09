@@ -9,6 +9,16 @@ SystemVerilog Graph
 User Guide
 ==========
 
+See [doc/ugrasp.md](doc/ugrasp.md) for full step-by-step setup.
+
+<iframe src="/doc/ugrasp.md">
+</iframe>
+
+
+Concepts
+==========
+
+
 Inputs:
 
 * CSV File with state, next_state columns
@@ -28,10 +38,6 @@ Outputs:
     * stops when a maximum number of iterations is reached
     * stops when coverage is 100%
     * allow users to extend the class and implement each action and call UVM sequences.
-
-See: [doc/ugrasp.md](doc/ugrasp.md)
-<iframe src="/doc/ugrasp.md">
-</iframe>
 
 
 Example:
@@ -59,7 +65,7 @@ GraphViz
 ```dot
 digraph FSM {
     
-    node [shape=diamond];    
+    node [shape=elipse];    
     rank=max;
     IDLE;
 

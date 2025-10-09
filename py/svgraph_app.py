@@ -82,7 +82,7 @@ class svgraph_app:
         continue
 
       if ( argname in self.parser_factory and self.args[argname] != None):
-        print(f"argname = {argname} --> {self.args[argname]}")
+        #print(f"argname = {argname} --> {self.args[argname]}")
         self.parser = self.parser_factory.get(argname,base_parser)()
         # a parser if found, we use only one
         break
@@ -181,7 +181,7 @@ class svgraph_app:
         continue
 
       if ( argname in self.gen_factory and self.args[argname] != None):
-        print(f"argname = {argname} --> {self.args[argname]}")
+        #print(f"argname = {argname} --> {self.args[argname]}")
         generator = self.gen_factory.get(argname,base_parser)()
 
         # generate files
@@ -218,8 +218,9 @@ class svgraph_app:
       Main entry point of the application
     """
     self.parse()
-    self.pre_gen()
-    self.generate()
-    self.report_diagnostics()
+    if self.graph:
+      self.pre_gen()
+      self.generate()
+      self.report_diagnostics()
     
 
