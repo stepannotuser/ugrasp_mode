@@ -1,0 +1,11 @@
+python3 ../../ugrasp.py \
+    -in_csv my_fsm.csv \
+    -out_dir my_fsm_pkg/src/sv \
+    -classname my_fsm \
+    -gen_uvm \
+    -first_state IDLE \
+    -per_instance no \
+    -gen_dot \
+    -gen_dot_full \
+    -sequence_item simple_vip_sequence_item  \
+    -import_package simple_vip_pkg

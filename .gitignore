@@ -2,3 +2,4 @@
 .*~
 \#.*
 __pycache__
+examples\0-get_started\my_fsm_pkg
