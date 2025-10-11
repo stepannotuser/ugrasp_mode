@@ -9,10 +9,11 @@ SystemVerilog Graph
 User Guide
 ==========
 
-See [doc/ugrasp.md](doc/ugrasp.md) for full step-by-step setup.
+for full step-by-step tutorial, see:
 
-<iframe src="/doc/ugrasp.md">
-</iframe>
+* [doc/ugrasp.md](doc/ugrasp.md) 
+
+
 
 
 Concepts
@@ -84,12 +85,8 @@ digraph FSM {
 
 
 
-is converted to 
+is converted to a sequence handling all possible states and transitions.
 
-[examples/completeness/randseq_example.sv](examples/completeness/randseq_example.sv)
-
-<iframe src="examples/completeness/randseq_example.sv">
-</iframe>
 
 
 

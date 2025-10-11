@@ -42,8 +42,13 @@ package my_test_pkg;
     
       `uvm_info(get_type_name(), "Starting my_test run_phase", UVM_LOW)
       
-      assert(my_seq.randomize() with { max_iter == 20; coverage_closure_en == 1; })
-      else `uvm_fatal(get_type_name(), "Failed to randomize my_seq");
+      assert (
+        my_seq.randomize() with { 
+          max_iter == 20000; 
+          coverage_default_edge_at_least == 10;
+          coverage_closure_en == 1; 
+        }
+      ) else `uvm_fatal(get_type_name(), "Failed to randomize my_seq");
       
       my_seq.start(vip_agent.sequencer);
       #100ns; // Simulate some activity
