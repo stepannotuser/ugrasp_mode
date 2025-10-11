@@ -22,16 +22,18 @@ class uvm_sequence_generator(base_generator):
   def generate(self,db,args):
     outdir    = "."        if args["out_dir"]   == None else args["out_dir"]
     classname = "svgraph"  if args["classname"] == None else args["classname"]
-    first_state = args["first_state"]
+    first_state   = args["first_state"]
     no_covergroup = args["no_covergroup"]
 
     self.db        = db 
     self.classname = classname
     self.outdir    = outdir
     self.first_state = first_state
-    self.no_covergroup = no_covergroup
-    self.sequence_item   = args["sequence_item"]
-    self.import_package   = args["import_package"]
+    self.no_covergroup  = no_covergroup
+    self.sequence_item  = args["sequence_item"]
+    self.import_package = args["import_package"]
+    self.__START__  = args["pre_run_state_name"]  # Name of the start node
+    self.__END__    = args["post_run_state_name"] # Name of the end
 
     if ( "per_instance" in args ):
       self.per_instance = args["per_instance"].lower()
@@ -171,6 +173,8 @@ class uvm_sequence_generator(base_generator):
     else:
       self.write(file,2,"option.per_instance = 0;\n")
     self.write(file,0,"\n")
+
+    # State Coverage
     self.write(file,2,f"// State coverage\n")
     self.write(file,2,f"states : coverpoint current_state {{\n")
     self.write(file,3,f"option.goal     = 100;\n")
@@ -178,13 +182,18 @@ class uvm_sequence_generator(base_generator):
     self.write(file,3,f"option.at_least = 10;\n")
     self.write(file,3,f"bins state      [] = {{ ")
     for idx,state in enumerate(self.db):
-      if idx == 0:
-        self.write(file,0,f"{state.strip()}")    
+      _state = state.strip()
+      if self.__START__ != None and _state == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+        continue
+      if idx == 0: 
+        self.write(file,0,f"{_state}")    
       else:
-        self.write(file,0,f",{state.strip()}")
+        self.write(file,0,f",{_state}")
     self.write(file,0,f" }};\n")
     self.write(file,3,f"ignore_bins unknown = {{ UNKNOWN }};\n")
     self.write(file,2,f"}}\n\n")
+
+    # Transition Coverage
     self.write(file,2,f"// Global Transition Coverage\n")
     self.write(file,2,f"transitions : coverpoint current_state {{\n")
     self.write(file,3,f"option.goal     = 100;\n")
@@ -193,8 +202,13 @@ class uvm_sequence_generator(base_generator):
     self.write(file,3,f"bins transition[] =\n")
     for idx,state in enumerate(self.db):
       _start = state.strip()
+      if self.__START__ != None and _start == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+        continue
+
       for jdx,nextstate in enumerate(self.db[state]):
         _end   = nextstate.strip()
+        if self.__START__ != None and _end == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+          continue
         if idx == 0 and jdx==0:
           self.write(file,4,f" ({_start} => {_end})\n")    
         else:
@@ -202,11 +216,17 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f";")
     self.write(file,2,f"}}\n\n")
 
+    # Transition Coverage - one coverpoint per edge
     self.write(file,4,f"// Individual Edge Coverpoints, allow fine grain objective setup\n")
     for idx,state in enumerate(self.db):
       _start = state.strip()
+      if self.__START__ != None and _start == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+        continue
+
       for jdx,nextstate in enumerate(self.db[state]):
         _end   = nextstate.strip()
+        if self.__START__ != None and _end == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+          continue
         self.write(file,2,f"{_start}_to_{_end} : coverpoint current_state {{\n")
         self.write(file,3,f"option.goal     = 100;\n")
         self.write(file,3,f"option.weight   = 1;\n")
@@ -243,11 +263,11 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"// ----------------------------------------------\n")
     self.write(file,1,f"// public constrainable settings\n")
     self.write(file,1,f"// ----------------------------------------------\n")
-    self.write(file,1,f"rand int unsigned max_iter;                      ///< maximum number of iterations. When reached, the graph completes\n")
-    self.write(file,1,f"rand int unsigned initial_edge_weight = 100;     ///< constrainable initial default weight for each edge\n")
-    self.write(file,1,f"rand bit          coverage_closure_en = 0;       ///< constrainable coverage closure configuration. When 1, graph will exit when the coverage reaches 100%\n")
-    self.write(file,1,f"rand int unsigned weight_default_decrement = 1;  ///< constrainable decrement of the weight of the edge each time it is executed\n")
-    self.write(file,1,f"rand int unsigned default_edge_at_least = 1;     ///< constrainable. Each edge should be covered at least this number of times\n")
+    self.write(file,1,f"rand int unsigned max_iter;                           ///< maximum number of iterations. When reached, the graph completes\n")
+    self.write(file,1,f"rand int unsigned initial_edge_weight = 100;          ///< constrainable initial default weight for each edge\n")
+    self.write(file,1,f"rand bit          coverage_closure_en = 0;            ///< constrainable coverage closure configuration. When 1, graph will exit when the coverage reaches 100%\n")
+    self.write(file,1,f"rand int unsigned weight_default_decrement = 1;       ///< constrainable decrement of the weight of the edge each time it is executed\n")
+    self.write(file,1,f"rand int unsigned coverage_default_edge_at_least = 1; ///< constrainable. Each edge should be covered at least this number of times\n")
     self.write(file,1,f"rand int unsigned weight[{self.classname}_state_t][{self.classname}_state_t]; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'\n\n")
     self.write(file,1,f"\n")
     self.write(file,1,f"// ----------------------------------------------\n")
@@ -304,7 +324,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,2,f"`uvm_field_int(initial_edge_weight      , UVM_DEFAULT | UVM_DEC | UVM_NOCOMPARE )\n")  
     self.write(file,2,f"`uvm_field_int(coverage_closure_en      , UVM_DEFAULT | UVM_DEC | UVM_NOCOMPARE )\n")  
     self.write(file,2,f"`uvm_field_int(weight_default_decrement , UVM_DEFAULT | UVM_DEC | UVM_NOCOMPARE )\n")  
-    self.write(file,2,f"`uvm_field_int(default_edge_at_least    , UVM_DEFAULT | UVM_DEC | UVM_NOCOMPARE )\n")  
+    self.write(file,2,f"`uvm_field_int(coverage_default_edge_at_least    , UVM_DEFAULT | UVM_DEC | UVM_NOCOMPARE )\n")  
     self.write(file,1,f"`uvm_object_utils_end\n")
     self.write(file,1,f"\n")
     self.write(file,0,f"endclass : {self.classname}_base_sequence\n")
@@ -330,11 +350,11 @@ class uvm_sequence_generator(base_generator):
     self.write(file,0,f"\n")
     self.write(file,0,f"// configure the covergroup goals depending on constraint setup\n")
     self.write(file,0,f"function void {self.classname}_base_sequence::post_randomize();\n")
-    self.write(file,1,f"int unsigned _at_least_value = this.default_edge_at_least;\n")
+    self.write(file,1,f"int unsigned _at_least_value = this.coverage_default_edge_at_least;\n")
     self.write(file,1,f"int unsigned _cover_weight   = 1;\n")
     self.write(file,1,f"foreach (weight[src,dst]) begin\n")
     self.write(file,2,f"// user made this edge as 0, so it's not a target\n")
-    self.write(file,2,f"_at_least_value = (weight[src][dst] == 0) ? 1 : this.default_edge_at_least;\n")
+    self.write(file,2,f"_at_least_value = (weight[src][dst] == 0) ? 1 : this.coverage_default_edge_at_least;\n")
     self.write(file,2,f"_cover_weight   = (weight[src][dst] == 0) ? 0 : 1;\n")
     self.write(file,0,f"\n")
     if not self.no_covergroup :
@@ -342,8 +362,12 @@ class uvm_sequence_generator(base_generator):
       self.write(file,2,f"case ({{src,dst}})\n")
       for idx,state in enumerate(self.db):
         _start = state.strip()
+        if self.__START__ != None and _start == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+          continue
         for jdx,nextstate in enumerate(self.db[state]):
           _end   = nextstate.strip()
+          if self.__START__ != None and _end == self.__START__: # Ignore the extra start state from coverage as it is not recorded
+            continue
           self.write(file,3,f"{{{_start},{_end}}} : begin cg.{_start}_to_{_end}.option.weight = _cover_weight; cg.{_start}_to_{_end}.option.at_least = _at_least_value; end\n")    
       self.write(file,3,f"endcase\n")
     self.write(file,2,f"end\n")
@@ -481,7 +505,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"weight_default_decrement < initial_edge_weight;\n\n")
     self.write(file,1,f"soft max_iter                 == 1_000; //< Maximum default number off iterations \n")
     self.write(file,1,f"soft coverage_closure_en      == 0;     //< Coverage Closure is disable by default\n")
-    self.write(file,1,f"soft default_edge_at_least    == 1;     //< default_edge_at_least\n")
+    self.write(file,1,f"soft coverage_default_edge_at_least    == 1;     //< coverage_default_edge_at_least\n")
     self.write(file,1,f"soft initial_edge_weight      == 100;   //< Default Weight for each edge\n")
     self.write(file,1,f"soft weight_default_decrement == 1;     //< weight_default_decrement\n")
     self.write(file,0,f"}}\n")
@@ -696,10 +720,10 @@ class uvm_sequence_generator(base_generator):
     self.write(file,1,f"if (!randomization_done)\n")
     self.write(file,1,f"`uvm_fatal(\"F_NORAND\",\"Sequence not randomized. Please randomize the sequence before calling start()\")\n")
 
-    if self.first_state == None:
+    if self.__START__ == None:
       self.write(file,1,f"randsequence()\n")
     else:
-      self.write(file,1,f"randsequence({self.first_state})\n")
+      self.write(file,1,f"randsequence({self.__START__})\n")
     for idx,state in enumerate(self.db):
       _start = state.strip()
       self.write(file,2,f"{_start} : {_start}_act {_start}_sel;\n")

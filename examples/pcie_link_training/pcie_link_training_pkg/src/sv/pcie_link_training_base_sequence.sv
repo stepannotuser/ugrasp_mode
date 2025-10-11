@@ -15,11 +15,11 @@ endfunction : new
 
 // configure the covergroup goals depending on constraint setup
 function void pcie_link_training_base_sequence::post_randomize();
-  int unsigned _at_least_value = this.default_edge_at_least;
+  int unsigned _at_least_value = this.coverage_default_edge_at_least;
   int unsigned _cover_weight   = 1;
   foreach (weight[src,dst]) begin
     // user made this edge as 0, so it's not a target
-    _at_least_value = (weight[src][dst] == 0) ? 1 : this.default_edge_at_least;
+    _at_least_value = (weight[src][dst] == 0) ? 1 : this.coverage_default_edge_at_least;
     _cover_weight   = (weight[src][dst] == 0) ? 0 : 1;
 
     // setup individual edge coverpoint target
@@ -191,7 +191,7 @@ constraint pcie_link_training_base_sequence::svgraph_base_sequence_default_c {
 
   soft max_iter                 == 1_000; //< Maximum default number off iterations 
   soft coverage_closure_en      == 0;     //< Coverage Closure is disable by default
-  soft default_edge_at_least    == 1;     //< default_edge_at_least
+  soft coverage_default_edge_at_least    == 1;     //< coverage_default_edge_at_least
   soft initial_edge_weight      == 100;   //< Default Weight for each edge
   soft weight_default_decrement == 1;     //< weight_default_decrement
 }

@@ -12,11 +12,9 @@
 from py.generator.base_generator import base_generator 
 import os
 import copy
-__START__ = "starting"    # Name of the start node
-__END__   = "completion"  # Name of the end node
 class dot_generator(base_generator):
   def __init__(self):
-    fname = "dot_generator.dot"
+    self.fname = "dot_generator.dot"
 
   def generate(self,db,args):
     outdir    = "."        if args["out_dir"]   == None else args["out_dir"]
@@ -27,14 +25,16 @@ class dot_generator(base_generator):
     self.classname = classname
     self.outdir    = outdir
     self.first_state = first_state
+    self.__START__  = args["pre_run_state_name"]  # Name of the start node
+    self.__END__    = args["post_run_state_name"] # Name of the end
 
     # Detect if there are any ending states
     ending_states = [state for state in self.db if not self.db[state]]
     if ending_states:
-      self.db[__END__] = []
+      self.db[self.__END__] = []
       for state in ending_states:
-        if state != __START__:
-          self.db[state].append(__END__)
+        if state != self.__START__:
+          self.db[state].append(self.__END__)
 
     if ( not os.path.isdir(self.outdir) ):
       os.makedirs(self.outdir)
@@ -50,8 +50,8 @@ class dot_generator(base_generator):
       Open the file
     """
     # TODO: some precaution to check that PATH is valid
-    fname = self.classname + suffix
-    full_filename = os.path.join(os.path.abspath(self.outdir),fname)
+    self.fname = self.classname + suffix
+    full_filename = os.path.join(os.path.abspath(self.outdir),self.fname)
     f = open(full_filename,"w")
 
     self.header(f,suffix)

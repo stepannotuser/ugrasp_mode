@@ -29,8 +29,6 @@ from py.generator.uvm_sequence_generator  import uvm_sequence_generator
 from py.generator.dot_generator           import dot_generator
 from py.generator.dot_full_generator      import dot_full_generator
 
-__START__ = "starting"    # Name of the start node
-__END__   = "completion"  # Name of the end node
 class svgraph_app:
   """
     Main SV Graph App
@@ -57,6 +55,8 @@ class svgraph_app:
             args: associative arrays of arguments passed in command line
     """
     self.args  = args
+    self.__START__ = args["pre_run_state_name"]  # Name of the start node
+    self.__END__   = args["post_run_state_name"] # Name of the end node
     self.graph = {}
     self.parser = None
     self.first_states = [] if args["first_state"]==None else args["first_state"].replace(" ","").split(",")
@@ -105,7 +105,9 @@ class svgraph_app:
 
     return orphans
   
-  def detect_unreachable(self,start=__START__):
+  def detect_unreachable(self,start=None):
+    if start == None:
+      start=self.__START__
     unreachable = [node for node in self.graph]
     to_process = [start]
     unreachable.remove(start)
@@ -125,7 +127,7 @@ class svgraph_app:
         It will check the graph and add the __START__ node.
     """
     nodes = [node for node in self.graph]
-    self.graph[__START__] = [] # need to be after user nodes in order not to have __START__ pointing on itself
+    self.graph[self.__START__] = [] # need to be after user nodes in order not to have __START__ pointing on itself
 
     # Check if first states are defined and valid
     invalid_first_states = []
@@ -134,21 +136,23 @@ class svgraph_app:
         invalid_first_states.append(state)
         self.raise_error(f"Undefined first state {state}")
 
+    # If first states are defined and valid, use them
+    # Otherwise, use all nodes as possible first state
     if self.first_states and not invalid_first_states:
-      self.graph[__START__] = self.first_states
+      self.graph[self.__START__] = self.first_states
     elif invalid_first_states:
       for state in self.first_states:
         if not state in invalid_first_states:
-          self.graph[__START__].append(state)
+          self.graph[self.__START__].append(state)
     else : 
-      self.graph[__START__] = nodes
+      self.graph[self.__START__] = nodes
 
     # If allow_orphans is set, add orphans to __START__
     if self.args['allow_orphans']:
       orphans = self.detect_orphans()
       for orphan in orphans:
-        if not orphan in self.graph[__START__] and orphan!=__START__:
-          self.graph[__START__].append(orphan)
+        if not orphan in self.graph[self.__START__] and orphan!=self.__START__:
+          self.graph[self.__START__].append(orphan)
 
     # Detect unreachable states and report them
     unreachable = self.detect_unreachable()
@@ -161,14 +165,13 @@ class svgraph_app:
     if not ending_states:
       self.info(f"No final states are found. The sequence will loop until the maximum number of iterations or coverage is reached.")
     else:
-      #self.graph[__END__] = []
+      #self.graph[self.__END__] = []
       for state in ending_states:
-        if state != __START__:
-          #self.graph[state].append(__END__)
+        if state != self.__START__:
+          #self.graph[state].append(self.__END__)
           self.info(f"State {state} is an ending state. Reaching it will terminate the sequence.")
       
 
-    self.args["first_state"] = __START__
 
   def generate(self):
     """

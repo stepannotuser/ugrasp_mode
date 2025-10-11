@@ -12,8 +12,6 @@
 from py.generator.base_generator import base_generator 
 import os
 import copy
-__START__ = "starting"    # Name of the start node
-__END__   = "completion"  # Name of the end node
 
 class dot_full_generator(base_generator):
   def __init__(self):
@@ -28,14 +26,16 @@ class dot_full_generator(base_generator):
     self.classname = classname
     self.outdir    = outdir
     self.first_state = first_state
+    self.__START__   = args["pre_run_state_name"]  # Name of the start node
+    self.__END__     = args["post_run_state_name"] # Name of the end
 
     # Detect if there are any ending states
     ending_states = [state for state in self.db if not self.db[state]]
     if ending_states:
-      self.db[__END__] = []
+      self.db[self.__END__] = []
       for state in ending_states:
-        if state != __START__:
-          self.db[state].append(__END__)
+        if state != self.__START__:
+          self.db[state].append(self.__END__)
 
 
     if ( not os.path.isdir(self.outdir) ):
