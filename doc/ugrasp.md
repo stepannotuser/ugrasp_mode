@@ -70,6 +70,7 @@ Hence, we recommand to:
 
 For convenience, the sequence also provides the following generic tasks, which take the state as arguments.
 
+```verilog
     extern virtual task          state_body(PACKAGENAME_state_t state); // called on any state
     extern virtual task          transition_body(PACKAGENAME_state_t src,dst); // called on any transition
     extern virtual task          include_next(PACKAGENAME_state_t state); // make the given state as parts of the possible choices
@@ -78,11 +79,14 @@ For convenience, the sequence also provides the following generic tasks, which t
     extern virtual task          exclude_transition(PACKAGENAME_state_t src,dst); // remove the given transition from the possible choices
     extern virtual task          exit(); // exit on the next iteration
     extern virtual task          goto(PACKAGENAME_state_t state); // ensure the graph jumps to the given state
+```
 
 and each task is provided with its companion functions:
 
+```verilog
     *_pre_body()
     *_post_body()
+```
 
 
 Generation Example:
