@@ -60,15 +60,24 @@ A recommended use of these tasks is to use the edge body() to implement the acti
 This eases the the actions (as we know the final destination) and allows to force the next decisions based on the design response while we are in a state condition.
 
 Hence, we recommand to:
-- <strong>PREVSTATE</strong>\_to\_<strong>NEXTSTATE</strong>_body() tasks to perform the actions that will trigger the design to reach <strong>NEXTSTATE</strong>.
-- <strong>STATENAME</strong>_body() tasks to poll registers, wait for events or wait for the design responses, while we are supposed to be in the state <strong>STATENAME</strong> prior to decide where to move.
-    - if the decision to move to a specific state depends on the design, we then use goto() to force the next transition.
+- <strong>PREVSTATE</strong>\_to\_<strong>NEXTSTATE</strong>_body() tasks maint to perform actions to change the state of the design<strong>NEXTSTATE</strong>.
+- <strong>STATENAME</strong>_body() tasks maint to be used while inside the state <strong>STATENAME</strong> prior to decide where to move.
+    - polling registers, wait for interrupts, wait for events, ... 
+    - Reactive state transitions (depending on the design) shall call goto(), exclude_next(), include_next() from here.
+
+   
 
 
 For convenience, the sequence also provides the following generic tasks, which take the state as arguments.
 
-    extern virtual task          state_body(PACKAGENAME_state_t state);
-    extern virtual task          transition_body(PACKAGENAME_state_t src,dst);
+    extern virtual task          state_body(PACKAGENAME_state_t state); // called on any state
+    extern virtual task          transition_body(PACKAGENAME_state_t src,dst); // called on any transition
+    extern virtual task          include_next(PACKAGENAME_state_t state); // make the given state as parts of the possible choices
+    extern virtual task          exclude_next(PACKAGENAME_state_t state); // remove the given state from possible choices
+    extern virtual task          include_transition(PACKAGENAME_state_t src,dst); // make the given transition as parts of the possible choices
+    extern virtual task          exclude_transition(PACKAGENAME_state_t src,dst); // remove the given transition from the possible choices
+    extern virtual task          exit(); // exit on the next iteration
+    extern virtual task          goto(PACKAGENAME_state_t state); // ensure the graph jumps to the given state
 
 and each task is provided with its companion functions:
 
@@ -79,8 +88,8 @@ and each task is provided with its companion functions:
 Generation Example:
 ===================
 
-    svgraph --help
-    svgraph -in_csv pcie_link_polling.csv \
+    ugrasp --help
+    ugrasp -in_csv pcie_link_polling.csv \
             -out_dir pcie_link_polling_pkg/src/sv \
             -classname pcie_link_polling \
             -gen_uvm \
@@ -95,7 +104,7 @@ In this example, the graph is defined in *pcie_link_polling.csv* and starts with
 
 In same cases, you don't care which first state you should enter in. For this, you can specify multiple first_states using a comma separated list
 
-    svgraph ... \
+    ugrasp ... \
         -first_state Entry_from_Detect,Entry_from_Error
 
 
