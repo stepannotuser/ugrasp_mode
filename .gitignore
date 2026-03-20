@@ -1,0 +1,5 @@
+# Ignore all emacs extra files
+.*~
+\#.*
+__pycache__
+examples\0-get_started\my_fsm_pkg

@@ -1,0 +1,37 @@
+AEDVICES Consulting SAS (c) Licence d'Utilisation Publique (Edition Simplifiée) v1.0 (AEDVICES-SE-v1.0)
+
+Copyright (c) 2025 AEDVICES Consulting SAS. Tous droits réservés.
+
+La présente licence accorde gratuitement à toute personne physique ou morale (l'Utilisateur)
+l'autorisation d'utiliser, de reproduire et de partager la version originale et non modifiée
+du logiciel (le Logiciel), y compris dans un cadre professionnel interne.
+
+Restrictions :
+
+1. L'Utilisateur est autorisé à modifier le Logiciel à des fins personnelles, internes ou expérimentales uniquement.
+   Les versions modifiées ne peuvent être redistribuées sous aucune forme.
+
+2. Si l'Utilisateur estime que ses modifications peuvent bénéficier à d'autres, il est encouragé (sans y être obligé)
+   à soumettre une *merge request* (demande de fusion) vers le dépôt officiel, sous réserve d'acceptation par AEDVICES Consulting SAS.
+
+3. Le Logiciel ne peut être vendu, sous-licencié ou intégré à une offre commerciale.
+
+4. La redistribution est autorisée uniquement sous sa forme originale, non modifiée, et à condition de conserver intégralement la présente licence 
+   et l'avis de copyright.
+5. La présente licence ne confère aucun droit d'utilisation sur le nom, le logo ou les marques d'AEDVICES Consulting SAS.
+6. Cette licence est automatiquement résiliée en cas de violation de l'une de ses clauses.
+
+Clause de Défense des Brevets :
+
+7. Si l'Utilisateur initie une action en justice liée à un brevet (y compris une demande reconventionnelle ou une action en garantie)
+   alléguant que le Logiciel ou son utilisation porte atteinte à un brevet, la présente licence est immédiatement et définitivement résiliée.
+
+Clause de Non-Garantie :
+
+8. Le Logiciel est fourni en l'état, sans aucune garantie expresse ou implicite.
+   AEDVICES Consulting SAS ne pourra être tenue responsable d'aucun dommage résultant de l'utilisation du Logiciel.
+
+Licence Commerciale :
+
+9. AEDVICES Consulting SAS se réserve le droit de publier d'autres versions du Logiciel sous des conditions différentes, y compris commerciales.
+   Pour toute demande de licence commerciale, veuillez contacter : contact@aedvices.com

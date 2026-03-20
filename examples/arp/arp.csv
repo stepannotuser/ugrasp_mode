@@ -1,0 +1,7 @@
+state           ,next_state      ,label
+Idle            ,RequestAddress  ,"Start ARP"
+RequestAddress  ,AddressConflict ,"Conflict Detected"
+AddressConflict ,RequestAddress  ,"Retry"
+RequestAddress  ,AssignAddress   ,"Address Assigned"
+AssignAddress   ,Ready           ,"Address Assigned Successfully"
+Ready           ,Idle            ,"Reset"

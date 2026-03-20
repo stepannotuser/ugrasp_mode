@@ -1,0 +1,90 @@
+// SVGraph pcie_link_training
+// File    pcie_link_training_full_graphviz.dot
+
+
+digraph pcie_link_training {
+  pad="0.5"
+  starting [label="starting" fillcolor=lightgrey style=filled];
+  starting -> starting_body;
+  Detect_body [label="Detect_body()" shape=box style=filled fillcolor=darkseagreen1];
+  Detect_sel [label="" shape=diamond height="0.3" width="0.3"];
+  Detect_body -> Detect_sel;
+  Detect_to_Polling_body [label="Detect_to_Polling_body()" shape=box style=filled fillcolor=lightcyan];
+  Detect_sel -> Detect_to_Polling_body
+  Detect_to_Polling_body -> Polling_body;
+  Polling_body [label="Polling_body()" shape=box style=filled fillcolor=darkseagreen1];
+  Polling_sel [label="" shape=diamond height="0.3" width="0.3"];
+  Polling_body -> Polling_sel;
+  Polling_to_Detect_body [label="Polling_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  Polling_sel -> Polling_to_Detect_body
+  Polling_to_Detect_body -> Detect_body;
+  Polling_to_Configuration_body [label="Polling_to_Configuration_body()" shape=box style=filled fillcolor=lightcyan];
+  Polling_sel -> Polling_to_Configuration_body
+  Polling_to_Configuration_body -> Configuration_body;
+  Configuration_body [label="Configuration_body()" shape=box style=filled fillcolor=darkseagreen1];
+  Configuration_sel [label="" shape=diamond height="0.3" width="0.3"];
+  Configuration_body -> Configuration_sel;
+  Configuration_to_L0_body [label="Configuration_to_L0_body()" shape=box style=filled fillcolor=lightcyan];
+  Configuration_sel -> Configuration_to_L0_body
+  Configuration_to_L0_body -> L0_body;
+  Configuration_to_Recovery_body [label="Configuration_to_Recovery_body()" shape=box style=filled fillcolor=lightcyan];
+  Configuration_sel -> Configuration_to_Recovery_body
+  Configuration_to_Recovery_body -> Recovery_body;
+  Configuration_to_Detect_body [label="Configuration_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  Configuration_sel -> Configuration_to_Detect_body
+  Configuration_to_Detect_body -> Detect_body;
+  L0_body [label="L0_body()" shape=box style=filled fillcolor=darkseagreen1];
+  L0_sel [label="" shape=diamond height="0.3" width="0.3"];
+  L0_body -> L0_sel;
+  L0_to_L1_body [label="L0_to_L1_body()" shape=box style=filled fillcolor=lightcyan];
+  L0_sel -> L0_to_L1_body
+  L0_to_L1_body -> L1_body;
+  L0_to_L0s_body [label="L0_to_L0s_body()" shape=box style=filled fillcolor=lightcyan];
+  L0_sel -> L0_to_L0s_body
+  L0_to_L0s_body -> L0s_body;
+  L0_to_L2_body [label="L0_to_L2_body()" shape=box style=filled fillcolor=lightcyan];
+  L0_sel -> L0_to_L2_body
+  L0_to_L2_body -> L2_body;
+  L0_to_Recovery_body [label="L0_to_Recovery_body()" shape=box style=filled fillcolor=lightcyan];
+  L0_sel -> L0_to_Recovery_body
+  L0_to_Recovery_body -> Recovery_body;
+  Recovery_body [label="Recovery_body()" shape=box style=filled fillcolor=darkseagreen1];
+  Recovery_sel [label="" shape=diamond height="0.3" width="0.3"];
+  Recovery_body -> Recovery_sel;
+  Recovery_to_Configuration_body [label="Recovery_to_Configuration_body()" shape=box style=filled fillcolor=lightcyan];
+  Recovery_sel -> Recovery_to_Configuration_body
+  Recovery_to_Configuration_body -> Configuration_body;
+  Recovery_to_L0_body [label="Recovery_to_L0_body()" shape=box style=filled fillcolor=lightcyan];
+  Recovery_sel -> Recovery_to_L0_body
+  Recovery_to_L0_body -> L0_body;
+  Recovery_to_Detect_body [label="Recovery_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  Recovery_sel -> Recovery_to_Detect_body
+  Recovery_to_Detect_body -> Detect_body;
+  L1_body [label="L1_body()" shape=box style=filled fillcolor=darkseagreen1];
+  L1_sel [label="" shape=diamond height="0.3" width="0.3"];
+  L1_body -> L1_sel;
+  L1_to_Recovery_body [label="L1_to_Recovery_body()" shape=box style=filled fillcolor=lightcyan];
+  L1_sel -> L1_to_Recovery_body
+  L1_to_Recovery_body -> Recovery_body;
+  L0s_body [label="L0s_body()" shape=box style=filled fillcolor=darkseagreen1];
+  L0s_sel [label="" shape=diamond height="0.3" width="0.3"];
+  L0s_body -> L0s_sel;
+  L0s_to_L0_body [label="L0s_to_L0_body()" shape=box style=filled fillcolor=lightcyan];
+  L0s_sel -> L0s_to_L0_body
+  L0s_to_L0_body -> L0_body;
+  L0s_to_Recovery_body [label="L0s_to_Recovery_body()" shape=box style=filled fillcolor=lightcyan];
+  L0s_sel -> L0s_to_Recovery_body
+  L0s_to_Recovery_body -> Recovery_body;
+  L2_body [label="L2_body()" shape=box style=filled fillcolor=darkseagreen1];
+  L2_sel [label="" shape=diamond height="0.3" width="0.3"];
+  L2_body -> L2_sel;
+  L2_to_Detect_body [label="L2_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  L2_sel -> L2_to_Detect_body
+  L2_to_Detect_body -> Detect_body;
+  starting_body [label="starting_body()" shape=box style=filled fillcolor=darkseagreen1];
+  starting_sel [label="" shape=diamond height="0.3" width="0.3"];
+  starting_body -> starting_sel;
+  starting_to_Detect_body [label="starting_to_Detect_body()" shape=box style=filled fillcolor=lightcyan];
+  starting_sel -> starting_to_Detect_body
+  starting_to_Detect_body -> Detect_body;
+}

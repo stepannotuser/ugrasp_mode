@@ -1,0 +1,33 @@
+AEDVICES Consulting SAS (c) Public Use License (Simplified Edition) v1.0 (AEDVICES-SE-v1.0)
+
+Copyright (c) 2025 AEDVICES Consulting SAS. All rights reserved.
+
+Permission is hereby granted, free of charge, to any individual or legal entity (the "User")
+to use, reproduce, and share the original, unmodified version of this software (the "Software")
+for any purpose, including internal professional use.
+
+Restrictions:
+
+1. The Software may be modified by the User for personal, internal, or experimental purposes only.
+   Such modified versions may not be redistributed in any form.
+2. If the User believes their modifications could benefit others, they are encouraged (but not required)
+   to submit a merge request to the official repository, subject to AEDVICES Consulting SAS's approval.
+3. The Software may not be sold, sublicensed, or used as part of any commercial offering.
+4. Redistribution is permitted only in its original, unmodified form, with this license and copyright notice intact.
+5. This license does not grant any rights to the Software's name, logo, or trademarks.
+6. This license terminates automatically if the User violates any of its terms.
+
+Patent Defense:
+
+7. If the User initiates any patent litigation (including a cross-claim or counterclaim) alleging that the Software
+   or its use infringes any patent, this license is immediately and permanently terminated.
+
+Disclaimer:
+
+8. This Software is provided "as is", without warranty of any kind, express or implied.
+   AEDVICES Consulting SAS shall not be liable for any damages arising from the use of the Software.
+
+Commercial Licensing:
+
+9. AEDVICES Consulting SAS reserves the right to license other versions of this Software under different (including commercial) terms.
+   For commercial licensing inquiries, contact: contact@aedvices.com
