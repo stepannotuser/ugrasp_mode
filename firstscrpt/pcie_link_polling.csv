@@ -1,0 +1,8 @@
+state, next_state
+Entry_from_Detect, Polling_Active 
+Polling_Active, Polling_Compliance
+Polling_Compliance, Polling_Active 
+Polling_Active, Polling_Configuration
+Polling_Active, Exit_to_Detect
+Polling_Configuration, Exit_to_Detect
+Polling_Configuration, Exit_to_Configuration

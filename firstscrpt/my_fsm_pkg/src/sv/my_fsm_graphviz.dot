@@ -1,0 +1,13 @@
+// SVGraph my_fsm
+// File    my_fsm_graphviz.dot
+
+
+digraph my_fsm {
+  pad="0.5"
+  IDLE [fillcolor=lightgrey style=filled]
+  IDLE -> READ;
+  READ -> WRITE;
+  WRITE -> DONE;
+  DONE -> DONE;
+  __START__ -> IDLE;
+}

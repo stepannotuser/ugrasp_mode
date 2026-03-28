@@ -1,0 +1,150 @@
+m255
+K4
+z2
+!s99 nomlopt
+!s11f vlog 2021.2_1 2021.05, May 15 2021
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/step/Downloads/ugrasp/my_project
+T_opt
+!s110 1773423814
+VB80RlLO_Li0iZ5XC5l8Wg2
+04 2 4 work tb fast 0
+=1-000ae431a4f1-69b44cc5-81443-2c05
+!s124 OEM100
+o-quiet -auto_acc_if_foreign -work work
+Z1 tCvgOpt 0
+n@_opt
+OL;O;2021.2_1;73
+Xmy_fsm_pkg
+Z2 DXx6 sv_std 3 std 0 22 9oUSJO;AeEaW`l:M@^WG92
+Z3 DXx6 mtiUvm 7 uvm_pkg 0 22 8V[`8]Q0W57le7Z>zYaAj1
+Z4 !s110 1773423811
+!i10b 1
+!s100 ?m@WnlC5=3:IhOcKbz11U3
+I;zOi`NYkb73HzOX6H:b_@1
+S1
+R0
+w1773423810
+8my_fsm_pkg/src/sv/my_fsm_pkg.sv
+Fmy_fsm_pkg/src/sv/my_fsm_pkg.sv
+Z5 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh
+Z6 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh
+Z7 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh
+Z8 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh
+Z9 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh
+Z10 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh
+Z11 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh
+Z12 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh
+Z13 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh
+Z14 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh
+Z15 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh
+Z16 F/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh
+Fmy_fsm_pkg/src/sv/my_fsm_types.svh
+Fmy_fsm_pkg/src/sv/my_fsm_covergroups.svh
+Fmy_fsm_pkg/src/sv/my_fsm_base_sequence.svh
+Fmy_fsm_pkg/src/sv/my_fsm_sequence.svh
+Fmy_fsm_pkg/src/sv/my_fsm_checker.svh
+Fmy_fsm_pkg/src/sv/my_fsm_base_sequence.sv
+Fmy_fsm_pkg/src/sv/my_fsm_sequence.sv
+Fmy_fsm_pkg/src/sv/my_fsm_checker.sv
+!i122 0
+L0 4 0
+V;zOi`NYkb73HzOX6H:b_@1
+Z17 OL;L;2021.2_1;73
+r1
+!s85 0
+31
+Z18 !s108 1773423810.000000
+Z19 !s107 my_fsm_pkg/src/sv/my_fsm_checker.sv|my_fsm_pkg/src/sv/my_fsm_sequence.sv|my_fsm_pkg/src/sv/my_fsm_base_sequence.sv|my_fsm_pkg/src/sv/my_fsm_checker.svh|my_fsm_pkg/src/sv/my_fsm_sequence.svh|my_fsm_pkg/src/sv/my_fsm_base_sequence.svh|my_fsm_pkg/src/sv/my_fsm_covergroups.svh|my_fsm_pkg/src/sv/my_fsm_types.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_deprecated_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_reg_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_callback_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_sequence_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/tlm1/uvm_tlm_imps.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_tlm_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_printer_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_object_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_phase_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_message_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/macros/uvm_version_defines.svh|/home/step/Questa_Sim/questasim/uvm-1.1d/../verilog_src/uvm-1.1d/src/uvm_macros.svh|tb_my_fsm.sv|my_path_seq.sv|my_fsm_pkg/src/sv/my_fsm_pkg.sv|
+Z20 !s90 -work|work|+incdir+my_fsm_pkg/src/sv|my_fsm_pkg/src/sv/my_fsm_pkg.sv|my_path_seq.sv|tb_my_fsm.sv|
+!i113 0
+Z21 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z22 !s92 -work work +incdir+my_fsm_pkg/src/sv -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R1
+Xmy_path_seq_sv_unit
+R2
+R2
+R3
+Z23 DXx4 work 10 my_fsm_pkg 0 22 ;zOi`NYkb73HzOX6H:b_@1
+R4
+VMP0634_:4_>[MPcH725i81
+r1
+!s85 0
+!i10b 1
+!s100 U1mZaVoO`]mS=3jD^HgNT3
+IMP0634_:4_>[MPcH725i81
+!i103 1
+S1
+R0
+w1773423803
+8my_path_seq.sv
+Fmy_path_seq.sv
+R5
+R6
+R7
+R8
+R9
+R10
+R11
+R12
+R13
+R14
+R15
+R16
+!i122 0
+L0 3 0
+R17
+31
+R18
+R19
+R20
+!i113 0
+R21
+R22
+R1
+vtb
+R2
+R2
+R3
+R23
+DXx4 work 19 my_path_seq_sv_unit 0 22 MP0634_:4_>[MPcH725i81
+R4
+!i10b 1
+!s100 Sf6h<jW=Z`o>`JJUHA1=J0
+IFf:[cm;gdiRK_[72cJJ170
+S1
+R0
+w1773423530
+8tb_my_fsm.sv
+Ftb_my_fsm.sv
+R5
+R6
+R7
+R8
+R9
+R10
+R11
+R12
+R13
+R14
+R15
+R16
+!i122 0
+L0 2 6512
+VDg1SIo80bB@j0V0VzS_@n1
+R17
+r1
+!s85 0
+31
+R18
+R19
+R20
+!i113 0
+R21
+R22
+R1
