@@ -1,5 +1,0 @@
-state,next_state
-IDLE,READ
-READ,WRITE
-WRITE,DONE
-DONE
