@@ -1,0 +1,3 @@
+  CREATE_STREAM @0 {NAME:uvm_sequence T:Transactions SCOPE:uvm_test_top.vip_agent.sequencer STREAM:547}
+  CREATE_STREAM @0 {NAME:uvm_sequence T:Transactions SCOPE:uvm_test_top.vip_agent.sequencer STREAM:547}
+  CREATE_STREAM @0 {NAME:uvm_sequence T:Transactions SCOPE:uvm_test_top.vip_agent.sequencer STREAM:547}
