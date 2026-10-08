@@ -83,7 +83,7 @@ def edge_coverage_walk(graph, start):
         remaining = all_e - covered
         current = walk[-1]
         best = None
-        for (u, v) in remaining:
+        for (u, v) in sorted(remaining):
             p = bfs_path(graph, current, u)
             if p is None:
                 continue

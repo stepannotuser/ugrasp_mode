@@ -25,3 +25,4 @@ examples/*/my_fsm_pkg/
 # Generated output
 new_code/output/
 
+new_code/*.log

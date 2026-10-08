@@ -88,18 +88,22 @@ def gen_class(classname, walk, out_file):
 
 def main():
     if len(sys.argv) < 4:
-        print("Usage: walk_to_sv.py <graph.csv> <dfs|edges> <classname> [out_dir]")
+        print("Usage: walk_to_sv.py <graph.csv> <dfs|edges> <classname> [strat_state] [out_dir]")
         sys.exit(1)
 
     csv_file  = sys.argv[1]
     mode      = sys.argv[2]
     classname = sys.argv[3]
-    out_dir   = sys.argv[4] if len(sys.argv) > 4 else "new_code/output"
+    start_arg = sys.argv[4] if len(sys.argv) > 4 else None
+    out_dir   = sys.argv[4] if len(sys.argv) > 5 else "new_code/output"
 
     os.makedirs(out_dir, exist_ok=True)
 
     graph = read_graph(csv_file)
-    start = next(iter(graph))
+    start = start_arg if start_arg else next(iter(graph))
+    if start not in graph:
+        print(f"ERROR: '{start}' not in graph. Available: {', '.join(graph.keys())}")
+        sys.exit(1)
 
     if mode == 'dfs':
         walk = dfs_states(graph, start)
