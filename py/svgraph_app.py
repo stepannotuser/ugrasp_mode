@@ -26,6 +26,7 @@ from py.parsers.csv_parser  import csv_parser
 
 from py.generator.base_generator          import base_generator 
 from py.generator.uvm_sequence_generator  import uvm_sequence_generator
+from py.generator.uvm_automaton_generator import uvm_automaton_generator
 from py.generator.dot_generator           import dot_generator
 from py.generator.dot_full_generator      import dot_full_generator
 
@@ -185,8 +186,11 @@ class svgraph_app:
 
       if ( argname in self.gen_factory and self.args[argname] != None):
         #print(f"argname = {argname} --> {self.args[argname]}")
-        generator = self.gen_factory.get(argname,base_parser)()
-
+        #generator = self.gen_factory.get(argname,base_parser)()
+        if argname == "gen_uvm" and self.args.get("strategy", "random") != "random":
+          generator = uvm_automaton_generator()
+        else:
+          generator = self.gen_factory.get(argname,base_parser)()
         # generate files
         generator.generate(self.graph,self.args)
   

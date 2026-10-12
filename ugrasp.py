@@ -36,6 +36,9 @@ def main():
   parser.add_argument('-gen_dot'      ,action="store_true"   ,dest="gen_dot"       ,default=None ,help="Graphviz Generation Simple Graph")  
   parser.add_argument('-gen_dot_full' ,action="store_true"   ,dest="gen_dot_full"  ,default=None ,help="Graphviz Full Graph Generation with all function names")  
   parser.add_argument("-gen_uvm"      ,action="store_true"   ,dest="gen_uvm"       ,default=None ,help="generate UVM graph")
+#
+  parser.add_argument("-strategy"     ,action="store"        ,dest="strategy"      ,default="random" ,choices=["random","dfs","edges"] ,help="Graph traversal strategy: random (default), dfs, edges")
+#
   parser.add_argument("-per_instance" ,action="store"        ,dest="per_instance"  ,default=None ,help="(yes|no|param) : Specify if covergroup is per instance or not, or is parameterizable" )
   parser.add_argument("-no_covergroup"  ,action="store_true" ,dest="no_covergroup" ,default=None ,help="(yes|no) : Specify if covergroup is generated or not" )
   parser.add_argument("-allow_orphans"  ,action="store_true" ,dest="allow_orphans" ,default=None ,help="(yes|no) : When orphans are found the graph may start by one of them." )
