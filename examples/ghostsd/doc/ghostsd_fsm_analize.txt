@@ -1,0 +1,122 @@
+ссылки:
+репозиторий - https://github.com/sirazenkov/GhostSD/tree/master
+файл - src/sd/sd_fsm.v
+
+//==================================
+//company: Tomsk State University
+//developer: Simon Razenkov
+//e-mail: sirazenkov@stud.tsu.ru
+//description: SD Bus controller FSM
+//==================================
+
+рассмотрим:
+
+always @(*) begin
+    next_state = state;
+    if (start && state == IDLE)
+      next_state = CMD55;
+    else if (state == READ) begin
+      if (iread_done || iwrite_done)
+        next_state = CMD12;
+    end
+    else if (state == WRITE) begin
+      if (iwrite_done)
+        next_state = CMD12;
+      else if (icheck_status)
+        next_state = CMD13;
+    end
+    else if (state == OTP) begin
+      if (iotp_ready)
+        next_state = CMD25;
+    end
+    else if (icmd_done) begin
+      case(state)
+        CMD55:   next_state = iresp[5] ? ((~|rca) ? ACMD41 : iread_done ? ACMD23 : CMD6) : IDLE;
+        ACMD41:  next_state = !(iresp[21] || iresp[20]) ? IDLE : (iresp[31] ? CMD2 : CMD55);
+        CMD2:    next_state = CMD3;
+        CMD3:    next_state = CMD9;
+        CMD9:    next_state = CMD7;
+        CMD7:    next_state = CMD55;
+        CMD6:    next_state = switch ? CMD13 : (tran_state ? CMD6 : IDLE);
+        CMD18:   next_state = iresp[31] ? CMD15 : READ;
+        CMD12:   next_state = iwrite_done ? CMD13 : CMD55;
+        ACMD23:  next_state = OTP;
+        CMD25:   next_state = WRITE;
+        CMD13:   next_state = iresp[8] ? (!iwrite_done && iresp[12:9] == 4'd6 ? WRITE : 
+                              !tran_state ? CMD13 :
+                              (addr_sd == max_addr_sd ? CMD15 : 
+                              CMD18) ) : CMD13;
+        default: next_state = IDLE;
+      endcase
+    end
+  end
+
+преобразуем:
+
+
+IDLE, CMD55
+READ, CMD12
+WRITE, CMD12
+WRITE, CMD13
+OTP, CMD25
+CMD55, ACMD41
+CMD55, ACMD23
+CMD55, CMD6
+CMD55, IDLE
+ACMD41, IDLE
+ACMD41, CMD2
+ACMD41, CMD55
+CMD2, CMD3
+CMD3, CMD9
+CMD9, CMD7
+CMD7, CMD55
+CMD6, CMD13
+CMD6, CMD6
+CMD6, IDLE
+CMD18 CMD15
+CMD18, READ
+CMD12, CMD13
+CMD12, CMD55
+ACMD23, OTP
+CMD25, WRITE
+CMD13, WRITE
+CMD13, CMD13
+CMD13, CMD15
+CMD13, CMD18
+CMD13, CMD13 // ПОВТОР
+В КОНЦЕ ДЕФОЛТНЫЙ ВАРИАНТ , IDLE
+не прошли через CMD15 значит дефолтный вариант CMD15, IDLE
+
+
+тогда:
+state,next_state
+IDLE,CMD55
+CMD55,ACMD41
+CMD55,ACMD23
+CMD55,CMD6
+CMD55,IDLE
+ACMD41,IDLE
+ACMD41,CMD2
+ACMD41,CMD55
+CMD2,CMD3 //
+CMD3,CMD9
+CMD9,CMD7
+CMD7,CMD55
+CMD6,CMD13
+CMD6,CMD6
+CMD6,IDLE
+CMD18,CMD15
+CMD18,READ
+READ,CMD12
+CMD12,CMD13
+CMD12,CMD55
+ACMD23,OTP
+OTP,CMD25
+CMD25,WRITE
+WRITE,CMD12
+WRITE,CMD13
+CMD13,WRITE
+CMD13,CMD13
+CMD13,CMD15
+CMD13,CMD18
+CMD15, IDLE
