@@ -1,0 +1,9 @@
+state,next_state
+A,B
+B,C
+B,E
+C,D
+C,F
+D,A
+E,B
+F,C
