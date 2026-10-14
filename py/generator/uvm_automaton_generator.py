@@ -1,6 +1,7 @@
 from py.generator.uvm_sequence_generator import uvm_sequence_generator
 from py.traversal.dfs   import dfs_states
 from py.traversal.edges import edge_coverage_walk
+from py.traversal.postman import directed_chinese_postman
 import os
 
 
@@ -28,7 +29,8 @@ class uvm_automaton_generator(uvm_sequence_generator):
                 walk = dfs_states(clean_db, first)
             elif strategy == "edges":
                 walk = edge_coverage_walk(clean_db, first)
-            #elif strategy == "":
+            elif strategy == "postman":
+                walk = directed_chinese_postman(clean_db, first)
             else:
                 raise ValueError(f"Unknown strategy: {strategy}")
 
