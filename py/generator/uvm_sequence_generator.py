@@ -705,9 +705,12 @@ class uvm_sequence_generator(base_generator):
     self.write(file,2,f"if ( get_current_iteration() >= max_iter )\n")
     self.write(file,3,f"`uvm_info(\"completion_post_body\",$sformatf(\"- Max iterations %d reached\",this.max_iter),UVM_MEDIUM);\n")
     if not self.no_covergroup :
-      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- state      coverage: %d %%\",cg.states.get_coverage());\n") #
-      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- transition coverage: %d %%\",cg.transitions.get_coverage());\n")
-      self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- Total      coverage: %d %%\",cg.get_coverage());\n")
+      #self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- state      coverage: %d %%\",cg.states.get_coverage());\n") #
+      #self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- transition coverage: %d %%\",cg.transitions.get_coverage());\n")
+      #self.write(file,1,f"`uvm_info(\"completion_post_body\",\"- Total      coverage: %d %%\",cg.get_coverage());\n")
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",$sformatf(\"- state      coverage: %d %%\",cg.states.get_coverage()),UVM_MEDIUM);\n")
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",$sformatf(\"- transition coverage: %d %%\",cg.transitions.get_coverage()),UVM_MEDIUM);\n")
+      self.write(file,1,f"`uvm_info(\"completion_post_body\",$sformatf(\"- Total      coverage: %d %%\",cg.get_coverage()),UVM_MEDIUM);\n")
     self.write(file,0,f"endfunction\n")
     self.write(file,0,f"\n")
 
