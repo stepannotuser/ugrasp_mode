@@ -45,4 +45,4 @@ vlog -sv +incdir+$UVM_HOME/src $DEFINE tb_ghostsd.sv
 vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb_ghostsd > sim.log 2>&1
 
 echo "=== GhostSD [$STRATEGY] ==="
-grep -nE "AUTOMATON|nr of iterations|UVM_ERROR|UVM_FATAL" sim.log | sed 's/^# //'
+grep -nE "AUTOMATON|nr of iterations|coverage:|UVM_ERROR|UVM_FATAL" sim.log | sed 's/^# //'

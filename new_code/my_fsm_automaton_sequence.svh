@@ -1,5 +1,5 @@
 // Auto-generated automaton sequence
-// Walk (13 transitions): IDLE -> A -> A -> B -> B -> C -> A -> C -> IDLE -> B -> D -> B -> D -> IDLE
+// Walk (6 transitions): IDLE -> A -> B -> C -> A -> B -> D
 
 class my_fsm_automaton_sequence extends my_fsm_user_sequence;
   `uvm_object_utils(my_fsm_automaton_sequence)
@@ -56,35 +56,13 @@ class my_fsm_automaton_sequence extends my_fsm_user_sequence;
     A_body();      state_body(A);
     A_post_body(); state_post_body(A);
 
-    // --- transition A -> A ---
-    A_to_A_pre_body();  transition_pre_body(A, A);
-    A_to_A_body();      transition_body(A, A);
-    A_to_A_post_body(); transition_post_body(A, A);
-    update_transition(A, A);
-
-    // --- state A (step 2) ---
-    A_pre_body();  state_pre_body(A);
-    A_body();      state_body(A);
-    A_post_body(); state_post_body(A);
-
     // --- transition A -> B ---
     A_to_B_pre_body();  transition_pre_body(A, B);
     A_to_B_body();      transition_body(A, B);
     A_to_B_post_body(); transition_post_body(A, B);
     update_transition(A, B);
 
-    // --- state B (step 3) ---
-    B_pre_body();  state_pre_body(B);
-    B_body();      state_body(B);
-    B_post_body(); state_post_body(B);
-
-    // --- transition B -> B ---
-    B_to_B_pre_body();  transition_pre_body(B, B);
-    B_to_B_body();      transition_body(B, B);
-    B_to_B_post_body(); transition_post_body(B, B);
-    update_transition(B, B);
-
-    // --- state B (step 4) ---
+    // --- state B (step 2) ---
     B_pre_body();  state_pre_body(B);
     B_body();      state_body(B);
     B_post_body(); state_post_body(B);
@@ -95,7 +73,7 @@ class my_fsm_automaton_sequence extends my_fsm_user_sequence;
     B_to_C_post_body(); transition_post_body(B, C);
     update_transition(B, C);
 
-    // --- state C (step 5) ---
+    // --- state C (step 3) ---
     C_pre_body();  state_pre_body(C);
     C_body();      state_body(C);
     C_post_body(); state_post_body(C);
@@ -106,40 +84,18 @@ class my_fsm_automaton_sequence extends my_fsm_user_sequence;
     C_to_A_post_body(); transition_post_body(C, A);
     update_transition(C, A);
 
-    // --- state A (step 6) ---
+    // --- state A (step 4) ---
     A_pre_body();  state_pre_body(A);
     A_body();      state_body(A);
     A_post_body(); state_post_body(A);
 
-    // --- transition A -> C ---
-    A_to_C_pre_body();  transition_pre_body(A, C);
-    A_to_C_body();      transition_body(A, C);
-    A_to_C_post_body(); transition_post_body(A, C);
-    update_transition(A, C);
+    // --- transition A -> B ---
+    A_to_B_pre_body();  transition_pre_body(A, B);
+    A_to_B_body();      transition_body(A, B);
+    A_to_B_post_body(); transition_post_body(A, B);
+    update_transition(A, B);
 
-    // --- state C (step 7) ---
-    C_pre_body();  state_pre_body(C);
-    C_body();      state_body(C);
-    C_post_body(); state_post_body(C);
-
-    // --- transition C -> IDLE ---
-    C_to_IDLE_pre_body();  transition_pre_body(C, IDLE);
-    C_to_IDLE_body();      transition_body(C, IDLE);
-    C_to_IDLE_post_body(); transition_post_body(C, IDLE);
-    update_transition(C, IDLE);
-
-    // --- state IDLE (step 8) ---
-    IDLE_pre_body();  state_pre_body(IDLE);
-    IDLE_body();      state_body(IDLE);
-    IDLE_post_body(); state_post_body(IDLE);
-
-    // --- transition IDLE -> B ---
-    IDLE_to_B_pre_body();  transition_pre_body(IDLE, B);
-    IDLE_to_B_body();      transition_body(IDLE, B);
-    IDLE_to_B_post_body(); transition_post_body(IDLE, B);
-    update_transition(IDLE, B);
-
-    // --- state B (step 9) ---
+    // --- state B (step 5) ---
     B_pre_body();  state_pre_body(B);
     B_body();      state_body(B);
     B_post_body(); state_post_body(B);
@@ -150,43 +106,10 @@ class my_fsm_automaton_sequence extends my_fsm_user_sequence;
     B_to_D_post_body(); transition_post_body(B, D);
     update_transition(B, D);
 
-    // --- state D (step 10) ---
+    // --- state D (step 6) ---
     D_pre_body();  state_pre_body(D);
     D_body();      state_body(D);
     D_post_body(); state_post_body(D);
-
-    // --- transition D -> B ---
-    D_to_B_pre_body();  transition_pre_body(D, B);
-    D_to_B_body();      transition_body(D, B);
-    D_to_B_post_body(); transition_post_body(D, B);
-    update_transition(D, B);
-
-    // --- state B (step 11) ---
-    B_pre_body();  state_pre_body(B);
-    B_body();      state_body(B);
-    B_post_body(); state_post_body(B);
-
-    // --- transition B -> D ---
-    B_to_D_pre_body();  transition_pre_body(B, D);
-    B_to_D_body();      transition_body(B, D);
-    B_to_D_post_body(); transition_post_body(B, D);
-    update_transition(B, D);
-
-    // --- state D (step 12) ---
-    D_pre_body();  state_pre_body(D);
-    D_body();      state_body(D);
-    D_post_body(); state_post_body(D);
-
-    // --- transition D -> IDLE ---
-    D_to_IDLE_pre_body();  transition_pre_body(D, IDLE);
-    D_to_IDLE_body();      transition_body(D, IDLE);
-    D_to_IDLE_post_body(); transition_post_body(D, IDLE);
-    update_transition(D, IDLE);
-
-    // --- state IDLE (step 13) ---
-    IDLE_pre_body();  state_pre_body(IDLE);
-    IDLE_body();      state_body(IDLE);
-    IDLE_post_body(); state_post_body(IDLE);
 
     // --- completion ---
     completion_pre_body();

@@ -2,75 +2,56 @@
 
 set -e
 
-MODE="${1:-edges}"
-START="${2:-IDLE}"
-
-CLASSNAME="my_fsm"
-CSV="examples/0-get_started/my_fsm.csv"
-
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 EX_DIR="$REPO_ROOT/examples/0-get_started"
-NEW_CODE="$REPO_ROOT/new_code"
+VIP_PKG="$EX_DIR/simple_vip_pkg/src/sv/simple_vip_pkg.sv"
+CSV="$EX_DIR/my_fsm.csv"
 
-if [ -z "$UVM_HOME" ] || [ -z "$UVM_DPI" ]; then
-  echo "UVM_HOME/UVM_DPI не заданы."
-  echo "source ~/.bashrc"
-  exit 1
-fi
+STRATEGY="${1:-edges}"
+START="${2:-IDLE}"
 
-if ! command -v vlog >/dev/null || ! command -v vsim >/dev/null; then
-  echo "vlog/vsim не найдены в PATH."
-  exit 1
-fi
-
-
-echo "генерация SV-класса из walk..."
-cd "$REPO_ROOT"
-python3 new_code/walk_to_sv.py "$CSV" "$MODE" "$CLASSNAME" "$START"
-cp new_code/output/${CLASSNAME}_automaton_sequence.svh new_code/
-echo ""
-
-echo "удаление"
-cd "$EX_DIR"
-rm -rf work
-mkdir -p work
-echo ""
-
-echo "компиляция..."
-vlib work > /dev/null
-vlog -sv +incdir+$UVM_HOME/src $UVM_HOME/src/uvm_pkg.sv          > /tmp/vlog1.log 2>&1
-vlog -sv +incdir+$UVM_HOME/src simple_vip_pkg/src/sv/simple_vip_pkg.sv > /tmp/vlog2.log 2>&1
-vlog -sv +incdir+$UVM_HOME/src my_fsm_pkg/src/sv/my_fsm_pkg.sv    > /tmp/vlog3.log 2>&1
-vlog -sv +incdir+$UVM_HOME/src my_test_pkg/src/sv/my_test_pkg.sv  > /tmp/vlog4.log 2>&1
-vlog -sv +incdir+$UVM_HOME/src ../../new_code/my_automaton_pkg.sv > /tmp/vlog5.log 2>&1
-vlog -sv +incdir+$UVM_HOME/src ../../new_code/tb_automaton.sv     > /tmp/vlog6.log 2>&1
-
-for f in /tmp/vlog*.log; do
-  errs=$(grep -oP 'Errors: \K\d+' "$f" | tail -1)
-  if [ "$errs" != "0" ]; then
-    echo "ошибка компиляции в $f:"
-    cat "$f"
+if [ "$STRATEGY" = "random" ]; then
+    echo "edges, dfs or postman"
     exit 1
-  fi
-done
-echo "ошибок нет"
-echo ""
+fi
 
-LOG="$NEW_CODE/sim_automaton.log"
-echo "симуляция..."
-vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb_automaton > "$LOG" 2>&1
-echo "лог сохранён: $LOG"
-echo ""
+GEN_DIR="/tmp/test/my_fsm_${STRATEGY}"
+BUILD_DIR="/tmp/build_my_fsm_${STRATEGY}"
 
-echo "результаты:"
+# ---------- 1. Генерация ----------
+echo "[1/4] Генерация пакета через ugrasp (strategy=$STRATEGY)..."
+rm -rf "$GEN_DIR"
+python3 "$REPO_ROOT/ugrasp.py" \
+    -in_csv "$CSV" \
+    -out_dir "$GEN_DIR" \
+    -classname my_fsm \
+    -gen_uvm \
+    -first_state "$START" \
+    -per_instance no \
+    -strategy "$STRATEGY"
+
+# ---------- 2. Сборка ----------
+echo "[2/4] Сборка в $BUILD_DIR ..."
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
+
+vlib work > /dev/null
+vlog -sv +incdir+$UVM_HOME/src $UVM_HOME/src/uvm_pkg.sv          > /dev/null
+vlog -sv +incdir+$UVM_HOME/src "$VIP_PKG"                        > /dev/null
+vlog -sv +incdir+$UVM_HOME/src "$GEN_DIR/my_fsm_pkg.sv"          > /dev/null
+
+# Готовим testbench через sed: my_fsm -> my_fsm, module tb_auto -> module tb_my_fsm
+sed -e 's/module tb_auto/module tb_my_fsm/' \
+    "$REPO_ROOT/new_code/tb_auto_integration.sv" > tb_my_fsm.sv
+vlog -sv +incdir+$UVM_HOME/src +define+AUTOMATON tb_my_fsm.sv    > /dev/null
+
+# ---------- 3. Симуляция ----------
+echo "[3/4] Симуляция..."
+vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb_my_fsm > sim.log 2>&1
+
+# ---------- 4. Отчёт ----------
+echo "[4/4] Результаты:"
 echo "----------------------------------------"
-grep -E "\[AUTOMATON\]|nr of iterations|UVM_ERROR|UVM_FATAL" "$LOG" \
-  | sed 's/^# //' \
-  | sed 's/.*\[AUTOMATON\]/[AUTOMATON]/'
+grep -E "\[AUTOMATON\]|nr of iterations|UVM_ERROR|UVM_FATAL" sim.log | sed 's/^# //'
 echo "----------------------------------------"
-echo ""
-echo "Walk (из Python):"
-cd "$REPO_ROOT"
-python3 "$NEW_CODE/dfs_traversal.py" "$CSV" "$MODE" "$START" | tail -3
-echo ""
-echo "готово."
