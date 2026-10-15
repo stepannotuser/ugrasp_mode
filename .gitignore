@@ -1,28 +1,22 @@
-# Ignore all emacs extra files
 .*~
 \#.*
-__pycache__
-examples\0-get_started\my_fsm_pkg
 
 __pycache__/
 *.pyc
 
-
-# QuestaSim artifacts
+work/
+transcript
+tr_db.log
 examples/*/work/
 examples/*/transcript
 examples/*/tr_db.log
 examples/*/*.log
-work/
-transcript
-tr_db.log
-# Generated packages
+
 examples/*/my_fsm_pkg/
-
-# Python venv
-.venv/
-
-# Generated output
 new_code/output/
 
 new_code/*.log
+examples/demo_results.log
+
+.venv/
+build/

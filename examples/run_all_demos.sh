@@ -51,6 +51,10 @@ run_step "my_fsm / dfs" \
     "Пример 0-get_started, автоматный обход всех состояний" \
     bash -c "cd $REPO_ROOT && ./new_code/run_automaton.sh dfs"
 
+run_step "my_fsm / postman" \
+    "Пример 0-get_started, Directed CPP" \
+    bash -c "cd $REPO_ROOT && ./new_code/run_automaton.sh postman"
+
 run_step "ghostsd / random" \
     "GhostSD FSM, случайный обход" \
     bash -c "cd $REPO_ROOT/examples/ghostsd && ./run_automaton.sh random"
@@ -62,6 +66,10 @@ run_step "ghostsd / edges" \
 run_step "ghostsd / dfs" \
     "GhostSD FSM, автоматный обход всех состояний" \
     bash -c "cd $REPO_ROOT/examples/ghostsd && ./run_automaton.sh dfs"
+    
+run_step "ghostsd / postman" \
+    "GhostSD FSM, Directed CPP (оптимум)" \
+    bash -c "cd $REPO_ROOT/examples/ghostsd && ./run_automaton.sh postman"
 
 run_step "postman_demo / анализ" \
     "Сравнение стратегий dfs/edges/postman на синтетическом графе (Python, без QuestaSim)" \
@@ -117,13 +125,17 @@ awk '
 }
 
 /- state *coverage:/ {
-    sub(/.*coverage: */, "", line)
-    printf "[%s] state coverage (std):  %s\n", step, line
+    if (step ~ /random/) {
+        sub(/.*coverage: */, "", line)
+        printf "[%s] state coverage (std):  %s\n", step, line
+    }
     next
 }
 /- transition coverage:/ {
-    sub(/.*coverage: */, "", line)
-    printf "[%s] transition coverage (std):  %s\n", step, line
+    if (step ~ /random/) {    
+        sub(/.*coverage: */, "", line)
+        printf "[%s] transition coverage (std):  %s\n", step, line
+    }
     next
 }
 

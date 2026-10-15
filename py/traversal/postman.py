@@ -1,14 +1,4 @@
-"""Directed Chinese Postman Problem (DCPP).
-
-Адаптация алгоритма Edmonds-Johnson на основе стандартных функций networkx:
-  - nx.min_cost_flow — выравнивание дисбалансов степеней
-  - nx.eulerian_circuit — эйлеров цикл в мультиграфе
-
-Логика (дисбалансы, flow, дублирование рёбер) заимствована из класса
-ChinesePostmanCollector проекта Automata Learning Lab (Saarland University).
-
-Адаптировано под формат ugrasp: dict {state: [next_state, ...]}.
-"""
+"""Directed Chinese Postman Problem (DCPP)."""
 
 import networkx as nx
 
