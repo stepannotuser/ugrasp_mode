@@ -2,9 +2,10 @@
 set -e
 cd "$(dirname "$0")"
 
-export UVM_HOME=/home/step/Questa_Sim/questasim/verilog_src/uvm-1.2
-export UVM_DPI=/home/step/Questa_Sim/questasim/uvm-1.2/linux_x86_64/uvm_dpi
-export QUESTA=/home/step/Questa_Sim/questasim/linux_x86_64
+#пока так
+#export QUESTA=/путь/к/questasim/linux_x86_64
+#export UVM_HOME=/путь/к/questasim/verilog_src/uvm-1.2
+#export UVM_DPI=/путь/к/questasim/uvm-1.2/linux_x86_64/uvm_dpi
 
 # 1) генерация
 python3 ../../ugrasp.py \

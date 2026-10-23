@@ -20,3 +20,4 @@ examples/demo_results.log
 
 .venv/
 build/
+examples/ghostsd/ghostsd_dot/

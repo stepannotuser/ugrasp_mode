@@ -44,4 +44,3 @@ vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb_my_fsm > sim.log 2>&1
 
 echo "[$STRATEGY]"
 grep -nE "\[AUTOMATON\]|nr of iterations|coverage:|UVM_ERROR|UVM_FATAL" sim.log | sed 's/^# //'
-^# //'

@@ -21,13 +21,10 @@ run_step() {
     local name="$1"
     local desc="$2"
     shift 2
-    separator
     log "STEP: $name"
     log "DESC: $desc"
-    separator
     log ""
     "$@" 2>&1 | tee -a "$LOG"
-    log ""
     log ""
 }
 
@@ -72,7 +69,7 @@ run_step "ghostsd / postman" \
     bash -c "cd $REPO_ROOT/examples/ghostsd && ./run_automaton.sh postman"
 
 run_step "postman_demo / анализ" \
-    "Сравнение стратегий dfs/edges/postman на синтетическом графе (Python, без QuestaSim)" \
+    "" \
     python3 -c "
 from py.parsers.csv_parser import csv_parser
 from py.traversal.edges import edge_coverage_walk

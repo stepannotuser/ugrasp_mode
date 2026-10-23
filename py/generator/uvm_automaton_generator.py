@@ -7,7 +7,7 @@ import os
 
 class uvm_automaton_generator(uvm_sequence_generator):
 
-    def generate(self, db, args):
+    def generate(self, db, args): #
         strategy = args.get("strategy", "random") 
         self.gen_automaton = (strategy != "random")
         self.strategy = strategy
@@ -61,7 +61,7 @@ class uvm_automaton_generator(uvm_sequence_generator):
 
        #
 
-    def write_package(self, file):
+    def write_package(self, file): #
         self.write(file, 0, f"package {self.classname}_pkg;\n\n")
         self.write(file, 1, "\n")
         self.write(file, 1, "`include \"uvm_macros.svh\"\n")
@@ -82,7 +82,7 @@ class uvm_automaton_generator(uvm_sequence_generator):
         self.write(file, 1, f"`include \"{self.classname}_base_sequence.sv\"\n")
         self.write(file, 1, f"`include \"{self.classname}_sequence.sv\"\n")
         self.write(file, 1, f"`include \"{self.classname}_checker.sv\"\n")
-
+#
         if getattr(self, "gen_automaton", False):
             self.write(file, 1, "\n")
             if not self.no_covergroup:
@@ -183,7 +183,7 @@ class uvm_automaton_generator(uvm_sequence_generator):
         if not self.no_covergroup:
             self.write(file, 1, f"acg.sample({walk[0]});\n")
         self.write(file, 1, "\n")
-
+##
         for i, state in enumerate(walk):
             self.write(file, 1, f"// state {state}\n")
             self.write(file, 1, f"{state}_pre_body();  state_pre_body({state});\n")
