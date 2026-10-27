@@ -31,7 +31,7 @@ class automaton_test extends uvm_test;
 `else
     seq = my_fsm_sequence::type_id::create("seq");
 `endif
-    if (!seq.randomize() with { max_iter == 1000; coverage_closure_en == 0; })
+    if (!seq.randomize() with { max_iter == 1000; coverage_closure_en == 1; })
       `uvm_fatal(get_type_name(), "randomize failed")
     `uvm_info("TB", $sformatf("max_iter=%0d cov_closure=%0d", seq.max_iter, seq.coverage_closure_en), UVM_LOW)
 
