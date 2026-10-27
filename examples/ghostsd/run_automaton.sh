@@ -1,52 +1,59 @@
 #!/usr/bin/env bash
 set -e
-
-REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-GHOSTSD_DIR="$REPO_ROOT/examples/ghostsd"
-VIP_PKG="$REPO_ROOT/examples/0-get_started/simple_vip_pkg/src/sv/simple_vip_pkg.sv"
-CSV="$GHOSTSD_DIR/ghostsd_fsm.csv"
+cd "$(dirname "$0")"
 
 STRATEGY="${1:-edges}"
 START="${2:-IDLE}"
 
-GEN_DIR="$REPO_ROOT/build/generated/ghostsd_${STRATEGY}"
-BUILD_DIR="$REPO_ROOT/build/sim/ghostsd_${STRATEGY}"
-
 if [ "$STRATEGY" = "random" ]; then
-    SEQ_CLASS="ghostsd_sequence"
-    DEFINE=""
+    SEQ=ghostsd_user_sequence
+    DEF=""
+    USR=""
 else
-    SEQ_CLASS="ghostsd_automaton_sequence"
-    DEFINE="+define+AUTOMATON"
+    SEQ=ghostsd_automaton_sequence
+    DEF="+define+AUTOMATON"
+    USR="-user_sequence ghostsd_user_sequence"
 fi
 
-rm -rf "$GEN_DIR"
-python3 "$REPO_ROOT/ugrasp.py" \
-    -in_csv "$CSV" \
-    -out_dir "$GEN_DIR" \
+export UVM_HOME=/home/step/Questa_Sim/questasim/verilog_src/uvm-1.2
+export UVM_DPI=/home/step/Questa_Sim/questasim/uvm-1.2/linux_x86_64/uvm_dpi
+export QUESTA=/home/step/Questa_Sim/questasim/linux_x86_64
+
+cp ghostsd_test_pkg/src/sv/ghostsd_user_sequence.svh ghostsd_pkg/src/sv/
+
+python3 ../../ugrasp.py \
+    -in_csv ghostsd_fsm.csv \
+    -out_dir ghostsd_pkg/src/sv \
     -classname ghostsd \
     -gen_uvm \
     -first_state "$START" \
-    -per_instance no \
-    -strategy "$STRATEGY"
+    -per_instance yes \
+    -strategy "$STRATEGY" \
+    -sequence_item simple_vip_sequence_item \
+    -import_package simple_vip_pkg \
+    $USR
 
-rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
+if [ "$STRATEGY" = "random" ]; then
+    sed -i 's|`include "ghostsd_sequence.svh"|`include "ghostsd_sequence.svh"\n`include "ghostsd_user_sequence.svh"|' \
+        ghostsd_pkg/src/sv/ghostsd_pkg.sv
+fi
 
-vlib work
-vlog -sv +incdir+$UVM_HOME/src $UVM_HOME/src/uvm_pkg.sv
-vlog -sv +incdir+$UVM_HOME/src "$VIP_PKG"
-vlog -sv +incdir+$UVM_HOME/src "$GEN_DIR/ghostsd_pkg.sv"
+rm -rf work
+$QUESTA/vlib work
+$QUESTA/vlog -sv +incdir+$UVM_HOME/src $UVM_HOME/src/uvm_pkg.sv
+$QUESTA/vlog -sv +incdir+$UVM_HOME/src ../0-get_started/simple_vip_pkg/src/sv/simple_vip_pkg.sv
+$QUESTA/vlog -sv +incdir+$UVM_HOME/src ghostsd_pkg/src/sv/ghostsd_pkg.sv
+$QUESTA/vlog -sv +incdir+$UVM_HOME/src $DEF ghostsd_test_pkg/src/sv/ghostsd_test_pkg.sv
+sed -e "s/ghostsd_automaton_sequence/$SEQ/g" \
+    -e "s/ghostsd_sequence/$SEQ/g" \
+    tb/src/sv/tb.sv > tb_ghostsd.sv
+$QUESTA/vlog -sv +incdir+$UVM_HOME/src $DEF tb_ghostsd.sv
+$QUESTA/vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb > sim.log 2>&1
 
-sed -e "s/my_fsm_automaton_sequence/$SEQ_CLASS/g" \
-    -e "s/my_fsm_sequence/$SEQ_CLASS/g" \
-    -e "s/my_fsm/ghostsd/g" \
-    -e "s/module tb_auto/module tb_ghostsd/" \
-    "$REPO_ROOT/new_code/tb_auto_integration.sv" > tb_ghostsd.sv
-vlog -sv +incdir+$UVM_HOME/src $DEFINE tb_ghostsd.sv > /dev/null
-
-vsim -c -sv_lib $UVM_DPI -do "run -all; quit -f" tb_ghostsd > sim.log 2>&1
-
-echo "[$STRATEGY]"
 grep -nE "AUTOMATON|nr of iterations|coverage:|UVM_ERROR|UVM_FATAL" sim.log | sed 's/^# //'
+    
+if grep -qE "UVM_(ERROR|FATAL) :\s+[1-9]" sim.log; then
+    echo "error"
+    exit 1
+fi 
+echo "no error"

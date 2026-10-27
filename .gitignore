@@ -21,3 +21,14 @@ examples/demo_results.log
 .venv/
 build/
 examples/ghostsd/ghostsd_dot/
+
+# uGRASP generated artefacts
+build/
+examples/ghostsd/ghostsd_pkg/
+examples/ghostsd/tb_ghostsd.sv
+examples/ghostsd/sim.log
+examples/*/logs/
+work/
+transcript
+*.vstf
+py/__init__.py
