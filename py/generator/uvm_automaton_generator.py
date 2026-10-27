@@ -147,7 +147,7 @@ class uvm_automaton_generator(uvm_sequence_generator):
         self.write(file, 0, "\n")
         self.write(file, 0, "// Automaton sequence (declaration)\n")
         self.write(file, 0, f"class {self.classname}_automaton_sequence "
-                            f"extends {self.user_sequence_class};\n") #f"extends {self.classname}_sequence;\n")
+                            f"extends {self.user_sequence_class};\n")
         self.write(file, 1, f"`uvm_object_utils({self.classname}_automaton_sequence)\n\n")
         if not self.no_covergroup:
             self.write(file, 1, f"{self.classname}_automaton_cg acg;\n\n")
