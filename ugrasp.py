@@ -43,6 +43,11 @@ def main():
   parser.add_argument("-no_covergroup"  ,action="store_true" ,dest="no_covergroup" ,default=None ,help="(yes|no) : Specify if covergroup is generated or not" )
   parser.add_argument("-allow_orphans"  ,action="store_true" ,dest="allow_orphans" ,default=None ,help="(yes|no) : When orphans are found the graph may start by one of them." )
   parser.add_argument("-sequence_item"  ,action="store"      ,dest="sequence_item" ,default=None ,help="When set, the generated sequence is non-virtual and uses this sequence item" )
+#  
+  parser.add_argument("-user_sequence", action="store", dest="user_sequence", default=None,
+                    help="User sequence class for automaton strategies "
+                         "(extends <classname>_sequence). Default: <classname>_sequence")
+#
   parser.add_argument("-import_package" ,action="store"      ,dest="import_package",default=None ,help="The generated package will import the given package. Empty by default." )
   parser.add_argument("-pre_run_state_name"  ,action="store"      ,dest="pre_run_state_name" ,default="ugrasp_pre_run"  ,help="Pre-Start extra state to handle initial actions" )
   parser.add_argument("-post_run_state_name" ,action="store"      ,dest="post_run_state_name",default="ugrasp_post_run" ,help="Post-Run extra state to handle final actions" )

@@ -11,7 +11,12 @@ class uvm_automaton_generator(uvm_sequence_generator):
         strategy = args.get("strategy", "random") 
         self.gen_automaton = (strategy != "random")
         self.strategy = strategy
-
+#
+        self.user_sequence_class = (
+            args.get("user_sequence")
+            or f"{self.classname}_sequence"
+        )
+#
         if self.gen_automaton:
             pre_run = args.get("pre_run_state_name", "ugrasp_pre_run")
             clean_db = {k: v for k, v in db.items() if k != pre_run}
@@ -77,6 +82,10 @@ class uvm_automaton_generator(uvm_sequence_generator):
         self.write(file, 1, "\n")
         self.write(file, 1, f"`include \"{self.classname}_base_sequence.svh\"\n")
         self.write(file, 1, f"`include \"{self.classname}_sequence.svh\"\n")
+#        
+        if self.user_sequence_class != f"{self.classname}_sequence":
+            self.write(file, 1, f"`include \"{self.user_sequence_class}.svh\"\n")
+#        
         self.write(file, 1, f"`include \"{self.classname}_checker.svh\"\n")
         self.write(file, 1, "\n")
         self.write(file, 1, f"`include \"{self.classname}_base_sequence.sv\"\n")
@@ -138,7 +147,7 @@ class uvm_automaton_generator(uvm_sequence_generator):
         self.write(file, 0, "\n")
         self.write(file, 0, "// Automaton sequence (declaration)\n")
         self.write(file, 0, f"class {self.classname}_automaton_sequence "
-                            f"extends {self.classname}_sequence;\n")
+                            f"extends {self.user_sequence_class};\n") #f"extends {self.classname}_sequence;\n")
         self.write(file, 1, f"`uvm_object_utils({self.classname}_automaton_sequence)\n\n")
         if not self.no_covergroup:
             self.write(file, 1, f"{self.classname}_automaton_cg acg;\n\n")

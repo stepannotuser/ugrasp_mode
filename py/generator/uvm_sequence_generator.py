@@ -179,7 +179,7 @@ class uvm_sequence_generator(base_generator):
     self.write(file,2,f"states : coverpoint current_state {{\n")
     self.write(file,3,f"option.goal     = 100;\n")
     self.write(file,3,f"option.weight   = {nr_transitions}; //< The weight is set to the number of transitions so that states have as much weight as the all transations together\n")
-    self.write(file,3,f"option.at_least = 10;\n")
+    self.write(file,3,f"option.at_least = 1;\n") # поменял с 10 до 1
     self.write(file,3,f"bins state      [] = {{ ")
     for idx,state in enumerate(self.db):
       _state = state.strip()
@@ -793,6 +793,7 @@ class uvm_sequence_generator(base_generator):
         self.write(file,2,f"{{{_start},{_end}}} : ret_val = 1;\n")    
     self.write(file,2,f"default: ret_val = 0;\n")
     self.write(file,1,f"endcase\n")
+    self.write(file,1,f"return ret_val;\n") # добавил ретерн
     self.write(file,0,f"endfunction : is_valid_transition\n")
     self.write(file,0,f"\n")
     self.write(file,0,f"function void {self.classname}_checker::check_transition({self.classname}_state_t src,dst);\n")
