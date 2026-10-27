@@ -278,7 +278,8 @@ function void pcie_link_training_sequence::completion_post_body();
     `uvm_info("completion_post_body",$sformatf("- nr of iterations : %d",this.get_current_iteration()),UVM_MEDIUM);
     if ( get_current_iteration() >= max_iter )
       `uvm_info("completion_post_body",$sformatf("- Max iterations %d reached",this.max_iter),UVM_MEDIUM);
-  `uvm_info("completion_post_body","- state      coverage: %d %%",cg.states.get_coverage());
+  //`uvm_info("completion_post_body","- state      coverage: %d %%",cg.states.get_coverage());
+  `uvm_info("completion_post_body", $sformatf("- state      coverage: %d %%", cg.states.get_coverage()), UVM_MEDIUM);
   `uvm_info("completion_post_body","- transition coverage: %d %%",cg.transitions.get_coverage());
   `uvm_info("completion_post_body","- Total      coverage: %d %%",cg.get_coverage());
 endfunction

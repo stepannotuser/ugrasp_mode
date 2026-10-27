@@ -235,10 +235,8 @@ package my_test_pkg;
         endtask
 
 
-        // In L0, the slave decides
+// In L0, the slave decides
         task L0_body();
-            
-            weight[L0][Recovery] = 0;
         endtask
         
         task L0_to_L0s_body();

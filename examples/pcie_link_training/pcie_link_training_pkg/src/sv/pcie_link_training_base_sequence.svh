@@ -17,8 +17,8 @@ class pcie_link_training_base_sequence extends uvm_sequence;
   rand bit          coverage_closure_en = 0;       ///< constrainable coverage closure configuration. When 1, graph will exit when the coverage reaches 100%
   rand int unsigned weight_default_decrement = 1;  ///< constrainable decrement of the weight of the edge each time it is executed
   rand int unsigned coverage_default_edge_at_least = 1;     ///< constrainable. Each edge should be covered at least this number of times
-  rand int unsigned weight[pcie_link_training_state_t][pcie_link_training_state_t] = '{default:initial_edge_weight}; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'
-
+  //rand int unsigned weight[pcie_link_training_state_t][pcie_link_training_state_t] = '{default:initial_edge_weight}; //< constrainable weights for each possible edge. Initial value set to 'initial_edge_weight'
+  rand int unsigned weight[pcie_link_training_state_t][pcie_link_training_state_t] = '{default:'{default:initial_edge_weight}};
   
   // ----------------------------------------------
   // Coverage
